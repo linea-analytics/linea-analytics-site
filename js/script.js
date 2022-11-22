@@ -8,11 +8,13 @@ $(document).ready(function() {
           $('.scroll_down').fadeIn();
         }
       }
-    )
+    );
 
     $(".scroll_down").click(function(){
       $('.main_panel').animate({
         scrollTop: $(".row2").offset().top
     }, 'slow');
-    }) 
+    });
+
+    // $('.scroll_down').delay(5000).hide(0);
 });
