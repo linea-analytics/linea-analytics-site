@@ -320,6 +320,9 @@ a{
 
 
 /* Background animation */
+.animation_panel{
+    /* filter: blur(4px); */
+}
 .an1{
     position:fixed;
     height:100vh;
