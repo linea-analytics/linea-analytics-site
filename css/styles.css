@@ -46,6 +46,8 @@ a{
 }
 
 
+
+/* Sidebar */
 .sidebar{
     position: fixed;
     display: block;
@@ -98,9 +100,9 @@ a{
 .sidebar .nav a{
     box-sizing: border-box;
     text-shadow: 0px 0px 5px rgba(0,0,0,0.3);
-    border-bottom: 2px solid var(--dark);
+    border-bottom: 4px solid var(--green);
     text-decoration: none;
-    margin: 20px 15%;
+    margin: 20px 22%;
     color: var(--dark);
     letter-spacing:4px;
     transition: .4s;
@@ -111,10 +113,44 @@ a{
     color: var(--green);
 }
 .sidebar .nav a.active{
-    border-bottom: 5px solid var(--dark);
+    border-bottom: 10px solid var(--dark);
 }
 
 
+
+/* Footer */
+.footer_container{
+    width: 100%;
+    z-index: 5;
+    text-align: center;
+    padding: 20px 0;
+    background: rgba(0,0,0,.3);
+    word-spacing: 5px;
+    display: flex;
+    font-size: 0.8em;
+    justify-content: space-evenly;
+}
+.footer_container .copyright{
+    width: 80%;
+}
+.footer_container .linea{
+    font-weight: 800;
+}
+.credits .icons8_links{
+    padding: 0;
+}
+.credits .icons8_links p{
+    float: right;
+    padding: 0;
+    margin: 0 20px 0 auto;
+    font-size: 0.7em;
+    opacity: .5;
+    color: var(--bright_green);
+}
+
+
+
+/* Main Panel */
 .main_panel{
     overflow-y: scroll;
     flex-direction: column;
@@ -193,44 +229,69 @@ a{
 .main_panel .row.row2 {
     flex-direction: column;
 }
-.main_panel .row.row2 .features_list{
+.main_panel .row .features_list{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-evenly;
     height: 90vh;
-    margin: 5vh auto;
+    margin: 0 auto;
 }
-.main_panel .row.row2 .features_list .header{
+.main_panel .row .features_list .header{
     font-size: 1.8em;
     border-bottom: 10px solid var(--bright_green);
     padding-bottom: 30px;
+    text-align: center;
+    margin-top: 45px;
+    font-family: Montserrat Alternates;
 }
-.main_panel .row.row2 .features_list .sub_header{
+.main_panel .row .features_list .sub_header{
     text-align: center;
     font-family: Montserrat Alternates;
     font-weight: 200;
-    font-size: 1.3em;
+    font-size: 1.5em;
     margin-top: 30px;
 }
-.main_panel .row.row2 .features_list .features{
+.main_panel .row .features_list .features{
     display: flex;
     justify-content: space-between;
     text-align: center;
 }
-.main_panel .row.row2 .features_list .features p{
-    background-color: rgba(0,0,0,.3);
+.main_panel .row .features_list .features .features_container{
+    background-color: rgba(0,0,0,.4);
+    color: var(--dark);
+    border-radius: 10px;
+    margin: 15px 10px;
+    opacity: 1;
+    /* box-shadow: 0px 0px 4px 2px rgba(0,0,0,0.15); */
+    /* border: 1px solid var(--bright_green); */
+}
+.main_panel .row .features_list .features img{
+    width: 50px;
+    margin: 15px auto 10px;
+    filter: invert(1);
+}
+.main_panel .row .features_list .features p{
+    font-size: 1.1em;
+    /* background-color: var(--bright_green); */
+    background-color: rgba(0,0,0,0.8);
     color: var(--bright);
     padding: 15px;
-    width: 20vh;
-    margin: 20px;
+    width: 25vh;
+    margin: 20px 20px;
     border-radius: 3px;
+    font-family: Montserrat Alternates;
+    font-weight: 500;
 }
-.main_panel .row.row2 .features_list .features h4{
+.main_panel .row .features_list .features h4{
+    border-bottom: 10px solid var(--bright_green);
     font-size: 1.5em;
+    margin: 10px auto 20px;
+    color: var(--bright);
+    padding: 20px 50px 20px;
 }
-.main_panel .row.row2 .footnote{
+.main_panel .row .footnote{
     font-size: 0.6em;
-    margin: 20px;
+    margin:7px;
     text-align: right;
     opacity: .5;
     margin-left: auto;
@@ -273,6 +334,8 @@ a{
     justify-content: start;
     scroll-snap-align: start !important;
 }
+
+.main_panel .row.row0 .product_overview,
 .main_panel .row.row1 .linea_product,
 .main_panel .row.row2 .lineapp_product,
 .main_panel .row.row3 .custom_product{
@@ -282,6 +345,7 @@ a{
     flex-direction: column;
     justify-content: center;
 }
+.main_panel .row.row0 .product_overview h3,
 .main_panel .row.row1 .linea_product h3,
 .main_panel .row.row2 .lineapp_product h3,
 .main_panel .row.row3 .custom_product h3{
@@ -292,12 +356,14 @@ a{
     margin-bottom: 20px;
     text-align: left;
 }
+.main_panel .row.row0 .product_overview .describe_cols,
 .main_panel .row.row1 .linea_product .describe_cols,
 .main_panel .row.row2 .lineapp_product .describe_cols,
 .main_panel .row.row3 .custom_product .describe_cols{
     display: flex;
     justify-content: space-evenly;
 }
+.main_panel .row.row0 .product_overview div,
 .main_panel .row.row1 .linea_product .describe_cols div,
 .main_panel .row.row2 .lineapp_product .describe_cols div,
 .main_panel .row.row3 .custom_product .describe_cols div{
@@ -308,6 +374,7 @@ a{
     display: block;
     text-align: center;
 }
+.main_panel .row.row0 .product_overview img,
 .main_panel .row.row1 .linea_product .describe_cols img,
 .main_panel .row.row2 .lineapp_product .describe_cols img,
 .main_panel .row.row3 .custom_product .describe_cols img{
@@ -358,7 +425,15 @@ a{
     background:var(--bright);
     width:100vw;
     display:block;
-    box-shadow:0 0 16px rgba(0,0,0,0.15);
+    box-shadow:0 0 16px rgba(0,0,0,0.07);
+    /* background-size: 500px 500px; */
+    /* border: 1px solid var(--bright_green); */
+    /* background-image: conic-gradient(
+      var(--bright) 90deg,
+      var(--red) 90deg 180deg,
+      var(--bright) 180deg 270deg,
+      var(--bright_green) 270deg
+    ); */
 }
 .an1,.an3,.an4{
     animation:90s Skew infinite;
@@ -376,8 +451,6 @@ a{
 @keyframes Skew2 {
     10% {transform:skewY(50deg) scale(1,3);}
     40% {transform:skewY(-50deg) scale(1,3);}
-    45% {transform:skewY(50deg) scale(1,3);}
-    50% {transform:skewY(-50deg) scale(1,3);}
     70% {transform:skewY(50deg) scale(1,3);}
     90% {transform:skewY(-50deg) scale(1,3);}
 }
@@ -411,33 +484,3 @@ a{
     90% {opacity: 0.1;}
 }
 
-
-/* Footer */
-.footer_container{
-    width: 100%;
-    z-index: 5;
-    text-align: center;
-    padding: 20px 0;
-    background: rgba(0,0,0,.3);
-    word-spacing: 5px;
-    display: flex;
-    justify-content: space-evenly;
-}
-.footer_container .copyright{
-    width: 80%;
-}
-.footer_container .linea{
-    font-weight: 400;
-}
-.footer_container .icons8_links{
-    width: 20%;
-    padding: 0;
-}
-.footer_container .icons8_links p{
-    text-align: right;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-    font-size: 0.7em;
-    opacity: .5;
-}
