@@ -106,12 +106,12 @@ a{
     margin: 20px 22%;
     color: var(--bright);
     letter-spacing:4px;
-    transition: .4s;
+    transition: .2s;
     padding: 0 0 10px;
 }
 .sidebar .nav a:hover{
-    /* border-bottom: 5px solid var(--dark); */
-    color: var(--green);
+    border-bottom: 4px solid var(--bright_green);
+    color: var(--bright_green);
 }
 .sidebar .nav a.active{
     border-bottom: 4px solid var(--bright_green);
