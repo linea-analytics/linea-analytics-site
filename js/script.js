@@ -16,6 +16,15 @@ $(document).ready(function() {
     }, 'slow');
     });
 
-    // $('.scroll_down').delay(5000).hide(0);
-});
 
+    $(".mobile_menu").click(function(){
+      if($(".nav").attr('data-click-state') == 0) {
+        $(".nav").attr('data-click-state', 1);
+        $(".nav").css("right",'-100vw')
+      }
+      else {
+        $(".nav").attr('data-click-state', 0);
+        $(".nav").css("right",'0')
+      }
+    });
+});
