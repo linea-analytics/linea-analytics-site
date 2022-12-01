@@ -68,7 +68,7 @@ a{
     justify-content: start;
     height: 30vh;
    font-family: Montserrat Alternates;
-   font-size: 2em;
+   font-size: 2.3em;
    color: var(--bright);
    text-shadow: 0px 0px 5px rgba(0,0,0, 0.5);
    mix-blend-mode: difference;
@@ -264,6 +264,7 @@ a{
     margin: 15px 10px;
     opacity: 1;
     transition: .2s;
+    width: 40vh;
     /* box-shadow: 0px 0px 4px 2px rgba(0,0,0,0.15); */
     /* border: 1px solid var(--bright_green); */
 }
@@ -273,13 +274,14 @@ a{
     filter: invert(1);
 }
 .main_panel .row .features_list .features p{
-    font-size: 1.1em;
+    width: 10vh;
+    font-size: 0.9em;
     /* background-color: var(--bright_green); */
     background-color: rgba(0,0,0,0.8);
     color: var(--bright);
     padding: 15px;
     width: 25vh;
-    margin: 20px 20px;
+    margin: 20px auto;
     border-radius: 3px;
     font-family: Montserrat Alternates;
     font-weight: 500;
@@ -370,7 +372,6 @@ a{
 .main_panel .row.row3 .custom_product .describe_cols div{
     display: flex;
     flex-direction: column;
-    width: 30%;
     justify-content: space-evenly;
     display: block;
     text-align: center;
@@ -385,16 +386,28 @@ a{
     filter: invert(1);
 }
 
+.main_panel .row .describe_cols a.linea{
+    text-decoration: none;
+}
+.main_panel .row .describe_cols div{
+    background-color: rgba(0,0,0, 0.2);
+    border-radius: 8px;
+    font-size: 2em;
+    padding: 50px;
+    margin: 5px;
+    width: 30%;
+}
+
 
 
 /* Background animation */
 #gradient-canvas {
     width:100%;
     height:100%;
-    --gradient-color-1: var(--dark);  
+    --gradient-color-1: var(--green);  
     --gradient-color-2: var(--red); 
     --gradient-color-3: var(--dark);
-    --gradient-color-4: var(--green); 
+    --gradient-color-4: var(--dark); 
     z-index:0;
     transform: rotate(180);
 }
