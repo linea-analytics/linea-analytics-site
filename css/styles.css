@@ -25,7 +25,7 @@
         right: -100vw;
         transition: .2s;
         width: 100%;
-        background-color: rgba(0,0,0, 0.5);
+        background-color: rgba(0,0,0, 0.95);
     }
     div.sidebar .nav a{
         margin: 10px;
@@ -34,6 +34,7 @@
         width: 50%;
         margin-left: 0px;
         padding: 10px;
+        /* font-size: 3vh; */
     }
     div.sidebar .logo :nth-child(1),
     div.sidebar .logo :nth-child(2){
