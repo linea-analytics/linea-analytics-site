@@ -269,7 +269,7 @@ a{
     justify-content: space-between;
     text-align: center;
 }
-.main_panel .row .features_list .features .features_container{
+.main_panel .row .features_container{
     background-color: rgba(0,0,0,.4);
     color: var(--dark);
     border-radius: 10px;
@@ -383,16 +383,28 @@ a{
     margin: 65px auto;
     filter: invert(1);
 }
-.main_panel .row .describe_cols a.linea{
-    text-decoration: none;
+
+.linea_product.features_list .features .features_container{
+    display: flex;
+    color: var(--bright);
+    padding: 0;
+    height: 100px;
 }
-.main_panel .row .describe_cols div{
-    background-color: rgba(0,0,0, 0.2);
-    border-radius: 8px;
-    font-size: 2em;
-    padding: 50px;
-    margin: 5px;
-    width: 30%;
+.linea_product.features_list .features .features_container img{
+    border-right: 10px solid var(--dark);
+    margin: 0;
+    padding: 0 15px;
+    height: 100px;
+    object-fit: contain;
+}
+.main_panel .row .linea_product.features_list .features .features_container p{
+    padding: 25px 15px;
+    background-color: inherit;
+    margin: 0;
+    width: 70%;
+}
+.main_panel .row .linea_product.features_list .features .features_container div{
+    height: 100px;
 }
 
 
