@@ -351,10 +351,10 @@ a{
 .main_panel .row.row2 .lineapp_product h3,
 .main_panel .row.row3 .custom_product h3{
     border-bottom: 10px solid var(--bright_green);
-    padding-bottom: 25px;
-    font-size: 2.5em;
+    padding-bottom: 15px;
+    font-size: 2em;
     margin-top: 0;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     text-align: left;
 }
 .main_panel .row.row0 .product_overview .describe_cols,
@@ -411,22 +411,30 @@ a{
 .main_panel .row .product_overview{
     width: 100%;
 }
+.main_panel .row .product_overview .features{
+    display: flex !important;
+    flex-direction: row  !important;
+}
+.main_panel .row .product_overview .features .feature{
+    width: 25%;
+}
 .main_panel .row .product_overview .features .feature div{
-    display: flex;
-    flex-direction: row;
     width: 100%;
-    justify-content: space-between
+    height: 45px;
 }
 .main_panel .row .product_overview .features .feature p{
-    width: 16.67%;
-    padding: 30px 0;
-    border-bottom: 2.5px solid var(--bright);
+    border-bottom: 2px solid var(--bright);
+    padding: 2vh 0 1vh;
     margin: 0;
+    height: 35px;
+    font-size: 1em;
+    display: flex;
+    justify-content: center;
 }
 .main_panel .row .product_overview .features .feature p.linea{
-    font-size: 1.5em;
-    text-align: left;
-    padding-right: 20px;
+    font-size: 1.6em;
+    text-align: center;
+    padding: 4vh 0;
 }
 .main_panel .row .product_overview .features .feature p[data-content="cross"]{
     color: var(--red);
@@ -437,9 +445,8 @@ a{
 
 .main_panel .row .product_overview .features .feature p[data-content="tick"],
 .main_panel .row .product_overview .features .feature p[data-content="cross"]{
-    font-size: 1.4em;
-    /* border-top: 2.5px solid var(--bright); */
-}
+    /* font-size: 1.4em; */
+ }
 
 
 /* Background animation */
