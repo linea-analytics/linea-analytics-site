@@ -69,7 +69,6 @@ a{
     justify-content: start;
     height: 30vh;
    font-family: Montserrat Alternates;
-   font-size: 2.3em;
    color: var(--bright);
    text-shadow: 0px 0px 5px rgba(0,0,0, 0.5);
    mix-blend-mode: difference;
@@ -82,12 +81,13 @@ a{
 .sidebar .logo :nth-child(1){
     font-weight: 800;
     margin: 0 auto;
+    font-size: 1.6em;
     padding: 25px 0 0;
 }
 .sidebar .logo :nth-child(2){
     font-weight: 400;
     margin: 0;
-    font-size: 0.63em;
+    font-size: .9em;
 }
 .sidebar .slogan{
     font-weight: 100;
@@ -443,10 +443,10 @@ a{
     color: var(--bright_green);
 }
 
-.main_panel .row .product_overview .features .feature p[data-content="tick"],
+/* .main_panel .row .product_overview .features .feature p[data-content="tick"],
 .main_panel .row .product_overview .features .feature p[data-content="cross"]{
-    /* font-size: 1.4em; */
- }
+    font-size: 1.4em;
+ } */
 
 
 /* Background animation */
