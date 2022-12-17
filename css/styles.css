@@ -601,7 +601,7 @@ html,body {
         height: auto;
     }
     div.main_panel .row.row2 .features_list .header{
-        padding: inherit 10px;
+        padding: 10px;
     }
     div.main_panel .row.row2 .features_list,
     div.main_panel .row.row2 .features_list .features{
