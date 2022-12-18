@@ -488,7 +488,7 @@ a{
     
 }
 .main_panel.lineapp .row.row2 img{
-    width: 400px;
+    width: 350px;
     height: 200px;
     padding-left: 10px;
 }
@@ -504,6 +504,7 @@ a{
     display: flex;
     font-family: Montserrat Alternates;
     scroll-snap-type: x mandatory;
+    justify-content: space-between;
 }
 .main_panel.lineapp .row.row2 .charts .chart{
     scroll-snap-align: center;
@@ -521,12 +522,15 @@ a{
     font-weight: 600;
     border-radius: 10px 10px 0 0;
 }
+.main_panel.lineapp .row.row2 .charts .chart figure{
+    margin: 0;
+}
 .main_panel.lineapp .row.row2 .charts .chart .chart_card_note{
     text-align: center;
     position: relative;
     bottom: 0;
-    margin: 0;
-    background-color: black;
+    margin: auto;
+    border-top: 2vh solid var(--bright_green);
     padding: 10px;
     color: var(--bright);
     font-weight: 400;
@@ -534,15 +538,16 @@ a{
 }
 .main_panel.lineapp .row.row2 .charts .blank_divider{
     content: "";
-    height: 10px;
-    border: 30px solid rgba(0,0,0, 0);
-    margin: auto 10px;
+    height: 5vh;
+    border: 5vh solid rgba(0,0,0, 0);
+    margin: auto 5vh;
 }
 .main_panel.lineapp .row.row2 .charts .divider{
     content: "";
-    height: 10px;
-    /* border: 10px solid rgba(0,0,0, 0.5); */
-    border: 10px solid var(--bright_green);
+    height: 1vh;
+    width: 1vh;
+    border: 1vh solid var(--bright_green);
+    background-color: var(--bright_green);
     margin: auto 10px;
 }
 
@@ -664,7 +669,6 @@ html,body {
     }
 
     div.main_panel{
-        scroll-snap-type: proximity;
         scroll-snap-type: y proximity;
         opacity: 1;
         font-size: 2vh;
@@ -675,6 +679,8 @@ html,body {
         padding: 0;
         height: calc(100vh - 80px);
     }
+
+    div.main_panel .row{}
 
     div.main_panel .row.row1{
         display: flex;
