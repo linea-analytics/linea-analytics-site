@@ -649,17 +649,20 @@ html,body {
     }
 
     div.mobile_menu{
-        display: block;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
         position: fixed;
         top: 0;
         right: 0;
-        padding: 20px;
+        padding: 2vh 0vh;
+        width: 10vh;
+        height: 8vh;
     }
     .mobile_menu div {
-        width: 35px;
-        height: 5px;
+        width: 6vh;
+        height: 1vh;
         background-color: var(--bright);
-        margin: 6px 0;
     }
 
     div.scroll_down{
@@ -680,10 +683,13 @@ html,body {
         height: 88vh;
     }
 
+    div.main_panel .row{
+        min-height: 88vh;
+    }
+
     div.main_panel .row.row1{
         display: flex;
         flex-direction: column;
-        height: calc(100vh - 80px);
     }
     div.main_panel .row.row1 .left_side_text,
     div.main_panel .row.row1 .right_side_text{
