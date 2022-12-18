@@ -2,7 +2,7 @@
 $(document).ready(function() {
 
     $(".main_panel").scroll(function() {
-        if ($(this).scrollTop() > 0) {
+        if ($(this).scrollTop() > 100) {
           $('.scroll_down').fadeOut();
         } else {
           $('.scroll_down').fadeIn();
