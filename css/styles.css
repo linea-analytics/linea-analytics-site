@@ -349,8 +349,10 @@ a{
 .main_panel .row.row3 .lineapp_product h3,
 .main_panel .row.row4 .custom_product h3{
     border-bottom: 10px solid var(--bright_green);
+    color: var(--bright);
+    text-decoration-color: var(--bright_green);
     padding-bottom: 15px;
-    font-size: 2em;
+    font-size: 6vh;
     margin-top: 0;
     margin-bottom: 15px;
     text-align: left;
@@ -436,6 +438,8 @@ a{
     font-size: 1.6em;
     text-align: center;
     padding: 4vh 0;
+    color: var(--bright);
+    text-decoration-color: var(--bright_green);
 }
 .main_panel .row .product_overview .features .feature p[data-content="cross"]{
     color: var(--red);
@@ -452,6 +456,24 @@ a{
 
 /* LINEAPP Page */
 
+.signin{
+    position: absolute;
+    right: 0;
+    top: 10px;
+    z-index: 10;
+    padding: 10px 20px;
+    border-radius: 20px;
+    margin: 10px 30px;
+    background-color: rgba(0,0,0, 0.5);
+    transition: .3s;
+}
+.signin a{
+    color: var(--bright);
+    text-decoration: none;
+}
+.signin:hover{
+    margin: 10px 25px;
+}
 .main_panel.lineapp .row{
     min-height: 100vh;
     display: block;
@@ -472,60 +494,72 @@ a{
     width: 75%;
     margin: auto;
 }
-.main_panel.lineapp .row.row2 .header{
+
+.main_panel.lineapp .row.row2 .lineapp_video{
+    margin: 0 auto;
+}
+.main_panel.lineapp .row.row2 iframe{
+    width: 70%;
+    height: 40%;
+}
+
+.main_panel.lineapp .row.row3 .header{
     font-size: 2em;
     border-bottom: 10px solid var(--bright_green);
     margin: 3%;
     padding: 2% 0;
 }
-.main_panel.lineapp .row.row2 .header h2{
+.main_panel.lineapp .row.row3 .header h2{
     margin: 0;
+    font-size: 6vh;
 }
-.main_panel.lineapp .row.row2 figure figcaption{
+.main_panel.lineapp .row.row3 figure figcaption{
     text-align: center;
     margin-bottom: -40px;
+    color: var(--bright);
     font-size: .8em;
     
 }
-.main_panel.lineapp .row.row2 img{
+.main_panel.lineapp .row.row3 img{
     width: 350px;
     height: 200px;
     padding-left: 10px;
 }
-.main_panel.lineapp .row.row2 .desc p{
+.main_panel.lineapp .row.row3 .desc p{
     text-align: center;
     font-size: 1.5em;
     margin-bottom: 0;
     font-family: Montserrat Alternates;
     font-weight: 600;
 }
-.main_panel.lineapp .row.row2 .charts{
+.main_panel.lineapp .row.row3 .charts{
     overflow-x: scroll;
     display: flex;
     font-family: Montserrat Alternates;
     scroll-snap-type: x mandatory;
     justify-content: space-between;
 }
-.main_panel.lineapp .row.row2 .charts .chart{
+.main_panel.lineapp .row.row3 .charts .chart{
     scroll-snap-align: center;
-    margin: 3%;
+    margin: 3% 0;
     background-color: rgba(0,0,0, 0.2);
     border-radius: 10px;
-    box-shadow: 0px 0px 3px rgba(0,0,0, 0.1);
+    box-shadow: 0px 0px 10px rgba(0,0,0, 0.9);
+    z-index: 10;
 }
-.main_panel.lineapp .row.row2 .charts .chart .chart_card_header{
+.main_panel.lineapp .row.row3 .charts .chart .chart_card_header{
     text-align: center;
-    background-color: var(--bright);
+    background-color: rgba(0,0,0, 0.6);
     padding: 10px;
-    color: var(--dark);
+    color: var(--bright);
     margin: 0 0 30px;
     font-weight: 600;
     border-radius: 10px 10px 0 0;
 }
-.main_panel.lineapp .row.row2 .charts .chart figure{
+.main_panel.lineapp .row.row3 .charts .chart figure{
     margin: 0;
 }
-.main_panel.lineapp .row.row2 .charts .chart .chart_card_note{
+.main_panel.lineapp .row.row3 .charts .chart .chart_card_note{
     text-align: center;
     position: relative;
     bottom: 0;
@@ -536,19 +570,19 @@ a{
     font-weight: 400;
     border-radius: 0 0 10px 10px;
 }
-.main_panel.lineapp .row.row2 .charts .blank_divider{
+.main_panel.lineapp .row.row3 .charts .blank_divider{
     content: "";
-    height: 5vh;
-    border: 5vh solid rgba(0,0,0, 0);
+    height: 15vh;
+    border: 30vh solid rgba(0,0,0, 0);
     margin: auto 5vh;
 }
-.main_panel.lineapp .row.row2 .charts .divider{
+.main_panel.lineapp .row.row3 .charts .divider{
     content: "";
-    height: 1vh;
-    width: 1vh;
-    border: 1vh solid var(--bright_green);
+    height: 2vh;
+    width: 3vh;
+    border-left: 100vh solid var(--bright_green);
     background-color: var(--bright_green);
-    margin: auto 10px;
+    margin: auto 0px;
 }
 
 
@@ -666,9 +700,13 @@ html,body {
     }
 
     div.scroll_down{
-        width: 30%;
-        padding: 0 15%;
+        width: 40%;
+        font-size: 2vh;
+        padding: 3% 10%;
         margin: 0 20%;
+    }
+    div.signin{
+        display: none;
     }
 
     div.main_panel{
