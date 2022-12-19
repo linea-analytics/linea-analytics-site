@@ -374,6 +374,11 @@ a{
     display: block;
     text-align: center;
 }
+.main_panel .row.row2 .linea_product .describe_cols div,
+.main_panel .row.row3 .lineapp_product .describe_cols div,
+.main_panel .row.row4 .custom_product .describe_cols div{
+
+}
 .main_panel .row.row1 .product_overview img,
 .main_panel .row.row2 .linea_product .describe_cols img,
 .main_panel .row.row3 .lineapp_product .describe_cols img,
@@ -381,36 +386,53 @@ a{
     width: 60px;
     display: block;
     margin: 65px auto;
+    background-color: var(--bright);
+    border-radius: 10%;
+    box-shadow: 0px 0px 5pc rgba(255,255,255, 0.5);
+    padding:50px;
     filter: invert(1);
+    transition: .3s;
 }
+.main_panel .row.row1 .product_overview img:hover,
+.main_panel .row.row2 .linea_product .describe_cols img:hover,
+.main_panel .row.row3 .lineapp_product .describe_cols img:hover,
+.main_panel .row.row4 .custom_product .describe_cols img:hover{
+    box-shadow: 0px 0px 5pc rgba(255,255,255, 0.1);
+}
+
 .linea_product.features_list .features .features_container{
     display: flex;
     color: var(--bright);
     padding: 0;
-    height: 100px;
+    height: 150px;
 }
 .linea_product.features_list .features .features_container img{
     border-right: 10px solid var(--dark);
     margin: 0;
     padding: 0 15px;
-    height: 100px;
+    height: 150px;
     object-fit: contain;
 }
 .main_panel .row .linea_product.features_list .features .features_container p{
     padding: 25px 15px;
     background-color: inherit;
-    margin: 0;
+    margin: auto;
     width: 70%;
 }
 .main_panel .row .linea_product.features_list .features .features_container div{
-    height: 100px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
 }
-.main_panel .row .product_overview{
+.main_panel .row.row1 .product_overview{
     width: 100%;
+    min-height: 100vh;
+    padding: 0 60px;
 }
 .main_panel .row .product_overview .features{
     display: flex !important;
     flex-direction: row  !important;
+    height: 60vh;
 }
 .main_panel .row .product_overview .features .feature{
     width: 25%;
@@ -453,37 +475,25 @@ a{
 
 /* LINEAPP Page */
 
-.signin{
-    position: absolute;
-    right: 0;
-    top: 10px;
-    z-index: 10;
-    padding: 10px 20px;
-    border-radius: 20px;
-    margin: 10px 30px;
-    background-color: rgba(0,0,0, 0.5);
-    transition: .3s;
-}
-.signin a{
-    color: var(--bright);
-    text-decoration: none;
-}
-.signin:hover{
-    margin: 10px 25px;
-}
 .main_panel.lineapp .row{
     min-height: 100vh;
     display: block;
 }
+.main_panel.lineapp .row.row1 {
+    scroll-snap-align: center;
+}
 .main_panel.lineapp .row.row1 .header{
     display: block;
-    margin: 5%;
+    margin: 10% 5% 0%;
     width: 84%;
-    padding: 3%;
-    height: 250px;
+    padding: 10% 3% 3%;
+    height: 200px;
     text-align: center;
     font-size: 4em;
     border-bottom: 10px solid var(--bright_green);
+}
+.main_panel.lineapp .row.row1 .header h2{
+    margin:0;
 }
 .main_panel.lineapp .row.row1 .desc1{
     text-align: center;
@@ -505,38 +515,43 @@ a{
     margin: auto;
     display: block;
 }
-.main_panel.lineapp .row.row3 .header{
+.main_panel.lineapp .row.row3 .header,
+.main_panel.lineapp .row.row4 .header{
     font-size: 2em;
     border-bottom: 10px solid var(--bright_green);
     margin: 3%;
     padding: 2% 0;
 }
-.main_panel.lineapp .row.row3 .header h2{
+.main_panel.lineapp .row.row3 .header h2,
+.main_panel.lineapp .row.row4 .header h2{
     margin: 0;
     font-size: 6vh;
 }
-.main_panel.lineapp .row.row3 .charts img{
+.main_panel.lineapp .row.row3 .charts img,
+.main_panel.lineapp .row.row4 .charts img{
     width: 500px;
     height: 300px;
     padding-left: 10px;
     margin: -25px -15px -15px;
 }
-.main_panel.lineapp .row.row3 .desc p{
+.main_panel.lineapp .row.row3 .desc p,
+.main_panel.lineapp .row.row4 .desc p{
     text-align: center;
     font-size: 1.5em;
     margin-bottom: 0;
     font-family: Montserrat Alternates;
     font-weight: 600;
 }
-.main_panel.lineapp .row.row3 .charts{
+.main_panel.lineapp .row.row3 .charts,
+.main_panel.lineapp .row.row4 .charts{
     overflow-x: scroll;
     display: flex;
     font-family: Montserrat Alternates;
     scroll-snap-type: x mandatory;
     justify-content: space-between;
 }
-
-.main_panel.lineapp .row.row3 .charts .chart{
+.main_panel.lineapp .row.row3 .charts .chart,
+.main_panel.lineapp .row.row4 .charts .chart{
     scroll-snap-align: center;
     margin: 3% 0;
     background-color: rgba(0,0,0, 0.2);
@@ -544,7 +559,8 @@ a{
     box-shadow: 0px 0px 10px rgba(0,0,0, 0.9);
     z-index: 10;
 }
-.main_panel.lineapp .row.row3 .charts .chart .chart_card_header{
+.main_panel.lineapp .row.row3 .charts .chart .chart_card_header,
+.main_panel.lineapp .row.row4 .charts .chart .chart_card_header{
     text-align: center;
     background-color: rgba(0,0,0, 0.6);
     padding: 10px;
@@ -553,7 +569,8 @@ a{
     font-weight: 600;
     border-radius: 10px 10px 0 0;
 }
-.main_panel.lineapp .row.row3 .charts .chart .chart_card_note{
+.main_panel.lineapp .row.row3 .charts .chart .chart_card_note,
+.main_panel.lineapp .row.row4 .charts .chart .chart_card_note{
     text-align: center;
     position: relative;
     bottom: 0;
@@ -564,19 +581,22 @@ a{
     font-weight: 400;
     border-radius: 0 0 10px 10px;
 }
-.main_panel.lineapp .row.row3 .charts .chart.last_chart{
+.main_panel.lineapp .row.row3 .charts .chart.last_chart,
+.main_panel.lineapp .row.row4 .charts .chart.last_chart{
     display: flex;
     justify-content: center;
     flex-direction: column;
 }
-.main_panel.lineapp .row.row3 .charts .chart.last_chart .more{
+.main_panel.lineapp .row.row3 .charts .chart.last_chart .more,
+.main_panel.lineapp .row.row4 .charts .chart.last_chart .more{
     width: 500px;
     text-align: center;
     margin: auto;
     font-weight: 600;
     font-size: 2em;
 }
-.main_panel.lineapp .row.row3 .charts .chart.last_chart .keep{
+.main_panel.lineapp .row.row3 .charts .chart.last_chart .keep,
+.main_panel.lineapp .row.row4 .charts .chart.last_chart .keep{
     width: 500px;
     text-align: center;
     margin:  0 auto 0;
@@ -586,13 +606,15 @@ a{
     background-color: rgba(0,0,0, 0.5);
     border-radius: 0 0 10px 10px;
 }
-.main_panel.lineapp .row.row3 .charts .blank_divider{
+.main_panel.lineapp .row.row3 .charts .blank_divider,
+.main_panel.lineapp .row.row4 .charts .blank_divider{
     content: "";
     height: 15vh;
     border: 30vh solid rgba(0,0,0, 0);
     margin: auto 5vh;
 }
-.main_panel.lineapp .row.row3 .charts .divider{
+.main_panel.lineapp .row.row3 .charts .divider,
+.main_panel.lineapp .row.row4 .charts .divider{
     content: "";
     height: 2vh;
     width: 3vh;
@@ -611,13 +633,7 @@ a{
     font-size: 6vh;
     font-family: Montserrat Alternates;
 }
-.main_panel.lineapp .row.row4 .desc{
-    display: flex;
-    flex-direction: row;
-}
-.main_panel.lineapp .row.row4 .desc img{
-    width: 300px;
-}
+
 
 
 /* Background animation */
@@ -816,4 +832,26 @@ html,body {
     div.main_panel .row .product_overview .features .feature{
         width: 22.5%;
     }
+}
+
+/* Sign in */
+
+.signin{
+    position: absolute;
+    right: 0;
+    top: 10px;
+    z-index: 10;
+    padding: 10px 20px;
+    border-radius: 20px;
+    margin: 10px 30px;
+    background-color: rgba(0,0,0, 0.9);
+    transition: .2s;
+}
+.signin a{
+    color: var(--bright);
+    text-decoration: none;
+}
+.signin:hover{
+    margin: 10px 25px;
+    filter: invert(1);
 }
