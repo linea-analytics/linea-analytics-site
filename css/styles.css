@@ -124,7 +124,6 @@ a{
     display: none;
 }
 
-
 /* Footer */
 .footer_container{
     width: 100%;
@@ -158,8 +157,6 @@ a{
     opacity: .5;
     color: var(--bright_green);
 }
-
-
 
 /* Main Panel */
 .main_panel{
@@ -328,7 +325,6 @@ a{
     padding: 30px;
 }
 
-
 /* Product page */
 .main_panel.products .row{
     justify-content: start;
@@ -399,7 +395,6 @@ a{
 .main_panel .row.row4 .custom_product .describe_cols img:hover{
     box-shadow: 0px 0px 5pc rgba(255,255,255, 0.1);
 }
-
 .linea_product.features_list .features .features_container{
     display: flex;
     color: var(--bright);
@@ -467,14 +462,7 @@ a{
     color: var(--bright_green);
 }
 
-/* .main_panel .row .product_overview .features .feature p[data-content="tick"],
-.main_panel .row .product_overview .features .feature p[data-content="cross"]{
-    font-size: 1.4em;
- } */
-
-
 /* LINEAPP Page */
-
 .main_panel.lineapp .row{
     min-height: 100vh;
     display: block;
@@ -529,10 +517,10 @@ a{
 }
 .main_panel.lineapp .row.row3 .charts img,
 .main_panel.lineapp .row.row4 .charts img{
-    width: 500px;
-    height: 300px;
-    padding-left: 10px;
-    margin: -25px -15px -15px;
+    width: 40vw;
+    height: 20vw;
+    object-fit: contain;
+    margin: auto;
 }
 .main_panel.lineapp .row.row3 .desc p,
 .main_panel.lineapp .row.row4 .desc p{
@@ -552,6 +540,8 @@ a{
 }
 .main_panel.lineapp .row.row3 .charts .chart,
 .main_panel.lineapp .row.row4 .charts .chart{
+    display: flex;
+    flex-direction: column;
     scroll-snap-align: center;
     margin: 3% 0;
     background-color: rgba(0,0,0, 0.2);
@@ -574,9 +564,9 @@ a{
     text-align: center;
     position: relative;
     bottom: 0;
-    margin: auto;
+    margin: auto 0 0;
     border-top: 2vh solid var(--bright_green);
-    padding: 10px;
+    padding: 2vh;
     color: var(--bright);
     font-weight: 400;
     border-radius: 0 0 10px 10px;
@@ -634,8 +624,6 @@ a{
     font-family: Montserrat Alternates;
 }
 
-
-
 /* Background animation */
 #gradient-canvas {
     width:100%;
@@ -654,7 +642,6 @@ html,body {
     height:100%;
     overflow:hidden;
 }
-
 
 /* Scroll Down */
 .scroll_down{
@@ -834,7 +821,6 @@ html,body {
 }
 
 /* Sign in */
-
 .signin{
     position: absolute;
     right: 0;
