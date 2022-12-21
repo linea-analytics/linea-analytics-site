@@ -164,14 +164,15 @@ a{
     flex-direction: column;
     position: fixed;
     top: 0;
-    opacity: .95;
+    /* opacity: .95; */
     color: var(--bright);
     right: 0;
     height: 100vh;
-    background-color: var(--dark);
+    background-color: rgba(0, 0, 0, 0);
+    /* background-color: var(--dark); */
     z-index: 4;
     width: 80%;
-    box-shadow: 0px 0px 10px 4px rgba(0,0,0,0.2);
+    /* box-shadow: 0px 0px 10px 4px rgba(0,0,0,0.2);     */
     scroll-snap-type: y mandatory;
     transition: .2s;
     scroll-behavior: smooth;
@@ -431,6 +432,7 @@ a{
 }
 .main_panel .row .product_overview .features .feature{
     width: 25%;
+    background-color: rgba(0,0,0, 0.2);
 }
 .main_panel .row .product_overview .features .feature.feature_names p{
     padding: 2.5vh 0 0.5vh;
@@ -628,7 +630,7 @@ a{
 #gradient-canvas {
     width:100%;
     height:100%;
-    --gradient-color-1: var(--bright_green);  
+    --gradient-color-1: var(--green);  
     --gradient-color-2: var(--red); 
     --gradient-color-3: var(--dark);
     --gradient-color-4: var(--dark); 
