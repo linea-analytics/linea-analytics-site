@@ -373,19 +373,19 @@ a{
 .main_panel .row.row2 .linea_product .describe_cols div,
 .main_panel .row.row3 .lineapp_product .describe_cols div,
 .main_panel .row.row4 .custom_product .describe_cols div{
-
+    margin: auto 20px;
 }
 .main_panel .row.row1 .product_overview img,
 .main_panel .row.row2 .linea_product .describe_cols img,
 .main_panel .row.row3 .lineapp_product .describe_cols img,
 .main_panel .row.row4 .custom_product .describe_cols img{
-    width: 60px;
+    width: 50px;
     display: block;
-    margin: 65px auto;
+    margin: 50px auto;
     background-color: var(--bright);
     border-radius: 10%;
     box-shadow: 0px 0px 5pc rgba(255,255,255, 0.5);
-    padding:50px;
+    padding:40px;
     filter: invert(1);
     transition: .3s;
 }
@@ -521,12 +521,13 @@ a{
     height: 20vw;
     object-fit: contain;
     margin: auto;
+    padding: 0 20px;
 }
 .main_panel.lineapp .row.row3 .desc p,
 .main_panel.lineapp .row.row4 .desc p{
     text-align: center;
     font-size: 1.5em;
-    margin-bottom: 0;
+    margin:0;
     font-family: Montserrat Alternates;
     font-weight: 600;
 }
