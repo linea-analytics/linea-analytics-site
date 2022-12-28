@@ -54,7 +54,11 @@ a{
     height: 100vh;
     left: 0;
     top: 0;
-    z-index: 2;
+    box-sizing: border-box;
+    /* border-right: 10px solid rgba(255,255,255,01); */
+    border-right: 5px solid var(--bright);
+    box-shadow: 0px 0px 5px rgba(0,0,0, 0.2);
+    z-index: 20;
     background: var(--bright);
     text-align: center;
     color: rgba(var(--dark),1);
@@ -383,7 +387,7 @@ a{
     width: 50px;
     display: block;
     margin: 50px auto;
-    background-color: var(--bright);
+    background-color: rgba(255,255,255, 0.5);
     border-radius: 10%;
     box-shadow: 0px 0px 5pc rgba(255,255,255, 0.5);
     padding:40px;
@@ -395,6 +399,7 @@ a{
 .main_panel .row.row3 .lineapp_product .describe_cols img:hover,
 .main_panel .row.row4 .custom_product .describe_cols img:hover{
     box-shadow: 0px 0px 5pc rgba(255,255,255, 0.1);
+    background-color: rgba(255,255,255, 0.9);
 }
 .linea_product.features_list .features .features_container{
     display: flex;
