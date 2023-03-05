@@ -104,6 +104,7 @@ a{
     height:70vh;
 }
 .sidebar .nav a{
+    font-size: .75em;
     box-sizing: border-box;
     text-shadow: 0px 0px 5px rgba(0,0,0,0.3);
     border-bottom: 4px solid var(--bright);
@@ -204,6 +205,7 @@ a{
     font-family: Roboto;
     transition: .3s;
 }
+.main_panel .row .left_side_text .span0,
 .main_panel .row .left_side_text .span3,
 .main_panel .row .left_side_text .span5,
 .main_panel .row .left_side_text .span9{
@@ -647,7 +649,13 @@ a{
     margin: 0 auto auto;
     filter: invert(1);
 }
-.main_panel.opensource .row.row2{
+.main_panel.opensource .row.row1 hr{
+    border-bottom: 10px solid white;
+    width: 75%;
+    margin-bottom: 20px;
+}
+.main_panel.opensource .row.row2,
+.main_panel.opensource .row.row3{
     display: block;
     padding: 20px;
 }
