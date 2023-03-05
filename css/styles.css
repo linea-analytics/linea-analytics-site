@@ -628,6 +628,31 @@ a{
     font-family: Montserrat Alternates;
 }
 
+
+/* OpenSource */
+.main_panel.opensource{
+    scroll-snap-type: none;
+}
+.main_panel.opensource .row.row1{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+}
+.main_panel.opensource .row.row1 h1{
+    margin: auto auto 0;
+}
+.main_panel.opensource .row.row1 img{
+    margin: 0 auto auto;
+    filter: invert(1);
+}
+.main_panel.opensource .row.row2{
+    display: block;
+    padding: 20px;
+}
+
+
 /* Background animation */
 #gradient-canvas {
     width:100%;
