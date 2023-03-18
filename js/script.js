@@ -27,4 +27,7 @@ $(document).ready(function() {
         $(".nav").css("right",'0')
       }
     });
+    
+    var in_dev = document.querySelector(".in_dev");
+    in_dev.innerHTML = "UNDER DEVELOPMENT";
 });
