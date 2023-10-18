@@ -22,10 +22,11 @@ body{
 }
 .in_dev{
     position: absolute;
+    display: none;
     top:100px;
     z-index: 100;
     /* box-shadow: 0px 0px 5px 5px rgba(0,0,0, 0.2); */
-    background-color: red;
+    background-color: rgba(155,0,0,0.75);
     padding: 20px;
     color: white;
     font-weight: 700;
@@ -123,7 +124,7 @@ a{
     text-decoration: none;
     margin: 20px 22%;
     color: var(--bright);
-    letter-spacing:4px;
+    letter-spacing:3px;
     transition: .2s;
     padding: 0 0 10px;
 }
@@ -205,7 +206,7 @@ a{
     height: 62vh;
     margin: 20vh 0;
     width: 40%;
-    font-size: 1.7em;
+    font-size: 250%;
     text-align: right;
     border-right: 10px solid var(--bright);
     padding-right: 20px;
@@ -515,7 +516,7 @@ a{
 .main_panel.lineapp .row.row2 .lineapp_video p{
     margin: 0 5%;
 }
-.main_panel.lineapp .row.row2 .lineapp_video iframe{
+.main_panel.lineapp .row.row2 .lineapp_video video{
     width: 90%;
     height: 70vh;
     margin: auto;
@@ -642,6 +643,12 @@ a{
     font-family: Montserrat Alternates;
 }
 
+
+/* Academy */
+
+.main_panel.academy .row .right_side_text .linea{
+    color: var(--bright_green);
+}
 
 /* OpenSource */
 .main_panel.opensource{
