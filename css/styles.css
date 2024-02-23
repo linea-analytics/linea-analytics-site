@@ -13,6 +13,7 @@
     --color4:#6a000d;
     --color5:#ff5c00;
     --color7:#8f9d35;
+    --transparentDark:rgba(0,0,0,0.1);
 }
 body{
    font-family: Roboto; 
@@ -643,6 +644,52 @@ a{
     font-family: Montserrat Alternates;
 }
 
+
+/* MMM PRicing Page */
+div.main_panel.mmm_pricing div.row.row1{
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+    margin: auto;
+}
+#pricingForm{
+    display: flex;
+    flex-direction: column;
+    background-color: var(--transparentDark);
+    margin: 0 auto;
+    width: 100%;
+}
+#pricingForm div{
+    width: 90%;
+    display: flex;
+    padding: 8px;
+    margin: 5px auto;
+}
+#pricingForm div span{
+    width: 20%;
+    text-align: right;
+    padding-right: 10%;
+}
+
+#pricingForm div label{
+    width: 70%;
+}
+#pricingForm div input{
+    width: 10%;
+}
+#pricingForm div input[type='number'] {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.totalPriceContainer{
+    margin: 0 auto;
+    font-size: 2rem;
+    font-weight: 800;
+    font-family: Montserrat Alternates;
+}
 
 /* Academy */
 
