@@ -10989,6 +10989,10 @@ html {
     border-bottom: solid .5rem !important;
   }
 
+  .contact h1 a{
+    font-size: 1.5rem !important;
+  }
+
 }
 
 .section-header h1 {
