@@ -687,9 +687,12 @@ ul.dropdown-menu li {
 
 .bg-left {
   min-height: 400px;
+  background-size:cover;
+}
+
+.bg-img-pading{
   background-origin: content-box;
   padding: 20px;
-  background-size:cover;
 }
 
 .about-content {
