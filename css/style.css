@@ -189,6 +189,10 @@ input[type=email]:focus, input[type=password]:focus, input[type=text]:focus, inp
   background: rgb(255, 221, 0);
 }
 
+.color-green {
+  color: rgb(41, 202, 171);!
+}
+
 .bg-green,
 .bg-primary {
   background: rgb(41, 202, 171);!
@@ -507,7 +511,7 @@ a:focus {
 .navbar-brand span {
   color: rgb(41, 202, 171);
 }
-
+/* 
 .dropdown-menu {
   padding: 0px;
   border: 0;
@@ -580,7 +584,6 @@ ul.dropdown-menu li {
   padding-left: 0px !important;
 }
 
-@media (min-width: 992px) {
   .dropdown-menu {
     transition: all 0.2s ease-in, visibility 0s linear 0.2s, transform 0.2s linear;
     display: block;
@@ -603,8 +606,8 @@ ul.dropdown-menu li {
     visibility: visible;
     transition: all 0.45s ease 0s;
     opacity: 1;
-  }
-}
+  } */
+
 .bg-1 {
   background: url("../images/bg/home-2.jpg") no-repeat 50% 50%;
   background-size: cover;

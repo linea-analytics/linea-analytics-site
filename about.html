@@ -28,10 +28,14 @@
 	<link rel="stylesheet" href="plugins/slick/slick-theme.css">
 
 	<!-- Main Stylesheet -->
+	<link rel="stylesheet" href="css/custom-dropdown.css">
 	<link rel="stylesheet" href="css/style.css">
 
 	<!--Favicon-->
 	<link rel="icon" href="images/logos/icon.png" type="image/x-icon">
+
+	<!-- CSV parsing -->
+	<script src="https://cdn.jsdelivr.net/npm/papaparse@5.5.2/papaparse.min.js"></script>
 
 </head>
 
@@ -49,7 +53,7 @@
 			<div class="row justify-content-center">
 				<div class="col-lg-7 text-center">
 					<div class="section-title">
-						<h1 class="display-4 mt-3 font-weight-normal">About us</h1>
+						<h1 class="display-4 mt-3 font-weight-normal tc108">About us</h1>
 					</div>
 				</div>
 			</div>
@@ -58,7 +62,7 @@
 
 				<div class="col-lg-4 col-md-6 col-sm-6">
 					<div class="mb-5">
-						<a href="#our-mission" class="btn btn-main btn-lg btn-block animated fadeInUp btn-round-full"
+						<a href="#our-mission" class="btn btn-main btn-lg btn-block animated fadeInUp btn-round-full tc88"
 							aria-label="Solutions">
 							Our Mission
 						</a>
@@ -67,7 +71,7 @@
 
 				<div class="col-lg-4 col-md-6 col-sm-6">
 					<div class="mb-5">
-						<a href="#our-team" class="btn btn-main btn-sm btn-block animated fadeInUp btn-round-full"
+						<a href="#our-team" class="btn btn-main btn-sm btn-block animated fadeInUp btn-round-full tc89"
 							aria-label="About">
 							Our Team
 						</a>
@@ -76,7 +80,7 @@
 
 				<div class="col-lg-4 col-md-6 col-sm-6">
 					<div class="mb-5 mx-auto">
-						<a href="#join-us" class="btn btn-main btn-sm btn-block animated fadeInUp btn-round-full"
+						<a href="#join-us" class="btn btn-main btn-sm btn-block animated fadeInUp btn-round-full tc90"
 							aria-label="Schedule a Call">
 							Join Us
 						</a>
@@ -97,14 +101,15 @@
 			</div>
 			<div class="col-md-6 d-flex justify-content-center align-items-center bg-light">
 				<div class="about-item p-5">
-					<h2 class="mt-3 mb-3 position-relative">Our Mission
+					<h2 class="mt-3 mb-3 position-relative tc88">Our Mission
 					</h2>
 					<div class="">
 						<p class="mb-3 h5 font-weight-normal position-relative">Build transparent technology
 							that allows you to measure the true uplift of your marketing</p>
-						<p class="mb-3 h5 font-weight-normal position-relative"> Our areas of focus are
-							<strong>People</strong>, <strong>Accuracy</strong>, <strong>Transparency</strong>, and
-							<strong>Implementation</strong>
+						<p class="mb-3 h5 font-weight-normal position-relative"> 
+							<span class="tc92">Our areas of focus are</span>
+							<strong class="tc93">People</strong>, <strong class="tc94">Accuracy</strong>, <strong class="tc95">Transparency</strong>, and
+							<strong class="tc96">Implementation</strong>
 						</p>
 					</div>
 				</div>
@@ -118,12 +123,12 @@
 		<div class="row" style="min-height: 450px;">
 			<div class="col-md-6 d-flex justify-content-center align-items-center bg-light">
 				<div class="about-item p-5">
-					<h2 class="mt-3 mb-4 position-relative">Our Team</h2>
-					<p class="mb-3 h5 font-weight-normal position-relative">
+					<h2 class="mt-3 mb-4 position-relative tc89">Our Team</h2>
+					<p class="mb-3 h5 font-weight-normal position-relative tc97">
 						Our team brings a wealth of experience building best in class measurement for the world's
 						biggest brands - we understand your challenges.
 					</p>
-					<p class="mb-3 h5 font-weight-normal position-relative">
+					<p class="mb-3 h5 font-weight-normal position-relative tc98">
 						We combine the smartest data scientists building the best measurement platform with the best
 						data communicators to drive impact for your business
 					</p>
@@ -138,7 +143,7 @@
 						<div class="mt-3 p-3 bg-light">
 							<p><strong>David Walsh: Client Lead</strong>
 							</p>
-							<p>15 years experience at MediaMonks, Brightblue & Mediacom. Delivered marketing effectiveness programme to drive business growth
+							<p class="tc99">15 years experience at MediaMonks, Brightblue & Mediacom. Delivered marketing effectiveness programme to drive business growth
 								</p>
 							<li class="list-inline-item">
 								<a href="https://www.linkedin.com/in/david-walsh-0820b1a8/" aria-label="linkedin"><i
@@ -153,8 +158,7 @@
 							alt="team member" class="mx-auto block">
 						<div class="mt-3 p-3 bg-light">
 							<p><strong>Claudio Paladini: Analytics Lead</strong></p>
-							<p>7 years experience building best in class measurement software at IPG MediaLabs,
-								Brightblue & Decoded</p>
+							<p class="tc100">7 years experience building best in class measurement software at IPG MediaLabs, Brightblue & Decoded</p>
 							<li class="list-inline-item">
 								<a href="https://www.linkedin.com/in/paladinic/" aria-label="linkedin"><i
 										class="fab fa-linkedin"></i>
@@ -177,28 +181,33 @@
 			</div>
 			<div class="col-md-6 d-flex justify-content-center align-items-center bg-light">
 				<div class="about-item p-5">
-					<h2 class="mt-3 mb-3 position-relative">Join us
+					<h2 class="mt-3 mb-3 position-relative tc90">Join us
 					</h2>
-					<div class="">
-						<p class="mb-3 h5 font-weight-normal position-relative">
+					<div >
+						<p class="mb-3 h5 font-weight-normal position-relative tc101">
 							Keen to be a part of the revolution in marketing measurement?
 						</p>
-						<p class="mb-3 h5 font-weight-normal position-relative">
+						<p class="mb-3 h5 font-weight-normal position-relative tc102">
 							We are always looking for:
 						</p>
 						<br>
 						<p class="h5 font-weight-normal position-relative">
-							<i class="fas fa-flask"></i>The smartest <em>data scientists</em> to drive our platform
+							<i class="fas fa-flask"></i>
+							<span class="tc103">The smartest</span>
+							<em class="tc109">data scientists</em> 
+							<span class="tc104">to drive our platform</span>
 						</p>
 						<br>
 						<p class="h5 font-weight-normal position-relative">
 							<i class="fas fa-chalkboard-teacher"></i>
-							The best <em>data communicators</em> to drive impact for our clients
+							<span class="tc105">The best</span>
+							<em class="tc110">data communicators</em>
+							<span class="tc106">to drive impact for our clients</span>
 						</p>
 						</p>
 						<br>
 						<p class="mb-3 h5 font-weight-normal position-relative">
-							If this is you, get in touch: <br> <strong><a
+							<span class="tc107">If this is you, get in touch:</span> <br> <strong><a
 									href="mailto:info@linea-analytics.com">info@linea-analytics.com</a></strong>
 						</p>
 					</div>
@@ -210,20 +219,20 @@
 
 	
 	<!-- Section Contacts Start -->
-	<section class="section cta d-flex align-items-center" id="contactUs">
+	<section class="section cta d-flex align-items-center">
 		<div class="container">
 			<div class="row justify-content-center">
-				<div class="col-xl-5 col-lg-6">
+				<div class="col-xl-5 col-lg-6"  id="contactUs">
 					<div class="cta-item bg-white p-5 rounded text-center">
-						<span class="h6 text-color">Take control of your data</span>
-						<h2 class="mt-2 mb-4">Contact us</h2>
-						<p class="lead mb-4">Have any project on mind?<br>For immediate support:</p>
+						<span class="h6 text-color tc27">Take control of your data</span>
+						<h2 class="mt-2 mb-4 tc28">Contact us</h2>
+						<p class="lead mb-4"><span class="tc29">Have any project on mind?</span><br><span class="tc30">For immediate support:</span></p>
 						<a href="mailto:info@linea-analytics.com">
 							<i class="fas fa-envelope mr-2"></i>
 							<span>info@linea-analytics.com</span>
 						</a>
 						<br>
-						<a href="https://calendly.com/claudio-paladini-linea-analytics/60-minute-meeting">
+						<a href="https://calendly.com/claudio-paladini-linea-analytics/60-minute-meeting" class="tc31">
 							<i class="fas fa-phone mr-2"></i>
 							Schedule a Call
 						</a>
@@ -238,12 +247,12 @@
 			<div class="cta-block-2 bg-gray p-5 rounded border-1">
 				<div class="row justify-content-center align-items-center ">
 					<div class="col-lg-7">
-						<span class="text-color">Why wait</span>
-						<h2 class="mt-2 mb-4 mb-lg-0">Get the <strong>True Impact</strong> of your Marketing.</h2>
+						<span class="text-color tc32">Why wait</span>
+						<h2 class="mt-2 mb-4 mb-lg-0"><span class="tc2">Get the</span> <strong><span class="tc3"> True Impact</span> </strong><span class="tc4">of your Marketing.</span></h2>
 					</div>
 					<div class="col-lg-4">
 						<a href="https://calendly.com/claudio-paladini-linea-analytics/60-minute-meeting"
-							class="btn btn-main btn-round-full float-lg-right ">Schedule a call</a>
+							class="btn btn-main btn-round-full float-lg-right tc31">Schedule a call</a>
 					</div>
 				</div>
 			</div>
@@ -276,6 +285,8 @@ Essential Scripts
 
 	<script src="js/script.js"></script>
 	<script src="js/views.js"></script>
+	<script src="js/customDropdown.js"></script>
+	<script src="js/translate.js"></script>
 	<!-- Google tag (gtag.js) -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-5LHVS45SP4"></script>
 	<script>

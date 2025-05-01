@@ -30,9 +30,14 @@
 
 	<!-- Main Stylesheet -->
 	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/custom-dropdown.css">
 
 	<!--Favicon-->
 	<link rel="icon" href="images/logos/icon144.png" type="image/x-icon">
+
+	<!-- CSV parsing -->
+	<script src="https://cdn.jsdelivr.net/npm/papaparse@5.5.2/papaparse.min.js"></script>
+
 
 
 </head>
@@ -49,8 +54,8 @@
 			<div class="row justify-content-center">
 				<div class="col-lg-7 text-center">
 					<div class="section-title">
-						<h1 class="display-4 mt-3 font-weight-normal">Get the <strong>True Impact</strong>
-							<br>of your Marketing.
+						<h1 class="display-4 mt-3 font-weight-normal"><span class="tc2">Get the</span> <strong><span class="tc3"> True Impact</span></strong>
+							<br><span class="tc4">of your Marketing.</span>
 						</h1>
 					</div>
 				</div>
@@ -61,7 +66,7 @@
 				<div class="col-lg-5 col-md-6 col-sm-6">
 					<div class="mb-5">
 						<a href="full-service.html"
-							class="btn btn-main btn-lg btn-block animated fadeInUp btn-round-full"
+							class="btn btn-main btn-lg btn-block animated fadeInUp btn-round-full tc5"
 							aria-label="Solutions">
 							Explore our Solutions
 						</a>
@@ -71,7 +76,7 @@
 				<div class="col-lg-5 col-md-6 col-sm-6">
 					<div class="mb-5 mx-auto">
 						<a href="https://calendly.com/claudio-paladini-linea-analytics/60-minute-meeting"
-							class="btn btn-main btn-sm btn-block bg-dark animated fadeInUp btn-round-full text-white"
+							class="btn btn-main btn-sm btn-block bg-dark animated fadeInUp btn-round-full text-white tc6"
 							aria-label="Schedule a Call">
 							Book a free consultation
 						</a>
@@ -125,7 +130,7 @@
 	<!-- small header START -->
 	<section>
 		<div class="pt-5 text-center mt-3 mb-3">
-			<span class="text-color font-weight-bold">Solving your business questions</span>
+			<span class="text-color font-weight-bold tc7">Solving your business questions</span>
 		</div>
 	</section>
 	<!-- small header END -->
@@ -138,16 +143,18 @@
 			</div>
 			<div class="col-md-6 d-flex justify-content-center align-items-center bg-light">
 				<div class="about-item p-5">
-					<h2 class="mt-3 mb-3 position-relative">Unbiased true uplift of your marketing
+					<h2 class="mt-3 mb-3 position-relative tc8">Unbiased true uplift of your marketing
 					</h2>
 					<div class="">
-						<p class="mb-3 h5 font-weight-normal position-relative">In a world with a wealth of data and
+						<p class="mb-3 h5 font-weight-normal position-relative tc9">In a world with a wealth of data and
 							multiple
 							reporting methodologies.</p>
-						<p class="h5 font-weight-normal">We <strong>partner with all teams</strong> to ensure we use the
-							right measurement approaches that are clear & can be implemented by the business</p>
+						<p class="h5 font-weight-normal"><span class="tc10">We</span> <strong class="tc11">partner with all teams</strong>
+							<span class="tc12">
+							to ensure we use the right measurement approaches that are clear & can be implemented by the business
+						</span></p>
 						<a href="https://calendly.com/claudio-paladini-linea-analytics/60-minute-meeting"
-							class="btn btn-main btn-round-full mb-5">Get started</a>
+							class="btn btn-main btn-round-full mb-5 tc13">Get started</a>
 					</div>
 				</div>
 			</div>
@@ -160,14 +167,14 @@
 		<div class="row" style="min-height: 450px;">
 			<div class="col-md-6 d-flex justify-content-center align-items-center bg-light">
 				<div class="about-item p-5">
-					<h2 class="mt-3 mb-4 position-relative">Measure the true impact of performance campaigns</h2>
-					<p class="h5 mb-5 font-weight-normal">Traditional marketing performance reporting methods don't show
+					<h2 class="mt-3 mb-4 position-relative tc14">Measure the true impact of performance campaigns</h2>
+					<p class="h5 mb-5 font-weight-normal tc15">Traditional marketing performance reporting methods don't show
 						the incremental impact of my marketing </p>
-					<p class="h5 mb-5 font-weight-normal">We measure <strong>True Uplift</strong> on a fair
-						like-for-like comparison of media channels.
+					<p class="h5 mb-5 font-weight-normal">
+						<span class="tc16">We measure</span> <strong class="tc17">True Uplift</strong> <span class="tc18">on a fair like-for-like comparison of media channels.</span>
 					</p>
 					<a href="https://calendly.com/claudio-paladini-linea-analytics/60-minute-meeting"
-						class="btn btn-main btn-round-full mb-5">Get started</a>
+						class="btn btn-main btn-round-full mb-5 tc13">Get started</a>
 				</div>
 			</div>
 			<div class="col-md-6 bg-left d-flex justify-content-center align-items-center bg-green"
@@ -186,20 +193,20 @@
 			</div>
 			<div class="col-md-6 d-flex justify-content-center align-items-center bg-light">
 				<div class="about-item p-5">
-					<h2 class="mt-3 mb-3 position-relative">Allocate & optimise your media budgets
+					<h2 class="mt-3 mb-3 position-relative tc19">Allocate & optimise your media budgets
 					</h2>
 					<div class="">
-						<p class="mb-3 h5 font-weight-normal position-relative">Measure all marketing channels on a like
+						<p class="mb-3 h5 font-weight-normal position-relative tc20">Measure all marketing channels on a like
 							for like basis & drive growth by:</p>
 						<ol>
-							<li class="h5 font-weight-normal">Optimise the same marketing budget level to drive uplift
+							<li class="h5 font-weight-normal tc21">Optimise the same marketing budget level to drive uplift
 							</li>
-							<li class="h5 font-weight-normal">Set marketing budget that maximises your profit</li>
-							<li class="mb-5 h5 font-weight-normal">Input pre-set budget level & understand what
+							<li class="h5 font-weight-normal tc22">Set marketing budget that maximises your profit</li>
+							<li class="mb-5 h5 font-weight-normal tc23">Input pre-set budget level & understand what
 								revenue/profit it will drive </li>
 						</ol>
 						<a href="https://calendly.com/claudio-paladini-linea-analytics/60-minute-meeting"
-							class="btn btn-main btn-round-full mb-5">Get started</a>
+							class="btn btn-main btn-round-full mb-5 tc13">Get started</a>
 					</div>
 				</div>
 			</div>
@@ -212,11 +219,11 @@
 		<div class="row" style="min-height: 450px;">
 			<div class="col-md-6 d-flex justify-content-center align-items-center bg-light">
 				<div class="about-item p-5">
-					<h2 class="mt-3 mb-4 position-relative">Ensure measurement leads to action</h2>
-					<p class="h5 mb-5 font-weight-normal">We work with all areas of your team to ensure the measurement
+					<h2 class="mt-3 mb-4 position-relative tc24">Ensure measurement leads to action</h2>
+					<p class="h5 mb-5 font-weight-normal tc25">We work with all areas of your team to ensure the measurement
 						is understood and that teams can take action from the results.</p>
 					<a href="https://calendly.com/claudio-paladini-linea-analytics/60-minute-meeting"
-						class="btn btn-main btn-round-full mb-5">Get started</a>
+						class="btn btn-main btn-round-full mb-5 tc13">Get started</a>
 				</div>
 			</div>
 			<div class="col-md-6 bg-left d-flex justify-content-center align-items-center bg-green"
@@ -232,7 +239,7 @@
 			<div class="row ">
 				<div class="col-lg-12">
 					<div class="section-title">
-						<h2 class="mt-3 content-title text-white">Driving growth for your business</h2>
+						<h2 class="mt-3 content-title text-white tc26">Driving growth for your business</h2>
 					</div>
 				</div>
 			</div>
@@ -264,20 +271,20 @@
 	<!-- Section Intro END -->
 
 	<!-- Section Contacts Start -->
-	<section class="section cta d-flex align-items-center" id="contactUs">
+	<section class="section cta d-flex align-items-center">
 		<div class="container">
 			<div class="row justify-content-center">
-				<div class="col-xl-5 col-lg-6">
+				<div class="col-xl-5 col-lg-6"  id="contactUs">
 					<div class="cta-item bg-white p-5 rounded text-center">
-						<span class="h6 text-color">Take control of your data</span>
-						<h2 class="mt-2 mb-4">Contact us</h2>
-						<p class="lead mb-4">Have any project on mind?<br>For immediate support:</p>
+						<span class="h6 text-color tc27">Take control of your data</span>
+						<h2 class="mt-2 mb-4 tc28">Contact us</h2>
+						<p class="lead mb-4"><span class="tc29">Have any project on mind?</span><br><span class="tc30">For immediate support:</span></p>
 						<a href="mailto:info@linea-analytics.com">
 							<i class="fas fa-envelope mr-2"></i>
 							<span>info@linea-analytics.com</span>
 						</a>
 						<br>
-						<a href="https://calendly.com/claudio-paladini-linea-analytics/60-minute-meeting">
+						<a href="https://calendly.com/claudio-paladini-linea-analytics/60-minute-meeting" class="tc31">
 							<i class="fas fa-phone mr-2"></i>
 							Schedule a Call
 						</a>
@@ -292,12 +299,12 @@
 			<div class="cta-block-2 bg-gray p-5 rounded border-1">
 				<div class="row justify-content-center align-items-center ">
 					<div class="col-lg-7">
-						<span class="text-color">Why wait</span>
-						<h2 class="mt-2 mb-4 mb-lg-0">Get the <strong>True Impact</strong> of your Marketing.</h2>
+						<span class="text-color tc32">Why wait</span>
+						<h2 class="mt-2 mb-4 mb-lg-0"><span class="tc2">Get the</span> <strong><span class="tc3"> True Impact</span> </strong><span class="tc4">of your Marketing.</span></h2>
 					</div>
 					<div class="col-lg-4">
 						<a href="https://calendly.com/claudio-paladini-linea-analytics/60-minute-meeting"
-							class="btn btn-main btn-round-full float-lg-right ">Schedule a call</a>
+							class="btn btn-main btn-round-full float-lg-right tc31">Schedule a call</a>
 					</div>
 				</div>
 			</div>
@@ -312,9 +319,8 @@
 	</div>
 
 
-	<!-- 
-Essential Scripts
-=====================================-->
+	<!-- Essential Scripts -->
+	 
 	<!-- Main jQuery -->
 	<script src="plugins/jquery/jquery.min.js"></script>
 	<!-- Bootstrap 4.3.1 -->
@@ -328,7 +334,9 @@ Essential Scripts
 	<script src="plugins/counterup/jquery.counterup.min.js"></script>
 
 	<script src="js/script.js"></script>
+	<script src="js/customDropdown.js"></script>
 	<script src="js/views.js"></script>
+	<script src="js/translate.js"></script>
 	<!-- Google tag (gtag.js) -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-5LHVS45SP4"></script>
 	<script>

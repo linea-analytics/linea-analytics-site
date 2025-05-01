@@ -1,0 +1,44 @@
+/* Wrapper ensures correct positioning */
+.custom-dropdown-wrapper {
+    position: relative;
+    display: inline-block; /* Or block, if you prefer full width */
+  }
+  
+  /* Style the toggle however you like */
+  .custom-dropdown-toggle {
+    background: none;
+    cursor: pointer;
+    border: none;
+    color: #919194;
+  }
+  
+  /* The dropdown list */
+  .custom-dropdown-content {
+    position: absolute;       /* So it appears below the button */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    min-width: 140px;         /* Adjust as needed */
+    z-index: 999;            /* Ensure it floats on top */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15); 
+    /* etc. */
+  }
+  
+  .custom-dropdown-content ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .custom-dropdown-content ul li a {
+    display: block;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #333;
+    margin-left: 0 !important;
+    text-align: center;
+  }
+  
+  .custom-dropdown-content ul li a:hover {
+    background-color: #f3f3f3;
+  }
+  
