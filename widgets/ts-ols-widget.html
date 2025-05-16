@@ -1,0 +1,151 @@
+<div class="py-4">
+  <h4 class="text-center mb-3">
+    Sales = <span id="ols2-interceptLabel">10000</span> +
+    <span id="ols2-coefLabel">2</span>&times; Media Spend
+  </h4>
+
+  <div class="card p-5 shadow">
+    <div class="row g-0">
+      <div class="col-md-4 p-3 border-end">
+        <form>
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              Coefficient:
+              <span id="ols2-coefValue" class="fw-normal">2</span>
+            </label>
+            <br>
+            <input type="range" class="form-range" id="ols2-coef" min="0" max="3" step="0.1" value="2" />
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              Intercept:
+              <span id="ols2-interceptValue" class="fw-normal">10000</span>
+            </label>
+            <br>
+            <input type="range" class="form-range" id="ols2-intercept" min="0" max="20000" step="1000" value="10000" />
+          </div>
+
+          <button type="button" id="ols2-reset" class="btn btn-outline-secondary w-100">
+            Reset&nbsp;Sliders
+          </button>
+        </form>
+      </div>
+
+      <div class="col-md-8 d-flex align-items-center justify-content-center">
+        <canvas id="ols2-chart" width="500" height="300"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initOlsWidget2() {
+    const ctx = document.getElementById('ols2-chart')?.getContext('2d');
+    if (!ctx) return;
+
+    const mediaSpend = [0, 0, 0, 0, 0, 10000, 0, 0, 0, 5000, 15000, 0, 0, 0, 0];
+    const noise = Array.from({ length: mediaSpend.length }, () => Math.random() * 2000 - 1000);
+
+    let coef = 2;
+    let intercept = 10000;
+
+    const fixedSales = mediaSpend.map((x, i) => 2 * x + 10000 + noise[i]);
+
+    function getMediaContribution() {
+      return mediaSpend.map(x => x * coef);
+    }
+
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: mediaSpend.map((_, i) => `Week ${i + 1}`),
+        datasets: [
+          {
+            label: 'Base',
+            data: Array(mediaSpend.length).fill(intercept),
+            backgroundColor: 'rgba(255, 159, 64, 0.5)',
+            stack: 'Stack 0'
+          },
+          {
+            label: 'Media Contribution',
+            data: getMediaContribution(),
+            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+            stack: 'Stack 0'
+          },
+          {
+            label: 'Sales',
+            data: fixedSales,
+            type: 'line',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 2,
+            pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+            fill: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: { stacked: true, grid: { display: false } },
+          y: {
+            stacked: true,
+            min: 0,
+            max: 60000,
+            grid: { display: false },
+            title: { display: true, text: 'Sales' }
+          }
+        }
+      }
+    });
+
+    function update() {
+      coef = parseFloat(document.getElementById('ols2-coef').value);
+      intercept = parseFloat(document.getElementById('ols2-intercept').value);
+
+      document.getElementById('ols2-coefLabel').textContent = coef;
+      document.getElementById('ols2-coefValue').textContent = coef;
+      document.getElementById('ols2-interceptLabel').textContent = intercept;
+      document.getElementById('ols2-interceptValue').textContent = intercept;
+
+      chart.data.datasets[0].data = Array(mediaSpend.length).fill(intercept);
+      chart.data.datasets[1].data = getMediaContribution();
+      chart.update();
+    }
+
+    function graduallyMoveSlider(sliderId, targetValue, step, delay, callback) {
+      const slider = document.getElementById(sliderId);
+      const labelId = sliderId === 'ols2-coef' ? 'ols2-coefValue' : 'ols2-interceptValue';
+
+      let currentValue = parseFloat(slider.value);
+      const direction = targetValue > currentValue ? 1 : -1;
+
+      function move() {
+        if ((direction === 1 && currentValue < targetValue) || (direction === -1 && currentValue > targetValue)) {
+          currentValue += direction * step;
+          currentValue = Math.round(currentValue * 10) / 10;
+          slider.value = currentValue;
+          document.getElementById(labelId).textContent = currentValue;
+          update();
+          setTimeout(move, delay);
+        } else {
+          callback();
+        }
+      }
+
+      move();
+    }
+
+    // Event listeners
+    document.getElementById('ols2-coef').addEventListener('input', update);
+    document.getElementById('ols2-intercept').addEventListener('input', update);
+
+    document.getElementById('ols2-reset').addEventListener('click', function () {
+      graduallyMoveSlider('ols2-coef', 2, 0.1, 10, function () {
+        graduallyMoveSlider('ols2-intercept', 10000, 100, 5, update);
+      });
+    });
+  }
+
+  requestAnimationFrame(initOlsWidget2);
+</script>

@@ -1,0 +1,165 @@
+
+<div class="py-4">
+    <!-- Formula -->
+    <h4 class="text-center mb-3">
+        Sales = <span id="olsIntercept">10000</span> +
+        <span id="olsCoef">2</span>&times; Media Spend
+    </h4>
+
+    <!-- Sliders + chart -->
+    <div class="card shadow p-5 mh-100">
+        <div class="row g-0">
+            <!-- Controls -->
+            <div class="col-md-4 p-3 border-end">
+                <form>
+                    <div class="mb-4">
+                        <label for="slope" class="form-label fw-semibold">
+                            Coefficient:
+                            <span id="slopeSales" class="fw-normal">2</span>
+                        </label>
+                        <br>
+                        <input type="range" class="form-range" id="slope" name="slope" min="0" max="5" step="0.25"
+                            value="2" />
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="intercept" class="form-label fw-semibold">
+                            Intercept:
+                            <span id="interceptSales" class="fw-normal">10000</span>
+                        </label>
+                        <br>
+                        <input type="range" class="form-range" id="intercept" name="intercept" min="0" max="20000"
+                            step="1000" value="10000" />
+                    </div>
+
+                    <button type="button" id="resetButton1" class="btn btn-outline-secondary w-100">
+                        Reset&nbsp;Sliders
+                    </button>
+                </form>
+            </div>
+
+            <!-- Chart -->
+            <div class="col-md-8 d-flex align-items-center justify-content-center">
+                <canvas id="regressionChart" width="500" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  function initOlsWidget() {
+    const ctx1 = document.getElementById('regressionChart')?.getContext('2d');
+    if (!ctx1) {
+      console.warn("Canvas not found for OLS Widget");
+      return;
+    }
+
+    const xValues = Array.from({ length: 10 }, (_, i) => i * 1000);
+    let slope = 2;
+    let intercept = 10000;
+
+    const originalYValues = xValues.map(x => 2 * x + 10000 + ((Math.random() - .5) * 5000));
+    function generateRegressionLine(slope, intercept) {
+      return xValues.map(x => slope * x + intercept);
+    }
+    let regressionYValues = generateRegressionLine(slope, intercept);
+
+    const regressionChart = new Chart(ctx1, {
+      type: 'scatter',
+      data: {
+        datasets: [
+          {
+            label: 'Sales vs Media Spend (Points)',
+            data: xValues.map((x, i) => ({ x: x, y: originalYValues[i] })),
+            backgroundColor: 'rgba(75, 192, 192, 1)',
+            showLine: false
+          },
+          {
+            label: 'Adjustable Regression Line',
+            data: xValues.map((x, i) => ({ x: x, y: regressionYValues[i] })),
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            type: 'line',
+            fill: false
+          }
+        ]
+      },
+      options: {
+        scales: {
+          x: {
+            type: 'linear',
+            position: 'bottom',
+            title: { display: true, text: 'Media Spend' },
+            grid: { display: false }, min: 0, max: 9000
+          },
+          y: {
+            title: { display: true, text: 'Sales' },
+            grid: { display: false }, min: 0, max: 40000
+          }
+        },
+        animation: { duration: 10, easing: 'easeInOutQuad' }
+      },
+      plugins: [{
+        afterDatasetsDraw(chart) {
+          const ctx = chart.ctx;
+          chart.data.datasets[0].data.forEach((point, i) => {
+            const actualY = chart.scales.y.getPixelForValue(point.y);
+            const predictedY = chart.scales.y.getPixelForValue(regressionYValues[i]);
+            const x = chart.scales.x.getPixelForValue(point.x);
+            const residual = Math.abs(actualY - predictedY);
+            const squareSize = residual;
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(x - squareSize, Math.min(actualY, predictedY), squareSize, residual);
+            ctx.fillStyle = 'rgba(54, 162, 235, 0.5)';
+            ctx.fill();
+            ctx.closePath();
+            ctx.restore();
+          });
+        }
+      }]
+    });
+
+    function updateChart1() {
+      slope = parseFloat(document.getElementById('slope').value);
+      intercept = parseFloat(document.getElementById('intercept').value);
+      document.getElementById('slopeSales').textContent = slope;
+      document.getElementById('interceptSales').textContent = intercept;
+      document.getElementById('olsIntercept').innerHTML = intercept;
+      document.getElementById('olsCoef').innerHTML = slope;
+      regressionYValues = generateRegressionLine(slope, intercept);
+      regressionChart.data.datasets[1].data = xValues.map((x, i) => ({ x: x, y: regressionYValues[i] }));
+      regressionChart.update();
+    }
+
+    document.getElementById('slope').addEventListener('input', updateChart1);
+    document.getElementById('intercept').addEventListener('input', updateChart1);
+
+    document.getElementById('resetButton1').addEventListener('click', function () {
+      graduallyMoveSlider('slope', 2, 0.1, 10, function () {
+        graduallyMoveSlider('intercept', 10000, 100, 5, updateChart1);
+      });
+    });
+
+    function graduallyMoveSlider(sliderId, targetValue, step, delay, callback) {
+      const slider = document.getElementById(sliderId);
+      let currentValue = parseFloat(slider.value);
+      const direction = targetValue > currentValue ? 1 : -1;
+      function moveStep() {
+        if ((direction === 1 && currentValue < targetValue) || (direction === -1 && currentValue > targetValue)) {
+          currentValue += direction * step;
+          slider.value = Math.round(currentValue * 10) / 10;
+          document.getElementById(sliderId + 'Sales').textContent = slider.value;
+          updateChart1();
+          setTimeout(moveStep, delay);
+        } else {
+          callback();
+        }
+      }
+      moveStep();
+    }
+  }
+
+  // Wait for DOM to be ready before running init
+  requestAnimationFrame(initOlsWidget);
+</script>
