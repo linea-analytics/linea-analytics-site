@@ -1,4 +1,4 @@
-# Demystifying building an MMM model? 
+# Demystifying building an MMM model
 
 A question we are often asked is “How do you build an MMM model?” At the core of MMM are statistical techniques that are often technical and confusing. The interactive charts in this article aim to assist the learning process.
 

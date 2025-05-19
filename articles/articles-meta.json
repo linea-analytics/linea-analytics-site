@@ -24,9 +24,33 @@
       "category": "Article"
     },
     {
-      "title": "What is Marketing Mix Modeling (MMM) ",
+      "title": "What is Marketing Mix Modeling (MMM)",
       "teaser": "An introduction to Marketing Mix Modeling",
       "folder": "what-is-mmm",
+      "author": "David Walsh",
+      "date": "2025-05-14",
+      "category": "Article"
+    },
+    {
+      "title": "Measuring the long-term impact of media",
+      "teaser": "How MMM can help measure the long-term impact of marketing",
+      "folder": "measuring-long-term",
+      "author": "David Walsh",
+      "date": "2025-05-14",
+      "category": "Article"
+    },
+    {
+      "title": "Demystifying building an MMM model",
+      "teaser": "Exploring the process of building an MMM model",
+      "folder": "demistify-mmm",
+      "author": "David Walsh",
+      "date": "2025-05-14",
+      "category": "Article"
+    },
+    {
+      "title": "Optimising future media budget",
+      "teaser": "Going from MMM to media budget optimisation",
+      "folder": "optimising-media",
       "author": "David Walsh",
       "date": "2025-05-14",
       "category": "Article"
