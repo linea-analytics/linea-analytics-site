@@ -105,7 +105,7 @@
 		const articlesContainer = $('#articles-container');
 
 		try {
-			const response = await fetch('./articles/articles.json');
+			const response = await fetch('/articles/articles.json');
 			if (!response.ok) {
 				throw new Error(`HTTP error! Status: ${response.status}`);
 			}

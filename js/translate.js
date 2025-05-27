@@ -42,7 +42,7 @@ function translateData(language, csvData) {
 }
 
 function translateContent(language) {
-    fetch('./js/lang-map.csv')
+    fetch('/js/lang-map.csv')
         .then(res => res.text())
         .then(csvData => {
             translateData(language, csvData);
