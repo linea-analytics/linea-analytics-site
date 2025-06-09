@@ -1,59 +1,114 @@
 [
-    {
-      "title": "Have We Reached a Consensus on Marketing Measurement?",
-      "teaser": "A look at the current state of marketing measurement",
-      "folder": "consensus",
-      "author": "David Walsh",
-      "date": "2025-03-09",
-      "category": "Article"
-    },
-    {
-      "title": "Measuring marketing performance in Germany",
-      "teaser": "A guide to measuring marketing performance in the German market",
-      "folder": "marketing-in-de",
-      "author": "David Walsh",
-      "date": "2025-03-09",
-      "category": "Article"
-    },
-    {
-      "title": "Is AI-Powered Performance Marketing Effective?",
-      "teaser": "Reviewing the role of AI in performance marketing",
-      "folder": "ai-marketing",
-      "author": "David Walsh",
-      "date": "2025-03-09",
-      "category": "Article"
-    },
-    {
-      "title": "What is Marketing Mix Modeling (MMM)",
-      "teaser": "An introduction to Marketing Mix Modeling",
-      "folder": "what-is-mmm",
-      "author": "David Walsh",
-      "date": "2025-05-14",
-      "category": "Article"
-    },
-    {
-      "title": "Measuring the long-term impact of media",
-      "teaser": "How MMM can help measure the long-term impact of marketing",
-      "folder": "measuring-long-term",
-      "author": "David Walsh",
-      "date": "2025-05-14",
-      "category": "Article"
-    },
-    {
-      "title": "Demystifying building an MMM model",
-      "teaser": "Exploring the process of building an MMM model",
-      "folder": "demistify-mmm",
-      "author": "David Walsh",
-      "date": "2025-05-14",
-      "category": "Article"
-    },
-    {
-      "title": "Optimising future media budget",
-      "teaser": "Going from MMM to media budget optimisation",
-      "folder": "optimising-media",
-      "author": "David Walsh",
-      "date": "2025-05-14",
-      "category": "Article"
-    }
-  ]
-  
+  {
+    "title": "Have We Reached a Consensus on Marketing Measurement?",
+    "teaser": "A look at the current state of marketing measurement",
+    "folder": "consensus",
+    "author": "David Walsh",
+    "date": "2025-03-09",
+    "category": "Article"
+  },
+  {
+    "title": "Measuring marketing performance in Germany",
+    "teaser": "A guide to measuring marketing performance in the German market",
+    "folder": "marketing-in-de",
+    "author": "David Walsh",
+    "date": "2025-03-09",
+    "category": "Article"
+  },
+  {
+    "title": "Is AI-Powered Performance Marketing Effective?",
+    "teaser": "Reviewing the role of AI in performance marketing",
+    "folder": "ai-marketing",
+    "author": "David Walsh",
+    "date": "2025-03-09",
+    "category": "Article"
+  },
+  {
+    "title": "What is Marketing Mix Modeling (MMM)",
+    "teaser": "An introduction to Marketing Mix Modeling",
+    "folder": "what-is-mmm",
+    "author": "David Walsh",
+    "date": "2025-05-14",
+    "category": "Article"
+  },
+  {
+    "title": "Measuring the long-term impact of media",
+    "teaser": "How MMM can help measure the long-term impact of marketing",
+    "folder": "measuring-long-term",
+    "author": "David Walsh",
+    "date": "2025-05-14",
+    "category": "Article"
+  },
+  {
+    "title": "Demystifying building an MMM model",
+    "teaser": "Exploring the process of building an MMM model",
+    "folder": "demistify-mmm",
+    "author": "David Walsh",
+    "date": "2025-05-14",
+    "category": "Article"
+  },
+  {
+    "title": "Optimising future media budget",
+    "teaser": "Going from MMM to media budget optimisation",
+    "folder": "optimising-media",
+    "author": "David Walsh",
+    "date": "2025-05-14",
+    "category": "Article"
+  },
+  {
+    "title": "How much more can we spend on a marketing channel?",
+    "teaser": "Understanding the scalability and limits of marketing spend",
+    "folder": "how-much-more-can-we-spend",
+    "author": "David Walsh",
+    "date": "2025-06-09",
+    "category": "Article"
+  },
+  {
+    "title": "What’s the impact of Robyn & Meridian on MMM?",
+    "teaser": "Exploring the impact of Robyn and Meridian on Marketing Mix Modeling",
+    "folder": "impact-robyn-meridian",
+    "author": "David Walsh",
+    "date": "2025-06-09",
+    "category": "Article"
+  },
+  {
+    "title": "Why might it be worth spending more than the “optimal” amount on your marketing?",
+    "teaser": "Adding context to mathematical optimisation in marketing",
+    "folder": "more-than-optim",
+    "author": "David Walsh",
+    "date": "2025-06-09",
+    "category": "Article"
+  },
+  {
+    "title": "What’s the one marketing measurement tool we should be using?",
+    "teaser": "A discussion on the best marketing measurement tools available",
+    "folder": "one-tool",
+    "author": "David Walsh",
+    "date": "2025-06-09",
+    "category": "Article"
+  },
+  {
+    "title": "How to communicate the uncertainty in MMM results?",
+    "teaser": "Understanding and communicating uncertainty in Marketing Mix Modeling results",
+    "folder": "uncertainty",
+    "author": "David Walsh",
+    "date": "2025-06-09",
+    "category": "Article"
+  },
+  {
+    "title": "Why last click attribution CPA can be misleading?",
+    "teaser": "Exploring the pitfalls of MTA when measuring marketing performance",
+    "folder": "last-click",
+    "author": "David Walsh",
+    "date": "2025-06-09",
+    "category": "Article"
+  },
+  {
+    "title": "How Linea used automation to make MMM faster and cost-efficient for Brands of all sizes?",
+    "teaser": "Leveraging automation and human expertise in Marketing Mix Modeling",
+    "folder": "linea-automation",
+    "author": "David Walsh",
+    "date": "2025-06-09",
+    "category": "Article"
+  }  
+]
