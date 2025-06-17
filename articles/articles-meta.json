@@ -110,5 +110,13 @@
     "author": "David Walsh",
     "date": "2025-06-09",
     "category": "Article"
+  }  ,
+  {
+    "title": "Building our Always-on MMM with automated Data Ingestion",
+    "teaser": "An overview of automating data inputs and the benefits this brings.",
+    "folder": "data-automation",
+    "author": "Claudio Paladini",
+    "date": "2025-06-17",
+    "category": "Article"
   }  
 ]
