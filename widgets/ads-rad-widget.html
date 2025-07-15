@@ -1,0 +1,140 @@
+<!-- DELAYED ADSTOCK WIDGET -->
+<div class="py-4">
+  <h4 class="text-center mb-3">Sales = Base + DelayedAdstock(Media)</h4>
+  <div class="card p-5 shadow">
+    <div class="row g-0">
+      <!-- controls -->
+      <div class="col-md-4 p-3 border-end">
+        <form>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">
+              Decay α:
+              <span id="delayed-alphaValue" class="fw-normal">0.80</span>
+            </label><br />
+            <input type="range" id="delayed-alpha" class="form-range" min="0.1" max="0.99" step="0.01" value="0.6" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">
+              Delay θ:
+              <span id="delayed-thetaValue" class="fw-normal">3</span>
+            </label><br />
+            <input type="range" id="delayed-theta" class="form-range" min="0" max="10" step="1" value="1" />
+          </div>
+          <button type="button" id="delayed-reset" class="btn btn-outline-secondary w-100">Reset&nbsp;Sliders</button>
+        </form>
+      </div>
+
+      <!-- chart -->
+      <div class="col-md-8 d-flex align-items-center justify-content-center">
+        <canvas id="delayed-chart" width="500" height="300"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function initDelayed() {
+  const ctx = document.getElementById('delayed-chart')?.getContext('2d');
+  if (!ctx) return;
+
+  const spend = [0, 0, 0, 0, 20000, 0, 0, 0, 0, 10000, 0, 0, 0, 0];
+  const base = 10000;
+  const noise = spend.map(() => Math.random() * 2000 - 1000);
+
+  let alpha = 0.6;
+  let theta = 1;
+
+  const delayedWeights = (alpha, theta, maxLag) =>
+    Array.from({ length: maxLag }, (_, l) =>
+      Math.pow(alpha, Math.pow(l - theta, 2))
+    );
+
+  const delayedAdstock = (series, alpha, theta) => {
+    const w = delayedWeights(alpha, theta, series.length);
+    return series.map((_, t) =>
+      series.reduce((sum, x, i) =>
+        t - i >= 0 ? sum + x * w[t - i] : sum, 0)
+    );
+  };
+
+  const media = (alpha, theta) => delayedAdstock(spend, alpha, theta);
+  const salesFixed = delayedAdstock(spend, 0.6, 1).map((m, i) => base + m + noise[i]); // α = 0.6, θ = 1
+ // Fixed once
+
+  // Cleanup if rerun
+  if (window.delayedChart) window.delayedChart.destroy();
+
+  window.delayedChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: spend.map((_, i) => `Week ${i + 1}`),
+      datasets: [
+        {
+          label: 'Base',
+          data: Array(spend.length).fill(base),
+          backgroundColor: 'rgba(255, 159, 64, 0.5)',
+          stack: 'Stack 0'
+        },
+        {
+          label: 'Media Contribution',
+          data: media(alpha, theta),
+          backgroundColor: 'rgba(75, 192, 192, 0.5)',
+          stack: 'Stack 0'
+        },
+        {
+          label: 'Sales (Fixed)',
+          data: salesFixed,
+          type: 'line',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 2,
+          pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: {
+          stacked: true,
+          grid: { display: false }
+        },
+        y: {
+          stacked: true,
+          min: 0,
+          max: 40000,
+          grid: { display: false },
+          title: {
+            display: true,
+            text: 'Sales'
+          }
+        }
+      }
+    }
+  });
+
+  function update() {
+    alpha = parseFloat(document.getElementById('delayed-alpha').value);
+    theta = parseInt(document.getElementById('delayed-theta').value);
+
+    document.getElementById('delayed-alphaValue').textContent = `${(alpha * 100).toFixed(0)}%`;
+    document.getElementById('delayed-thetaValue').textContent = theta;
+
+    window.delayedChart.data.datasets[1].data = media(alpha, theta);
+    window.delayedChart.update();
+  }
+
+  document.getElementById('delayed-alpha').addEventListener('input', update);
+  document.getElementById('delayed-theta').addEventListener('input', update);
+
+  document.getElementById('delayed-reset').addEventListener('click', () => {
+    document.getElementById('delayed-alpha').value = 0.6;
+    document.getElementById('delayed-theta').value = 1;
+    update();
+  });
+
+  update(); // initial render
+}
+
+requestAnimationFrame(initDelayed);
+</script>
+

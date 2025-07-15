@@ -1,0 +1,77 @@
+<!-- GEOMETRIC ADSTOCK WIDGET -->
+<div class="py-4">
+    <h4 class="text-center mb-3">Sales = Base + GeometricAdstock(Media)</h4>
+    <div class="card p-5 shadow">
+        <div class="row g-0">
+            <!-- controls -->
+            <div class="col-md-4 p-3 border-end">
+                <form>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            Decay&nbsp;Rate&nbsp;θ:
+                            <span id="geo-rateValue" class="fw-normal">50%</span>
+                        </label><br />
+                        <input type="range" id="geo-rate" class="form-range" min="0" max="1" step="0.05" value="0.5" />
+                    </div>
+                    <button type="button" id="geo-reset"
+                        class="btn btn-outline-secondary w-100">Reset&nbsp;Slider</button>
+                </form>
+            </div>
+            <!-- chart -->
+            <div class="col-md-8 d-flex align-items-center justify-content-center">
+                <canvas id="geo-chart" width="500" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function initGeo() {
+        const ctx = document.getElementById('geo-chart')?.getContext('2d');
+        if (!ctx) return;
+        const spend = [0, 0, 0, 0, 20000, 0, 0, 0, 0, 10000, 0, 0, 0, 0];
+        const base = 10000, noise = spend.map(() => Math.random() * 2000 - 1000);
+        let θ = 0.5;
+
+        const adstock = (series, rate) => {
+            let carry = 0, out = [];
+            for (const x of series) { carry = x + carry * rate; out.push(carry); }
+            return out;
+        };
+        const media = r => adstock(spend, r);
+        const sales = r => media(r).map((m, i) => base + m + noise[i]);
+
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: spend.map((_, i) => `W${i + 1}`),
+                datasets: [
+                    {
+                        label: 'Base', data: Array(spend.length).fill(base),
+                        backgroundColor: 'rgba(255,159,64,0.5)', stack: 's'
+                    },
+                    {
+                        label: 'Media', data: media(θ),
+                        backgroundColor: 'rgba(75,192,192,0.5)', stack: 's'
+                    },
+                    {
+                        label: 'Sales', data: sales(θ), type: 'line',
+                        borderColor: 'rgba(54,162,235,1)', borderWidth: 2, fill: false
+                    }]
+            },
+            options: { responsive: true, scales: { x: { stacked: true }, y: { stacked: true, max: 40000 } } }
+        });
+
+        function update() {
+            θ = parseFloat(document.getElementById('geo-rate').value);
+            document.getElementById('geo-rateValue').textContent = `${(θ * 100).toFixed(0)}%`;
+            chart.data.datasets[1].data = media(θ); chart.update();
+        }
+        document.getElementById('geo-rate').addEventListener('input', update);
+        document.getElementById('geo-reset').addEventListener('click', () => {
+            document.getElementById('geo-rate').value = 0.5;
+            update();
+        });
+    }
+    requestAnimationFrame(initGeo);
+</script>

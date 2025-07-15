@@ -1,0 +1,75 @@
+<!-- WEIBULL ADSTOCK WIDGET -->
+<div class="py-4">
+  <h4 class="text-center mb-3">Sales = Base + WeibullAdstock(Media)</h4>
+  <div class="card p-5 shadow">
+    <div class="row g-0">
+      <div class="col-md-4 p-3 border-end">
+        <form>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">
+              Shape&nbsp;k: <span id="wei-shapeValue">1.0</span>
+            </label><br/>
+            <input type="range" id="wei-shape" class="form-range" min="0.1" max="5" step="0.1" value="1"/>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">
+              Scale&nbsp;λ: <span id="wei-scaleValue">6</span>
+            </label><br/>
+            <input type="range" id="wei-scale" class="form-range" min="1" max="20" step="1" value="6"/>
+          </div>
+          <button type="button" id="wei-reset" class="btn btn-outline-secondary w-100">Reset&nbsp;Sliders</button>
+        </form>
+      </div>
+      <div class="col-md-8 d-flex align-items-center justify-content-center">
+        <canvas id="wei-chart" width="500" height="300"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function initWeibull(){
+  const ctx=document.getElementById('wei-chart')?.getContext('2d'); if(!ctx) return;
+  const spend=[0,0,0,0,20000,0,0,0,0,0,0,0,0,0];
+  const base=10000,noise=spend.map(()=>Math.random()*2000-1000);
+  let k=1,λ=6;
+
+  const weights = (shape,scale,maxLag)=>Array.from({length:maxLag},(_,l)=>Math.exp(-Math.pow((l)/scale,shape)));
+  const adstock=(series,shape,scale)=>{
+    const w=weights(shape,scale,series.length);
+    return series.map((_,t)=>series.reduce((sum,x,i)=>sum+(t-i>=0?x*w[t-i]:0),0));
+  };
+  const media=(shape,scale)=>adstock(spend,shape,scale);
+  const sales=(shape,scale)=>media(shape,scale).map((m,i)=>base+m+noise[i]);
+
+  const chartWei=new Chart(ctx,{type:'bar',
+    data:{labels:spend.map((_,i)=>`W${i+1}`),
+      datasets:[
+        {label:'Base',data:Array(spend.length).fill(base),
+         backgroundColor:'rgba(255,159,64,0.5)',stack:'s'},
+        {label:'Media',data:media(k,λ),
+         backgroundColor:'rgba(75,192,192,0.5)',stack:'s'},
+        {label:'Sales',data:sales(k,λ),type:'line',
+         borderColor:'rgba(54,162,235,1)',borderWidth:2,fill:false}]},
+    options:{responsive:true,scales:{x:{stacked:true},y:{stacked:true,max:40000}}}
+  });
+
+  function update(){
+    k=parseFloat(document.getElementById('wei-shape').value);
+    λ=parseFloat(document.getElementById('wei-scale').value);
+    document.getElementById('wei-shapeValue').textContent=k.toFixed(1);
+    document.getElementById('wei-scaleValue').textContent=λ;
+    chartWei.data.datasets[1].data=media(k,λ); 
+    chartWei.update();
+  }
+  document.getElementById('wei-shape').addEventListener('input',update);
+  document.getElementById('wei-scale').addEventListener('input',update);
+          document.getElementById('wei-reset').addEventListener('click', () => {
+            document.getElementById('wei-scale').value = 6;
+            document.getElementById('wei-shape').value = 1;
+            update();
+        });
+  document.getElementById('wei-reset').addEventListener('click',()=>{k=1;λ=6;update();});
+}
+requestAnimationFrame(initWeibull);
+</script>

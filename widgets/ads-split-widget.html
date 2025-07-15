@@ -1,0 +1,82 @@
+<!-- SPLIT VARIABLE ADSTOCK WIDGET -->
+<div class="py-4">
+  <h4 class="text-center mb-3">Sales = Base + β₁·Current + β₂·LaggedGeometric(Media)</h4>
+  <div class="card p-5 shadow">
+    <div class="row g-0">
+      <div class="col-md-4 p-3 border-end">
+        <form>
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              Lag&nbsp;Decay&nbsp;θ:
+              <span id="split-rateValue" class="fw-normal">50%</span>
+            </label><br />
+            <input type="range" id="split-rate" class="form-range" min="0" max="1" step="0.05" value="0.5" />
+          </div>
+          <button type="button" id="split-reset" class="btn btn-outline-secondary w-100">Reset&nbsp;Slider</button>
+        </form>
+      </div>
+      <div class="col-md-8 d-flex align-items-center justify-content-center">
+        <canvas id="split-chart" width="500" height="300"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initSplit() {
+    const ctx = document.getElementById('split-chart')?.getContext('2d'); if (!ctx) return;
+    const spend = [0, 0, 0, 0, 20000, 0, 0, 0, 0, 10000, 0, 0, 0, 0];
+    const spend_l0 = spend.map(x=>{return x*.5});
+    const base = 10000, noise = spend.map(() => Math.random() * 2000 - 1000);
+    let θ = 0.5;
+
+    const geo = (series, rate) => {
+      let carry = 0, out = [];
+      for (const x of series) { carry = x + carry * rate; out.push(carry); } return out;
+    };
+    const lagged = r => {
+      const g = geo(spend, r);
+      return g.map((_, i) => i === 0 ? 0 : g[i - 1]);
+    };
+
+    const sales = r => spend_l0.map((cur, i) => base + cur + lagged(r)[i] + noise[i]);
+
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: spend.map((_, i) => `W${i + 1}`),
+        datasets: [
+          {
+            label: 'Base', data: Array(spend.length).fill(base),
+            backgroundColor: 'rgba(255,159,64,0.5)', stack: 's'
+          },
+          {
+            label: 'Current Spend', data: spend_l0,
+            backgroundColor: 'rgba(153,102,255,0.5)', stack: 's'
+          },
+          {
+            label: 'Lagged Media', data: lagged(θ),
+            backgroundColor: 'rgba(75,192,192,0.5)', stack: 's'
+          },
+          {
+            label: 'Sales', data: sales(θ), type: 'line',
+            borderColor: 'rgba(54,162,235,1)', borderWidth: 2, fill: false
+          }]
+      },
+      options: { responsive: true, scales: { x: { stacked: true }, y: { stacked: true, max: 40000 } } }
+    });
+
+    function update() {
+      θ = parseFloat(document.getElementById('split-rate').value);
+      document.getElementById('split-rateValue').textContent = `${(θ * 100).toFixed(0)}%`;
+      chart.data.datasets[2].data = lagged(θ);
+      chart.update();
+    }
+    document.getElementById('split-rate').addEventListener('input', update);
+    document.getElementById('split-reset').addEventListener('click', () => {
+      document.getElementById('split-rate').value = .5;
+    update();
+  });
+  }
+  requestAnimationFrame(initSplit);
+</script>
