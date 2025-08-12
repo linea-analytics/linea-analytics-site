@@ -126,7 +126,7 @@
     "author": "Claudio Paladini",
     "date": "2025-06-24",
     "category": "Article"
-  }  ,
+  }   ,
   {
     "title": "First step to measuring the long-term impact of Marketing: The Memory Effect",
     "teaser": "Different ways of measuring adstock in MMM",
@@ -134,5 +134,30 @@
     "author": "Claudio Paladini",
     "date": "2025-07-07",
     "category": "Article"
-  }  
+  }  ,
+  {
+    "title": "If we keep scaling media spend, will my CAC always increase?",
+    "teaser": "Preventing CAC from spiralling upwards",
+    "folder": "cac-increase",
+    "author": "David Walsh",
+    "date": "2025-08-12",
+    "category": "Article"
+  },
+  {
+    "title": "How to successfully implement Robyn & Meridian",
+    "teaser": "Issues to overcome in “Free MMM”",
+    "folder": "robyn-meridian",
+    "author": "David Walsh",
+    "date": "2025-08-12",
+    "category": "Article"
+  } ,
+  {
+    "title": "Comparing the differences between last-click CPA and MMM",
+    "teaser": "Shifting from 'what converted' to 'what worked'",
+    "folder": "last-click-mmm-cpa",
+    "author": "David Walsh",
+    "date": "2025-08-12",
+    "category": "Article"
+  }    
+  
 ]
