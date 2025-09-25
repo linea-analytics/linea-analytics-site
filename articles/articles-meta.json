@@ -209,6 +209,46 @@
     "author": "David Walsh",
     "date": "2025-09-04",
     "category": "Article"
+  } ,
+    {
+    "title": "Should data science or marketing teams own measurement?",
+    "teaser": "Risks and benefits on both sides",
+    "folder": "data-teams",
+    "author": "David Walsh",
+    "date": "2025-09-24",
+    "category": "Article"
+  } ,
+    {
+    "title": "How to build trust in your MMM outputs",
+    "teaser": "Transparency and double verification",
+    "folder": "double-verification",
+    "author": "David Walsh",
+    "date": "2025-09-24",
+    "category": "Article"
+  } ,
+    {
+    "title": "Should we build our MMM in-house or use third party agencies?",
+    "teaser": "When does it make sense to use an MMM agency",
+    "folder": "inhouse-or-third-party",
+    "author": "David Walsh",
+    "date": "2025-09-24",
+    "category": "Article"
+  } ,
+    {
+    "title": "How to Allocate Your Media Budget Between TikTok and Meta for Maximum ROI",
+    "teaser": "Factoring in risk and scale in scenario planning",
+    "folder": "tiktok-v-meta",
+    "author": "David Walsh",
+    "date": "2025-09-24",
+    "category": "Article"
+  } ,
+    {
+    "title": "How to Win Q4: It's not about more spend, it's about smarter scenarios",
+    "teaser": "Overlaying what-if factors in MMM optimisations",
+    "folder": "win-q4",
+    "author": "David Walsh",
+    "date": "2025-09-24",
+    "category": "Article"
   }    
-  
+
 ]
