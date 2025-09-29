@@ -7,7 +7,7 @@ async function populateBlogPosts() {
     const rowContainer = document.getElementById('blog-row');
     let htmlContent = '';
 
-    articles.forEach(article => {
+    articles.reverse().forEach(article => {
       const articleUrl = `articles/${article.folder}/article.html`; // <-- direct link to static HTML
 
       htmlContent += `
