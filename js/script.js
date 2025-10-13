@@ -57,7 +57,6 @@
 			}, 300);
 		});
 	}
-
 	$(window).on('scroll', function () {
 		//.Scroll to top show/hide
 		if ($('#scroll-to-top').length) {
@@ -70,6 +69,7 @@
 			}
 		}
 	});
+
 	// scroll-to-top
 	if ($('#scroll-to-top').length) {
 		$('#scroll-to-top').on('click', function () {
@@ -133,5 +133,86 @@
 			console.error('Failed to load articles:', error);
 		}
 	});
+
+	// Fadein
+	(function () {
+		const els = document.querySelectorAll('.reveal');
+		if (!('IntersectionObserver' in window)) {
+			// very old browsers: just show everything
+			els.forEach(el => el.classList.add('reveal--visible'));
+			return;
+		}
+
+		const io = new IntersectionObserver((entries, obs) => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					const el = entry.target;
+					const delay = el.dataset.delay || '0ms';
+					el.style.transitionDelay = delay;
+					el.classList.add('reveal--visible');
+					obs.unobserve(el); // remove this to allow hide-on-exit behavior
+				}
+			});
+		}, {
+			root: null,
+			threshold: 0.1,          // fire when ~10% is visible
+			rootMargin: '0px 0px -10% 0px' // start a bit before fully in view
+		});
+
+		els.forEach(el => io.observe(el));
+	})();
+
+	// Growing number (showing £500M or %)
+	document.addEventListener("DOMContentLoaded", () => {
+		const counters = document.querySelectorAll(".countup");
+		const speed = 70; // smaller = faster
+
+		const animate = (el) => {
+			const target = +el.dataset.target;
+			const isCurrency = el.textContent.trim().includes("£");
+			const isPercent = el.textContent.trim().includes("%");
+			let count = 0;
+			const increment = target / speed;
+
+			const update = () => {
+				count += increment;
+				if (count < target) {
+					if (isCurrency) {
+						el.textContent = "£" + Math.floor(count / 1_000_000).toLocaleString() + "M";
+					} else if (isPercent) {
+						el.textContent = Math.floor(count).toLocaleString() + "%";
+					} else {
+						el.textContent = Math.floor(count).toLocaleString();
+					}
+					requestAnimationFrame(update);
+				} else {
+					if (isCurrency) {
+						el.textContent = "£" + (target / 1_000_000).toLocaleString() + "M";
+					} else if (isPercent) {
+						el.textContent = target.toLocaleString() + "%";
+					} else {
+						el.textContent = target.toLocaleString();
+					}
+				}
+			};
+			update();
+		};
+
+		// Trigger animation when visible
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach(entry => {
+					if (entry.isIntersecting && !entry.target.classList.contains("counted")) {
+						entry.target.classList.add("counted");
+						animate(entry.target);
+					}
+				});
+			},
+			{ threshold: 0.4 }
+		);
+
+		counters.forEach(counter => observer.observe(counter));
+	});
+
 
 })(jQuery);

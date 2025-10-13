@@ -6,7 +6,7 @@ You’ve just pumped an extra £100K into platforms in July. The platforms say t
 
 Finance says our monthly run rate has gone from £1m per month to £1.1m per month. With gross profit flat at £500k (we’ll take that\!\!).
 
-This common discrepancy, often leading to mistrust and frustration, highlights a fundamental flaw in relying solely on platform-reported metrics. At Linea Analytics, we understand this problem intimately. Our expertise in Marketing Mix Modeling (MMM) and incremental measurement is designed to bridge this gap, providing a single source of truth that both marketing and finance can trust.
+This common discrepancy, often leading to mistrust and frustration, highlights a fundamental flaw in relying solely on platform-reported metrics. At Linea Analytics, we understand this problem intimately. Our expertise in Marketing Mix Modelling (MMM) and incremental measurement is designed to bridge this gap, providing a single source of truth that both marketing and finance can trust.
 
 So, why do these discrepancies persist?
 

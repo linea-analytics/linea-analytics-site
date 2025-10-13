@@ -24,39 +24,4 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Error loading footer:", error));
 
-    const storedLang = localStorage.getItem('userLang');
-
-    if (storedLang) {
-        setTimeout(2000, translateContent(storedLang));
-    } else {
-        fetch('https://api.ipregistry.co/?key=tryout')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok: " + response.status);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("Country data:", data);
-
-                // Extract the country code
-                const countryCode = data.location?.country?.code || null;
-                console.log("Detected country code:", countryCode);
-
-                // Example translation logic
-                if (countryCode === 'IT') {
-                    translateContent('ita');
-                } else if (countryCode === 'DE') {
-                    translateContent('de');
-                } else {
-                    translateContent('eng');
-                }
-            })
-            .catch(error => {
-                console.error("Failed to fetch location from ipregistry:", error);
-                // Fallback logic, default to English, for example
-                translateContent('eng');
-            });
-    }
-
 });

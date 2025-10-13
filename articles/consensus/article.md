@@ -12,7 +12,7 @@ Over the years, marketing measurement approaches have evolved significantly. The
 
 In the early 2020s, significant changes in digital tracking—such as iOS updates and the deprecation of third-party cookies—have made traditional attribution models even less reliable. These shifts have made it increasingly difficult to rely solely on digital attribution models, highlighting the growing need for more comprehensive and **incrementality-focused** measurement.
 
-At Linea, we advocate for a flexible, tailored approach to measurement. The methodology we employ depends on the specific business question at hand, allowing us to create custom strategies that best address our clients’ needs. We also emphasize the importance of integrating various methods to create a comprehensive view of marketing performance. For example, **A/B testing** serves as a powerful tool to validate and continuously refine insights gained from **Marketing Mix Modeling (MMM)**. By combining these approaches, we ensure that our models remain adaptable and accurate, even as market dynamics change.
+At Linea, we advocate for a flexible, tailored approach to measurement. The methodology we employ depends on the specific business question at hand, allowing us to create custom strategies that best address our clients’ needs. We also emphasize the importance of integrating various methods to create a comprehensive view of marketing performance. For example, **A/B testing** serves as a powerful tool to validate and continuously refine insights gained from **Marketing Mix Modelling (MMM)**. By combining these approaches, we ensure that our models remain adaptable and accurate, even as market dynamics change.
 
 ## What Metrics Should We Focus Our Marketing Measurement On?
 

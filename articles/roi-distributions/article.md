@@ -47,7 +47,7 @@ Use the 75th percentile. This is a practical way to turn uncertainty into planni
 
 ![][image2]
 
-Jin, Y., Wang, Y., Sun, Y., Chan, D., & Koehler, J. (2017, April 14). *Bayesian methods for media mix modeling with carryover and shape effects* \[PDF\]. Google Inc.
+Jin, Y., Wang, Y., Sun, Y., Chan, D., & Koehler, J. (2017, April 14). *Bayesian methods for media mix modelling with carryover and shape effects* \[PDF\]. Google Inc.
 
 Instead of producing a single “optimal budget,” you now have a spectrum of scenarios. This makes your decisions more robust and allows for informed trade-offs between risk and return.
 

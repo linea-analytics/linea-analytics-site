@@ -23,7 +23,7 @@ As an independent measurement provider, Linea is not affiliated with publishers,
 ## Transparency of What to Do Next
 
 In today’s data-driven landscape, conflicting data points are common. For instance, one report may show that a particular media channel is performing well, while another suggests the opposite. We understand the challenge this presents, especially when working with brands that manage multiple campaigns or assess the effectiveness of numerous media channels.
-To address this, we partner with our clients for a long-term measurement strategy focused on double verification. For example, our Marketing Mix Modeling (MMM) analysis may indicate that social media channels are underperforming, while last-click attribution suggests they are highly efficient. In such cases, we collaborate with our clients’ social media teams to conduct targeted incrementality A/B tests, verifying the findings and providing additional insights.
+To address this, we partner with our clients for a long-term measurement strategy focused on double verification. For example, our Marketing Mix Modelling (MMM) analysis may indicate that social media channels are underperforming, while last-click attribution suggests they are highly efficient. In such cases, we collaborate with our clients’ social media teams to conduct targeted incrementality A/B tests, verifying the findings and providing additional insights.
 By continuously refining the model based on test results, we are able to make data-backed recommendations and propose further tests to optimize the media mix. This iterative process ensures that brands can trust their marketing data and make informed decisions to improve performance over time.
 
 ## Conclusion

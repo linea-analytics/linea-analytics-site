@@ -1,6 +1,6 @@
-# What is Marketing Mix Modeling (MMM)
+# What is Marketing Mix Modelling (MMM)
 
-Marketing Mix Modeling (MMM) is a technique used by businesses to measure the effectiveness of different marketing channels and strategies. 
+Marketing Mix Modelling (MMM) is a technique used by businesses to measure the effectiveness of different marketing channels and strategies. 
 
 The goal is to isolate the impact of all factors in driving business performance. This allows the separation of marketing factors separate to seasonal, economic & other drivers. This allows us to compare the impact from the analysis with the spend invested in marketing to calculate Return on Investment (ROI). 
 
