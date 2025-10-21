@@ -52,4 +52,55 @@ async function populateBlogPosts() {
   }
 }
 
+function populateFeaturedArticles() {
+  const featuredContainer = document.getElementById('featured-articles');
+  const featuredArticles = [
+    {
+      title: 'First step to measuring the long-term impact of Marketing: The Memory Effect',
+      thumbnail: './articles/adstocks/thumbnail.jpg',
+      url: './articles/adstocks/article.html'
+    },
+
+    {
+      title: 'If we keep scaling media spend, will my CAC always increase?',
+      thumbnail: './articles/cac-increase/thumbnail.jpg',
+      url: './articles/cac-increase/article.html'
+    },
+
+    {
+      title: 'Demystifying building an MMM model',
+      thumbnail: './articles/demistify-mmm/thumbnail.jpg',
+      url: './articles/demistify-mmm/article.html'
+    },
+
+    {
+      title: 'Measuring the long-term impact of media',
+      thumbnail: './articles/measuring-long-term/thumbnail.jpg',
+      url: './articles/measuring-long-term/article.html'
+    },
+
+    {
+      title: 'Is AI-Powered Performance Marketing Effective?',
+      thumbnail: './articles/ai-marketing/thumbnail.jpg',
+      url: './articles/ai-marketing/article.html'
+    },
+
+  ];
+
+  featuredContainer.innerHTML = featuredArticles.map(a => `
+      <div class="d-flex mb-3">
+        <img src="${a.thumbnail}" alt="${a.title}"
+             class="img-fluid rounded mr-3"
+             style="width:80px;height:80px;object-fit:cover;">
+        <div>
+          <h6 class="mb-1"><a href="${a.url}">${a.title}</a></h6>
+          <a href="${a.url}">
+            <small class="text-muted">Read more</small>
+          </a>
+        </div>
+      </div>
+    `).join('');
+}
+
+populateFeaturedArticles();
 populateBlogPosts();
