@@ -13,10 +13,10 @@ async function populateBlogPosts() {
       htmlContent += `
         <div class="col-lg-6 col-md-6 mb-5">
           <div class="blog-item">
-            <img loading="lazy" 
+            <a href="${articleUrl}"><img loading="lazy" 
                  src="articles/${article.folder}/thumbnail.jpg" 
                  alt="${article.title}" 
-                 class="img-fluid rounded">
+                 class="img-fluid rounded"></a>
 
             <div class="blog-item-content bg-white p-5">
               <div class="blog-item-meta bg-gray pt-2 pb-1 px-3">

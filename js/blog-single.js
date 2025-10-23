@@ -47,6 +47,78 @@ async function loadWidgets() {
     }
   }));
 }
+function insertLatest() {
+  const contactUs = document.getElementById('contactUs');
+  if (!contactUs) return console.warn('Element with id="contactUs" not found');
 
-window.addEventListener('DOMContentLoaded', loadWidgets);
+  const featuredContainer = document.createElement('section');
+  featuredContainer.id = 'featured-articles';
+  featuredContainer.className = 'my-5 container';
+
+  const featuredArticles = [
+    {
+      title: 'First step to measuring the long-term impact of Marketing: The Memory Effect',
+      thumbnail: '/articles/adstocks/thumbnail.jpg',
+      url: '/articles/adstocks/article.html'
+    },
+    {
+      title: 'If we keep scaling media spend, will my CAC always increase?',
+      thumbnail: '/articles/cac-increase/thumbnail.jpg',
+      url: '/articles/cac-increase/article.html'
+    },
+    {
+      title: 'Demystifying building an MMM model',
+      thumbnail: '/articles/demistify-mmm/thumbnail.jpg',
+      url: '/articles/demistify-mmm/article.html'
+    },
+    {
+      title: 'Measuring the long-term impact of media',
+      thumbnail: '/articles/measuring-long-term/thumbnail.jpg',
+      url: '/articles/measuring-long-term/article.html'
+    },
+    {
+      title: 'Is AI-Powered Performance Marketing Effective?',
+      thumbnail: '/articles/ai-marketing/thumbnail.jpg',
+      url: '/articles/ai-marketing/article.html'
+    },
+    {
+      title: 'Optimising future media budget',
+      thumbnail: '/articles/optimising-media/thumbnail.jpg',
+      url: '/articles/optimising-media/article.html'
+    }
+  ];
+
+  featuredContainer.innerHTML = `
+    <h4 class="mb-4 text-center fw-semibold">Most Popular Articles</h4>
+    <div class="row g-4">
+      ${featuredArticles.map(a => `
+        <div class="col-12 col-sm-6 col-md-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <img src="${a.thumbnail}" 
+                 alt="${a.title}" 
+                 class="card-img-top" 
+                 style="height:180px;object-fit:cover;">
+            <div class="card-body d-flex flex-column">
+              <h6 class="card-title fw-semibold mb-2">
+                <a href="${a.url}" class="stretched-link text-decoration-none text-dark">
+                  ${a.title}
+                </a>
+              </h6>
+              <p class="text-muted small mt-auto mb-0">Read more →</p>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  contactUs.parentNode.insertBefore(featuredContainer, contactUs);
+}
+
+
+
+window.addEventListener('DOMContentLoaded', () => {
+  loadWidgets();
+  insertLatest();
+});
 

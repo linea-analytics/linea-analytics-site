@@ -171,8 +171,7 @@ input[type=tel]:focus {
 .btn-main:hover,
 .btn-small:hover,
 .btn-transparent:hover {
-  background: rgb(32.3950617284, 159.6049382716, 135.1111111111);
-  color: #191b1c;
+  color: #8ae0d1 !important;
 }
 
 .btn-solid-border {
@@ -250,7 +249,6 @@ input[type=tel]:focus {
 .bg-green,
 .bg-primary {
   background: rgb(41, 202, 171);
-  !
 }
 
 .bg-green-dark,
@@ -614,103 +612,6 @@ a:focus {
 .navbar-brand span {
   color: rgb(41, 202, 171);
 }
-
-/* 
-.dropdown-menu {
-  padding: 0px;
-  border: 0;
-  border-radius: 0px;
-}
-@media (max-width: 992px) {
-  .dropdown-menu {
-    text-align: center;
-    float: left !important;
-    width: 100%;
-    margin: 0;
-  }
-}
-.dropdown-menu li:first-child {
-  margin-top: 5px;
-}
-.dropdown-menu li:last-child {
-  margin-bottom: 5px;
-}
-
-.dropdown-toggle::after {
-  display: none;
-}
-
-.dropleft .dropdown-menu,
-.dropright .dropdown-menu {
-  margin: 0;
-}
-
-.dropleft .dropdown-toggle::before,
-.dropright .dropdown-toggle::after {
-  font-weight: bold;
-  font-family: "Font Awesome 5 Free";
-  border: 0;
-  font-size: 10px;
-  vertical-align: 1px;
-}
-
-.dropleft .dropdown-toggle::before {
-  content: "\f053";
-  margin-right: 5px;
-}
-
-.dropright .dropdown-toggle::after {
-  content: "\f054";
-  margin-left: 5px;
-}
-
-.dropdown-item {
-  padding: 0.8rem 1.5rem 0.55rem;
-  text-transform: uppercase;
-  font-size: 14px;
-  font-weight: 500;
-}
-@media (max-width: 992px) {
-  .dropdown-item {
-    padding: 0.6rem 1.5rem 0.35rem;
-  }
-}
-
-.dropdown-submenu.active > .dropdown-toggle,
-.dropdown-submenu:hover > .dropdown-item,
-.dropdown-item.active,
-.dropdown-item:hover {
-  background: rgb(41, 202, 171);
-  color: #fff;
-}
-
-ul.dropdown-menu li {
-  padding-left: 0px !important;
-}
-
-  .dropdown-menu {
-    transition: all 0.2s ease-in, visibility 0s linear 0.2s, transform 0.2s linear;
-    display: block;
-    visibility: hidden;
-    opacity: 0;
-    min-width: 200px;
-    margin-top: 15px;
-  }
-  .dropdown-menu li:first-child {
-    margin-top: 10px;
-  }
-  .dropdown-menu li:last-child {
-    margin-bottom: 10px;
-  }
-  .dropleft .dropdown-menu,
-  .dropright .dropdown-menu {
-    margin-top: -10px;
-  }
-  .dropdown:hover > .dropdown-menu {
-    visibility: visible;
-    transition: all 0.45s ease 0s;
-    opacity: 1;
-  } */
 
 .bg-1 {
   background: url("../images/bg/home-2.jpg") no-repeat 50% 50%;
@@ -1856,3 +1757,6 @@ h3.quote::before {
 .custom-dropdown-content ul li a:hover {
   background-color: #f3f3f3;
 }
+
+
+
