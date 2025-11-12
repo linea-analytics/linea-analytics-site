@@ -110,7 +110,7 @@
     "author": "David Walsh",
     "date": "2025-06-09",
     "category": "Article"
-  }  ,
+  },
   {
     "title": "Building our Always-on MMM with automated Data Ingestion",
     "teaser": "An overview of automating data inputs and the benefits this brings.",
@@ -118,7 +118,7 @@
     "author": "Claudio Paladini",
     "date": "2025-06-17",
     "category": "Article"
-  }   ,
+  },
   {
     "title": "Is your Facebook ROI £2.50? Or is it somewhere between £2- £3?",
     "teaser": "The Value of Measuring Uncertainty.",
@@ -126,7 +126,7 @@
     "author": "Claudio Paladini",
     "date": "2025-06-24",
     "category": "Article"
-  }   ,
+  },
   {
     "title": "First step to measuring the long-term impact of Marketing: The Memory Effect",
     "teaser": "Different ways of measuring adstock in MMM",
@@ -134,7 +134,7 @@
     "author": "Claudio Paladini",
     "date": "2025-07-07",
     "category": "Article"
-  }  ,
+  },
   {
     "title": "If we keep scaling media spend, will my CAC always increase?",
     "teaser": "Preventing CAC from spiralling upwards",
@@ -150,7 +150,7 @@
     "author": "David Walsh",
     "date": "2025-08-12",
     "category": "Article"
-  } ,
+  },
   {
     "title": "Comparing the differences between last-click CPA and MMM",
     "teaser": "Shifting from 'what converted' to 'what worked'",
@@ -166,113 +166,141 @@
     "author": "David Walsh",
     "date": "2025-09-04",
     "category": "Article"
-  }    ,
-    {
+  },
+  {
     "title": "How to run sceanrios",
     "teaser": "Why Flexible Scenario Planning is the Key to Unlocking Growth",
     "folder": "running-scenarios",
     "author": "David Walsh",
     "date": "2025-09-04",
     "category": "Article"
-  }     ,
-    {
+  },
+  {
     "title": "Increasing the frequency for Marketing Measurement",
     "teaser": "Why Annual MMM is a Thing of the Past",
     "folder": "mmm-frequency",
     "author": "David Walsh",
     "date": "2025-09-04",
     "category": "Article"
-  }    
-   ,
-    {
+  },
+  {
     "title": "Moving from Data to Decisions",
     "teaser": "How to create value from data & analytics",
     "folder": "data-to-decisions",
     "author": "David Walsh",
     "date": "2025-09-04",
     "category": "Article"
-  }    
-   ,
-    {
+  },
+  {
     "title": "Should UK brands be allocating 61% of their media budget to Google and Meta?",
     "teaser": "How did they come to dominate the UK advertising market?",
     "folder": "google-meta-61",
     "author": "David Walsh",
     "date": "2025-09-04",
     "category": "Article"
-  }    
-   ,
-    {
+  },
+  {
     "title": "Using MMM to bridge the gap between marketing & finance",
     "teaser": "Three Steps to Alignment",
     "folder": "fin-mar",
     "author": "David Walsh",
     "date": "2025-09-04",
     "category": "Article"
-  } ,
-    {
+  },
+  {
     "title": "Should data science or marketing teams own measurement?",
     "teaser": "Risks and benefits on both sides",
     "folder": "data-teams",
     "author": "David Walsh",
     "date": "2025-09-24",
     "category": "Article"
-  } ,
-    {
+  },
+  {
     "title": "How to build trust in your MMM outputs",
     "teaser": "Transparency and double verification",
     "folder": "double-verification",
     "author": "David Walsh",
     "date": "2025-09-24",
     "category": "Article"
-  } ,
-    {
+  },
+  {
     "title": "Should we build our MMM in-house or use third party agencies?",
     "teaser": "When does it make sense to use an MMM agency",
     "folder": "inhouse-or-third-party",
     "author": "David Walsh",
     "date": "2025-09-24",
     "category": "Article"
-  } ,
-    {
+  },
+  {
     "title": "How to Allocate Your Media Budget Between TikTok and Meta for Maximum ROI",
     "teaser": "Factoring in risk and scale in scenario planning",
     "folder": "tiktok-v-meta",
     "author": "David Walsh",
     "date": "2025-09-24",
     "category": "Article"
-  } ,
-    {
+  },
+  {
     "title": "How to Win Q4: It's not about more spend, it's about smarter scenarios",
     "teaser": "Overlaying what-if factors in MMM optimisations",
     "folder": "win-q4",
     "author": "David Walsh",
     "date": "2025-09-24",
     "category": "Article"
-  }    ,
-    {
+  },
+  {
     "title": "The Modern Marketer's Guide: Choosing The Best Marketing Measurement Tools",
     "teaser": "Three questions to help you select the right measurement tool for the job",
     "folder": "choosing-right-tool",
     "author": "David Walsh",
     "date": "2025-10-17",
     "category": "Article"
-  }   ,
-    {
+  },
+  {
     "title": "4 tips for running marketing measurement for FinTechs",
     "teaser": "How Linea run marketing measurement for Fintech brands",
     "folder": "fintech",
     "author": "David Walsh",
     "date": "2025-10-21",
     "category": "Article"
-  }    ,
-    {
+  },
+  {
     "title": "Why are we Linea Analytics and not Linear Analytics?",
     "teaser": "The origins of our brand name",
     "folder": "linea-linear",
     "author": "David Walsh",
     "date": "2025-10-21",
     "category": "Article"
-  }    
-
+  },
+  {
+    "title": "The Fatal Flaw in Your MMM",
+    "teaser": "Why Marketing Mix Models Must Include Price, Promotions, and Economic Data?",
+    "folder": "fatal-flaw",
+    "author": "David Walsh",
+    "date": "2025-11-12",
+    "category": "Article"
+  },
+  {
+    "title": "Stop Chasing Clicks",
+    "teaser": "How to Shift from Click-Through Rate (CTR) to Incremental Measurement",
+    "folder": "chasing-clicks",
+    "author": "David Walsh",
+    "date": "2025-11-12",
+    "category": "Article"
+  },
+  {
+    "title": "Accelerate Your MMM",
+    "teaser": "The Blueprint for Reducing Marketing Mix Modelling Turnaround Time",
+    "folder": "acceleate-mmm",
+    "author": "David Walsh",
+    "date": "2025-11-12",
+    "category": "Article"
+  },
+  {
+    "title": "Comparing Robyn vs. Meridian",
+    "teaser": "What open source MMM is best for me?",
+    "folder": "comparing-open-source",
+    "author": "David Walsh",
+    "date": "2025-11-12",
+    "category": "Article"
+  }
 ]

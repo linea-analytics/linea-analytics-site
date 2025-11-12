@@ -251,6 +251,10 @@ input[type=tel]:focus {
   background: rgb(41, 202, 171);
 }
 
+.bg-green-t {
+  background: rgba(41, 202, 170, 0.25);
+}
+
 .bg-green-dark,
 .bg-primary-dark {
   background: rgb(32.3950617284, 159.6049382716, 135.1111111111);

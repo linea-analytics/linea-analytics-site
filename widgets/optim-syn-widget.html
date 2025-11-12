@@ -1,0 +1,227 @@
+<div class="py-4">
+  <h4 class="text-center mb-3">Optimised Allocation vs. Response Curves</h4>
+
+  <div class="card p-5 shadow">
+    <div class="row g-0">
+      <!-- Controls -->
+      <div class="col-md-4 p-3 border-end">
+        <form>
+          <!-- Budget -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              Budget:
+              <span id="budget-value" class="fw-normal">10000</span>
+            </label>
+            <br />
+            <input type="range" class="form-range" id="budget-slider" min="0" max="20000" step="500" value="10000" />
+          </div>
+
+          <!-- Market condition -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold d-block mb-2">Market condition</label>
+            <div id="market-condition" class="d-flex gap-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="marketCond" id="cond-bad" value="bad">
+                <label class="form-check-label" for="cond-bad">Bad</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="marketCond" id="cond-normal" value="normal" checked>
+                <label class="form-check-label" for="cond-normal">Normal</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="marketCond" id="cond-good" value="good">
+                <label class="form-check-label" for="cond-good">Good</label>
+              </div>
+            </div>
+            <div class="form-text mt-2">
+              Curves scale by channel-specific multipliers per market condition.
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Charts -->
+      <div class="col-md-8 p-3">
+        <div class="row">
+          <div class="col-12 d-flex align-items-center justify-content-center mb-4">
+            <canvas id="budget-chart" width="500" height="300" aria-label="Response Curves"></canvas>
+          </div>
+          <div class="col-12 d-flex align-items-center justify-content-center">
+            <canvas id="spend-bars" width="500" height="220" aria-label="Spend by Channel"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  // ---- Per-market multipliers (slightly different per curve) ----
+  const marketMultipliers = {
+    bad:   { "Display": 0.78, "Generic SEA": 0.82, "Social": 0.80, "TV": 0.75 },
+    normal:{ "Display": 1.00, "Generic SEA": 1.00, "Social": 1.00, "TV": 1.00 },
+    good:  { "Display": 1.18, "Generic SEA": 1.22, "Social": 1.20, "TV": 1.25 }
+  };
+
+  // Wait for globals injected by your data script (or wherever you set them)
+  function waitForGlobals(names, cb, timeout = 8000) {
+    const start = performance.now();
+    (function check() {
+      const missing = names.filter(n => !(n in window));
+      if (missing.length === 0) return cb();
+      if (performance.now() - start > timeout) {
+        console.error("Missing required globals:", missing);
+        return;
+      }
+      setTimeout(check, 50);
+    })();
+  }
+
+  function initCurveWithPointsAndBars() {
+    // Pull from window to avoid scope issues with loaders/bundlers
+    const curvesData = window.curvesData;
+    const optimData = window.optimData;
+    const categoryColors = window.categoryColors || {};
+
+    const categories = [...new Set(curvesData.map(d => d.category))];
+    const epsilon = 1e-6;
+
+    // Precompute base curves
+    const baseCurves = Object.fromEntries(
+      categories.map(cat => [
+        cat,
+        curvesData.filter(d => d.category === cat).map(d => ({ x: d.spend, baseY: d.uplift }))
+      ])
+    );
+
+    const getOptimPoint = (cat, budget) =>
+      optimData.find(d => d.category === cat && d.budget === budget);
+
+    const scaledCurve = (cat, condition) => {
+      const m = (marketMultipliers[condition] || {})[cat] ?? 1.0;
+      return baseCurves[cat].map(p => ({ x: p.x, y: p.baseY * m }));
+    };
+
+    const scaledOptimY = (cat, budget, condition) => {
+      const m = (marketMultipliers[condition] || {})[cat] ?? 1.0;
+      const row = getOptimPoint(cat, budget);
+      return row ? row.channel_uplift * m : null;
+    };
+
+    const spendByCategoryAtBudget = (budget) =>
+      categories.map(cat => getOptimPoint(cat, budget)?.channel_spend ?? 0);
+
+    // ---- DOM hooks
+    const lineCtx = document.getElementById('budget-chart').getContext('2d');
+    const barCtx  = document.getElementById('spend-bars').getContext('2d');
+    const budgetSlider = document.getElementById('budget-slider');
+    const budgetValue  = document.getElementById('budget-value');
+    const marketRadios = document.querySelectorAll('#market-condition input[name="marketCond"]');
+
+    let selectedBudget = parseInt(budgetSlider.value);
+    let condition = document.querySelector('#market-condition input[name="marketCond"]:checked').value;
+
+    // ---- Line chart
+    const lineDatasets = categories.map(cat => {
+      const color = categoryColors[cat] || 'rgba(100,100,100,1)';
+      const scaled = scaledCurve(cat, condition);
+      const optY = scaledOptimY(cat, selectedBudget, condition);
+      const opt = getOptimPoint(cat, selectedBudget);
+
+      return {
+        label: `${cat} Curve`,
+        data: scaled,
+        type: 'line',
+        borderWidth: 2,
+        borderColor: color,
+        fill: false,
+        tension: 0.4,
+        pointRadius: scaled.map(p =>
+          (opt && Math.abs(p.x - opt.channel_spend) < epsilon && optY !== null && Math.abs(p.y - optY) < epsilon) ? 5 : 0
+        ),
+        pointBackgroundColor: scaled.map(p =>
+          (opt && Math.abs(p.x - opt.channel_spend) < epsilon && optY !== null && Math.abs(p.y - optY) < epsilon) ? color : 'transparent'
+        ),
+        pointBorderColor: scaled.map(() => color)
+      };
+    });
+
+    const lineChart = new Chart(lineCtx, {
+      type: 'line',
+      data: { datasets: lineDatasets },
+      options: {
+        responsive: true,
+        parsing: false,
+        animation: false,
+        plugins: { legend: { display: true } },
+        scales: {
+          x: { type: 'linear', title: { display: true, text: 'Spend' }, beginAtZero: true, grid: { display: false } },
+          y: { title: { display: true, text: 'Uplift' }, beginAtZero: true, grid: { display: false } }
+        }
+      }
+    });
+
+    // ---- Bar chart
+    const barChart = new Chart(barCtx, {
+      type: 'bar',
+      data: {
+        labels: categories,
+        datasets: [{
+          label: 'Spend @ Budget',
+          data: spendByCategoryAtBudget(selectedBudget),
+          backgroundColor: categories.map(cat => (categoryColors[cat] || 'rgba(100,100,100,1)').replace(', 1)', ', 0.35)')),
+          borderColor: categories.map(cat => categoryColors[cat] || 'rgba(100,100,100,1)'),
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        animation: false,
+        plugins: { legend: { display: true } },
+        scales: {
+          x: { grid: { display: false } },
+          y: { beginAtZero: true, title: { display: true, text: 'Spend' }, grid: { display: false } }
+        }
+      }
+    });
+
+    function updateCharts() {
+      selectedBudget = parseInt(budgetSlider.value);
+      budgetValue.textContent = selectedBudget;
+
+      // Update line
+      lineChart.data.datasets.forEach(ds => {
+        const cat = ds.label.replace(' Curve', '');
+        const color = categoryColors[cat] || 'rgba(100,100,100,1)';
+        const scaled = scaledCurve(cat, condition);
+        const opt = getOptimPoint(cat, selectedBudget);
+        const optY = scaledOptimY(cat, selectedBudget, condition);
+
+        ds.data = scaled;
+        ds.pointRadius = scaled.map(p =>
+          (opt && Math.abs(p.x - opt.channel_spend) < epsilon && optY !== null && Math.abs(p.y - optY) < epsilon) ? 5 : 0
+        );
+        ds.pointBackgroundColor = scaled.map(p =>
+          (opt && Math.abs(p.x - opt.channel_spend) < epsilon && optY !== null && Math.abs(p.y - optY) < epsilon) ? color : 'transparent'
+        );
+        ds.pointBorderColor = scaled.map(() => color);
+      });
+      lineChart.update();
+
+      // Update bars
+      barChart.data.datasets[0].data = spendByCategoryAtBudget(selectedBudget);
+      barChart.update();
+    }
+
+    budgetSlider.addEventListener('input', updateCharts);
+    marketRadios.forEach(r => r.addEventListener('change', (e) => {
+      condition = e.target.value;
+      updateCharts();
+    }));
+  }
+
+  // If your loader runs this file before the data file, this will patiently wait.
+  waitForGlobals(['curvesData', 'optimData', 'categoryColors'], () => {
+    requestAnimationFrame(initCurveWithPointsAndBars);
+  });
+</script>
+
