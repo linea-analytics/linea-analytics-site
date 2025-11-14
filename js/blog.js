@@ -80,9 +80,9 @@ function populateFeaturedArticles() {
     },
 
     {
-      title: 'Is AI-Powered Performance Marketing Effective?',
-      thumbnail: './articles/ai-marketing/thumbnail.jpg',
-      url: './articles/ai-marketing/article.html'
+      title: 'Choosing The Best Marketing Measurement Tools',
+      thumbnail: '/articles/choosing-right-tool/thumbnail.jpg',
+      url: '/articles/choosing-right-tool/article.html'
     },
 
   ];
