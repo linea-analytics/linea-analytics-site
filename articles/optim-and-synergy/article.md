@@ -75,7 +75,7 @@ At Linea, we capture this synergy effect and which allows for an important
 
 ***A chart that shows how a media response curve changes when taking into account an improvement in external factors. Add in a current vs. “new” budget recommendation based on each.***
 
-That is exactly what we allow teams to run in the Linea Scenario Tool. Whether you have already run your MMM, use an open source tool or [if Linea run your MMM](https://linea-analytics.com/full-service-mmm) then this is exactly the type of future facing scenarios that allow you to confidently take action from measurement.
+That is exactly what we allow teams to run in the Linea Scenario Tool. Whether you have already run your MMM, use an open source tool or [if Linea runs your MMM](https://linea-analytics.com/full-service-mmm) then this is exactly the type of future facing scenarios that allow you to confidently take action from measurement.
 
 **Try the Linea Scenario now with a 7 day free trial.**
 
