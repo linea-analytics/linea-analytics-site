@@ -1,0 +1,326 @@
+<!-- SINGLE CURVE LEVEL WIDGET -->
+<div class="py-5">
+  <h4 class="text-center mb-3">How does the optimal budget level change if the economy changes?</h4>
+  <div class="card p-5 shadow">
+    <div class="row g-3">
+      <!-- controls -->
+      <div class="col-md-3 border-end">
+        <form>
+          <h6 class="mb-3">Select a future economy level</h6>
+
+          <div class="mb-2">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="lvl-radio" id="lvl-low" value="l">
+              <label class="form-check-label" for="lvl-low">
+                Low <span class="text-muted small">(0.75)</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="mb-2">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="lvl-radio" id="lvl-mid" value="m" checked>
+              <label class="form-check-label" for="lvl-mid">
+                Mid <span class="text-muted small">(1.00)</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="mb-2">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="lvl-radio" id="lvl-high" value="h">
+              <label class="form-check-label" for="lvl-high">
+                High <span class="text-muted small">(1.25)</span>
+              </label>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- chart -->
+      <div class="col-md-9 d-flex align-items-center justify-content-center">
+        <div class="d-flex flex-column w-100">
+          <div style="height: 320px; width: 100%;">
+            <canvas id="lvl-chart"></canvas>
+          </div>
+
+          <!-- custom legend -->
+          <div id="lvl-legend" class="mt-3 mx-auto" style="font-size: 14px;">
+            <span style="margin-right: 18px;">
+              <span style="display:inline-block;width:16px;height:3px;background:#ff6384;margin-right:6px;"></span>
+              Uplift (selected)
+            </span>
+
+            <span style="margin-right: 18px;">
+              <span style="display:inline-block;width:16px;height:3px;background:#4bc0c0;margin-right:6px;"></span>
+              Net uplift (selected)
+            </span>
+
+            <span style="margin-right: 18px;">
+              <span style="
+                display:inline-block;
+                width:16px;
+                height:3px;
+                border-bottom:2px dashed #999;
+                margin-right:6px;
+              "></span>
+              Baseline uplift & net uplift (mid)
+            </span>
+
+            <span style="margin-right: 18px;">
+              <span style="
+                display:inline-block;
+                width:10px;
+                height:10px;
+                border-radius:50%;
+                background:#000;
+                margin-right:6px;
+              "></span>
+              Optimal points
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initLevelWidget() {
+    const canvas = document.getElementById('lvl-chart');
+    if (!canvas || !window.Chart) {
+      console.warn('Level widget init - missing canvas or Chart');
+      return;
+    }
+    const ctx = canvas.getContext('2d');
+
+    const levelMap = { l: 0.75, m: 1, h: 1.25 };
+    const BASE_LEVEL = 1; // baseline mid
+
+    const CURVES_URL = '../../widgets/data/curves_2.json';
+    const OPTIM_URL  = '../../widgets/data/optim_2.json';
+
+    function getSelectedLevelKey() {
+      const checked = document.querySelector('input[name="lvl-radio"]:checked');
+      return checked ? checked.value : 'm';
+    }
+
+    function getSelectedLevel() {
+      return levelMap[getSelectedLevelKey()] ?? 1;
+    }
+
+    function getLevelLabel(key) {
+      if (key === 'l') return 'Low (0.75)';
+      if (key === 'h') return 'High (1.25)';
+      return 'Mid (1.00)';
+    }
+
+    function findClosestByValue(rows, key, target) {
+      if (!rows.length) return null;
+      return rows.reduce((best, row) => {
+        const dist = Math.abs(row[key] - target);
+        const bestDist = Math.abs(best[key] - target);
+        return dist < bestDist ? row : best;
+      }, rows[0]);
+    }
+
+    Promise.all([
+      fetch(CURVES_URL).then(r => r.json()),
+      fetch(OPTIM_URL).then(r => r.json())
+    ]).then(([curvesJson, optimJson]) => {
+      const curves = curvesJson.spend.map((s, i) => ({
+        spend: Number(curvesJson.spend[i]),
+        uplift: Number(curvesJson.uplift[i]),
+        net_uplift: Number(curvesJson.net_uplift[i]),
+        level: Number(curvesJson.level[i])
+      }));
+
+      const optim = optimJson.spend.map((s, i) => ({
+        spend: Number(optimJson.spend[i]),
+        uplift: Number(optimJson.uplift[i]),
+        net_uplift: Number(optimJson.net_uplift[i]),
+        level: Number(optimJson.level[i])
+      }));
+
+      const chart = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+          datasets: [
+            // selected level uplift line
+            {
+              label: 'Uplift (selected)',
+              data: [],
+              showLine: true,
+              pointRadius: 0,
+              borderWidth: 2,
+              borderColor: 'rgba(255, 99, 132, 1)',
+              backgroundColor: 'rgba(255, 99, 132, 0.15)'
+            },
+            // selected level net uplift line
+            {
+              label: 'Net uplift (selected)',
+              data: [],
+              showLine: true,
+              pointRadius: 0,
+              borderWidth: 2,
+              borderColor: 'rgba(75, 192, 192, 1)',
+              backgroundColor: 'rgba(75, 192, 192, 0.15)'
+            },
+            // selected level uplift point
+            {
+              label: 'Uplift optimal (selected)',
+              data: [],
+              showLine: false,
+              pointRadius: 6,
+              pointHoverRadius: 7,
+              pointBackgroundColor: 'rgba(0, 0, 0, 1)'
+            },
+            // selected level net uplift point
+            {
+              label: 'Net uplift optimal (selected)',
+              data: [],
+              showLine: false,
+              pointRadius: 6,
+              pointHoverRadius: 7,
+              pointBackgroundColor: 'rgba(0, 0, 0, 1)'
+            },
+            // baseline uplift line (mid)
+            {
+              label: 'Uplift (baseline mid)',
+              data: [],
+              showLine: true,
+              pointRadius: 0,
+              borderWidth: 1.5,
+              borderDash: [4, 3],
+              borderColor: 'rgba(153, 102, 255, 0.5)',
+              backgroundColor: 'rgba(153, 102, 255, 0.05)'
+            },
+            // baseline net uplift line (mid)
+            {
+              label: 'Net uplift (baseline mid)',
+              data: [],
+              showLine: true,
+              pointRadius: 0,
+              borderWidth: 1.5,
+              borderDash: [4, 3],
+              borderColor: 'rgba(201, 203, 207, 0.5)',
+              backgroundColor: 'rgba(201, 203, 207, 0.05)'
+            },
+            // baseline uplift point
+            {
+              label: 'Uplift optimal (baseline)',
+              data: [],
+              showLine: false,
+              pointRadius: 5,
+              pointHoverRadius: 6,
+              pointBackgroundColor: 'rgba(0, 0, 0, 0.5)'
+            },
+            // baseline net uplift point
+            {
+              label: 'Net uplift optimal (baseline)',
+              data: [],
+              showLine: false,
+              pointRadius: 5,
+              pointHoverRadius: 6,
+              pointBackgroundColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          ]
+        },
+        options: {
+          parsing: false,
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              type: 'linear',
+              title: { display: true, text: 'Weekly Spend (£)' }
+            },
+            y: {
+                min: -10_000,
+                max: 60_000,
+              type: 'linear',
+              title: { display: true, text: 'Weekly Uplift (£)' }
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => {
+                  const x = ctx.parsed.x;
+                  const y = ctx.parsed.y;
+                  return `${ctx.dataset.label}: spend=${x.toFixed(0)}, value=${y.toFixed(2)}`;
+                }
+              }
+            }
+          }
+        }
+      });
+
+      function updateChart() {
+        const lvlKey = getSelectedLevelKey();
+        const lvl = getSelectedLevel();
+
+        // selected curves
+        const selectedCurves = curves
+          .filter(r => r.level === lvl)
+          .sort((a, b) => a.spend - b.spend);
+
+        const selectedUpliftLine = selectedCurves.map(r => ({ x: r.spend, y: r.uplift }));
+        const selectedNetLine = selectedCurves.map(r => ({ x: r.spend, y: r.net_uplift }));
+
+        // baseline mid curves
+        const baselineCurves = curves
+          .filter(r => r.level === BASE_LEVEL)
+          .sort((a, b) => a.spend - b.spend);
+
+        const baselineUpliftLine = baselineCurves.map(r => ({ x: r.spend, y: r.uplift }));
+        const baselineNetLine = baselineCurves.map(r => ({ x: r.spend, y: r.net_uplift }));
+
+        // selected optimal row
+        const selectedOptimRow = optim.find(o => o.level === lvl) || null;
+        // baseline optimal row
+        const baselineOptimRow = optim.find(o => o.level === BASE_LEVEL) || null;
+
+        // map optim to nearest curve points for y values
+        let selectedUpliftPoint = [];
+        let selectedNetPoint = [];
+        if (selectedOptimRow && selectedCurves.length) {
+          const closest = findClosestByValue(selectedCurves, 'spend', selectedOptimRow.spend);
+          selectedUpliftPoint = [{ x: closest.spend, y: closest.uplift }];
+          selectedNetPoint   = [{ x: closest.spend, y: closest.net_uplift }];
+        }
+
+        let baselineUpliftPoint = [];
+        let baselineNetPoint = [];
+        if (baselineOptimRow && baselineCurves.length) {
+          const closest = findClosestByValue(baselineCurves, 'spend', baselineOptimRow.spend);
+          baselineUpliftPoint = [{ x: closest.spend, y: closest.uplift }];
+          baselineNetPoint    = [{ x: closest.spend, y: closest.net_uplift }];
+        }
+
+        chart.data.datasets[0].data = selectedUpliftLine;
+        chart.data.datasets[1].data = selectedNetLine;
+        chart.data.datasets[2].data = selectedUpliftPoint;
+        chart.data.datasets[3].data = selectedNetPoint;
+        chart.data.datasets[4].data = baselineUpliftLine;
+        chart.data.datasets[5].data = baselineNetLine;
+        chart.data.datasets[6].data = baselineUpliftPoint;
+        chart.data.datasets[7].data = baselineNetPoint;
+
+        chart.update();
+      }
+
+      document
+        .querySelectorAll('input[name="lvl-radio"]')
+        .forEach(el => el.addEventListener('change', updateChart));
+
+      updateChart();
+    }).catch(err => {
+      console.error('Level widget error', err);
+    });
+  }
+
+  requestAnimationFrame(initLevelWidget);
+</script>

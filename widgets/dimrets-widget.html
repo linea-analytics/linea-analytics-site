@@ -1,48 +1,69 @@
 <div class="py-4">
   <h4 class="text-center mb-3">Diminishing Returns Simulation</h4>
 
-  <div class="card p-4 shadow">
-    
-    <!-- Controls: sliders and button in one row -->
+  <div class="card p-3 p-md-4 shadow">
+
+    <!-- Controls -->
     <div class="row g-3 align-items-center mb-4">
       <!-- Slider 1 -->
-      <div class="col-md-4">
-        <label class="form-label fw-semibold">
+      <div class="col-12 col-md-4">
+        <label class="form-label fw-semibold mb-1">
           Rate:
           <span id="rateValueDR" class="fw-normal">10000</span>
         </label>
-        <input type="range" class="form-range" id="rateDR" min="1000" max="30000" step="1000" value="10000" />
+        <input
+          type="range"
+          class="form-range"
+          id="rateDR"
+          min="1000"
+          max="30000"
+          step="1000"
+          value="10000"
+        />
       </div>
 
       <!-- Slider 2 -->
-      <div class="col-md-4">
-        <label class="form-label fw-semibold">
+      <div class="col-12 col-md-4">
+        <label class="form-label fw-semibold mb-1">
           Coefficient:
           <span id="coefficientValue" class="fw-normal">15000</span>
         </label>
-        <input type="range" class="form-range" id="coefficient" min="1000" max="40000" step="1000" value="15000" />
+        <input
+          type="range"
+          class="form-range"
+          id="coefficient"
+          min="1000"
+          max="40000"
+          step="1000"
+          value="15000"
+        />
       </div>
 
       <!-- Reset Button -->
-      <div class="col-md-4 d-flex align-items-end">
-        <button type="button" id="resetButtonDimRets" class="btn btn-outline-secondary w-100">
-          Reset&nbsp;Sliders
+      <div class="col-12 col-md-4 d-flex align-items-stretch mt-2 mt-md-0">
+        <button
+          type="button"
+          id="resetButtonDimRets"
+          class="btn btn-outline-secondary w-100"
+        >
+          Reset Sliders
         </button>
       </div>
     </div>
 
-    <!-- Charts stacked vertically -->
+    <!-- Charts -->
     <div class="row">
-      <div class="col-6 mb-4">
+      <div class="col-12 col-md-6 mb-4 mb-md-0">
         <canvas id="diminishingChart" height="250"></canvas>
       </div>
-      <div class="col-6">
+      <div class="col-12 col-md-6">
         <canvas id="mediaContributionChart" height="250"></canvas>
       </div>
     </div>
 
   </div>
 </div>
+
 
 
 <script>

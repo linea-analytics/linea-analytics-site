@@ -1,0 +1,517 @@
+<!-- BUDGET CURVES OPTIM WIDGET -->
+<div class="py-5">
+    <h4 class="text-center mb-3">Budget allocation on response curves</h4>
+    <div class="card p-5 shadow">
+        <div class="row g-3">
+            <!-- controls -->
+            <div class="col-md-4 border-end">
+                <form>
+                    <!-- budget slider -->
+                    <div class="mb-4">
+                        <h6>Set Budget</h6>
+                        <label class="d-flex">
+                            <span class="fw-semibold">Budget: </span>
+                            <span id="bc-budgetValue" class="fw-normal text-muted"></span>
+                        </label>
+                        <input type="range" id="bc-budget" class="form-range" min="0" max="1000" step="100" value="0">
+                    </div>
+
+                    <hr>
+
+                    <h6>Set Future Channel Efficiency</h6>
+
+                    <!-- google level -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-danger">Google level</label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="bc-google-level" id="bc-google-l"
+                                    value="l">
+                                <label class="form-check-label" for="bc-google-l">Low</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="bc-google-level" id="bc-google-m"
+                                    value="m" checked>
+                                <label class="form-check-label" for="bc-google-m">Mid</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="bc-google-level" id="bc-google-h"
+                                    value="h">
+                                <label class="form-check-label" for="bc-google-h">High</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- meta level -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-primary">Meta level</label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="bc-meta-level" id="bc-meta-l"
+                                    value="l">
+                                <label class="form-check-label" for="bc-meta-l">Low</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="bc-meta-level" id="bc-meta-m"
+                                    value="m" checked>
+                                <label class="form-check-label" for="bc-meta-m">Mid</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="bc-meta-level" id="bc-meta-h"
+                                    value="h">
+                                <label class="form-check-label" for="bc-meta-h">High</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- summary table -->
+                    <div class="mt-4">
+                        <h6>How does that impact Budget Allocation?</h6>
+                        <table class="table table-sm mb-0 align-middle fw-normal">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">Channel</th>
+                                    <th scope="col">Current</th>
+                                    <th scope="col">Future</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row" class="text-primary">Meta</th>
+                                    <td id="bc-meta-stable">–</td>
+                                    <td id="bc-meta-future">–</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="text-danger">Google</th>
+                                    <td id="bc-google-stable">–</td>
+                                    <td id="bc-google-future">–</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </form>
+            </div>
+
+
+            <!-- chart -->
+            <div class="col-md-8 d-flex align-items-center justify-content-center">
+                <div class="d-flex flex-column w-100">
+                    <div style="height: 430px; width: 100%;">
+                        <canvas id="bc-chart" width="500" height="320"></canvas>
+                    </div>
+                    <div id="bc-legend" class="mt-3 mx-auto" style="font-size: 14px;">
+                        <span style="margin-right: 18px;">
+                            <span
+                                style="display:inline-block;width:16px;height:3px;background:#ff6384;margin-right:6px;"></span>
+                            Google
+                        </span>
+
+                        <span style="margin-right: 18px;">
+                            <span
+                                style="display:inline-block;width:16px;height:3px;background:#36a2eb;margin-right:6px;"></span>
+                            Meta
+                        </span>
+
+                        <span style="margin-right: 18px;">
+                            <span style="
+          display:inline-block;
+          width:10px;
+          height:10px;
+          border-radius:50%;
+          background:#000;
+          margin-right:6px;
+        "></span>
+                            Optimal point
+                        </span>
+
+                        <span style="margin-right: 18px;">
+                            <span style="
+          display:inline-block;
+          width:16px;
+          height:3px;
+          border-bottom:2px dashed #999;
+          margin-right:6px;
+        "></span>
+                            Current baseline
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function initBudgetCurvesWidget() {
+        const canvas = document.getElementById('bc-chart');
+        if (!canvas || !window.Chart) {
+            console.warn('BCW init - missing canvas or Chart');
+            return;
+        }
+        const ctx = canvas.getContext('2d');
+
+        const budgetSlider = document.getElementById('bc-budget');
+        const budgetLabel = document.getElementById('bc-budgetValue');
+        const metaStableCell = document.getElementById('bc-meta-stable');
+        const metaFutureCell = document.getElementById('bc-meta-future');
+        const googleStableCell = document.getElementById('bc-google-stable');
+        const googleFutureCell = document.getElementById('bc-google-future');
+
+        function fmtMoney(v) {
+            if (v == null || Number.isNaN(v)) return '–';
+            return `£${Number(v).toLocaleString()}`;
+        }
+
+
+        const levelIndexMap = { l: 1, m: 2, h: 3 };
+        const BASE_LEVEL = 'm'; // uplift2 reference
+
+        const CURVES_URL = '../../widgets/data/curves_combos.json';
+        const OPTIM_URL = '../../widgets/data/optim_combos.json';
+
+        console.log('BCW - fetching data', { CURVES_URL, OPTIM_URL });
+
+        Promise.all([
+            fetch(CURVES_URL).then(r => r.json()),
+            fetch(OPTIM_URL).then(r => r.json())
+        ]).then(([curvesJson, optimJson]) => {
+            console.log('BCW - raw curvesJson keys', Object.keys(curvesJson));
+            console.log('BCW - raw optimJson keys', Object.keys(optimJson));
+
+            const curves = curvesJson.chan.map((ch, i) => ({
+                chan: String(ch),
+                spend: Number(curvesJson.spend[i]),
+                uplift: Number(curvesJson.uplift[i]),
+                name: String(curvesJson.name[i])
+            }));
+
+            const optim = optimJson.chan.map((ch, i) => ({
+                budget: Number(optimJson.budget[i]),
+                chan: String(ch),
+                spend: Number(optimJson.spend[i]),
+                name: String(optimJson.name[i])
+            }));
+
+            console.log('BCW - curves sample', curves.slice(0, 5));
+            console.log('BCW - optim sample', optim.slice(0, 5));
+
+            const uniqueCurveNames = [...new Set(curves.map(c => c.name))];
+            console.log('BCW - unique names in curves (first 10)', uniqueCurveNames.slice(0, 10));
+
+            const budgets = [...new Set(optim.map(o => o.budget))].sort((a, b) => a - b);
+            console.log('BCW - unique budgets from optim', budgets);
+
+            const minBudget = budgets[0] ?? 0;
+            const maxBudget = budgets[budgets.length - 1] ?? 0;
+
+            let step = 1;
+            if (budgets.length > 1) {
+                let minDiff = Infinity;
+                for (let i = 1; i < budgets.length; i++) {
+                    const diff = budgets[i] - budgets[i - 1];
+                    if (diff > 0 && diff < minDiff) minDiff = diff;
+                }
+                if (minDiff !== Infinity) step = minDiff;
+            }
+
+            budgetSlider.min = String(minBudget);
+            budgetSlider.max = String(maxBudget);
+            budgetSlider.step = String(step);
+            budgetSlider.value = 50_000;
+
+            console.log('BCW - slider config', {
+                minBudget,
+                maxBudget,
+                step,
+                sliderMin: budgetSlider.min,
+                sliderMax: budgetSlider.max,
+                sliderStep: budgetSlider.step,
+                sliderValue: budgetSlider.value
+            });
+
+            function getCurrentLevels() {
+                const googleLevel = document.querySelector('input[name="bc-google-level"]:checked')?.value || 'm';
+                const metaLevel = document.querySelector('input[name="bc-meta-level"]:checked')?.value || 'm';
+                return { googleLevel, metaLevel };
+            }
+
+            function buildComboName(googleLevel, metaLevel) {
+                const gIdx = levelIndexMap[googleLevel];
+                const mIdx = levelIndexMap[metaLevel];
+                return `uplift${gIdx}_google_uplift${mIdx}_meta`;
+            }
+
+            function buildCurveName(level) {
+                const idx = levelIndexMap[level];
+                return `uplift${idx}`;
+            }
+
+            function findClosestByValue(rows, key, target) {
+                if (!rows.length) return null;
+                return rows.reduce((best, row) => {
+                    const dist = Math.abs(row[key] - target);
+                    const bestDist = Math.abs(best[key] - target);
+                    return dist < bestDist ? row : best;
+                }, rows[0]);
+            }
+
+            const chart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        {
+                            label: 'Google curve',
+                            data: [],
+                            showLine: true,
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            borderColor: 'rgba(255, 99, 132, 1)',      // red
+                            backgroundColor: 'rgba(255, 99, 132, 0.15)'
+                        },
+                        {
+                            label: 'Meta curve',
+                            data: [],
+                            showLine: true,
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            borderColor: 'rgba(54, 162, 235, 1)',      // blue
+                            backgroundColor: 'rgba(54, 162, 235, 0.15)'
+                        },
+                        {
+                            label: 'Google optimal',
+                            data: [],
+                            showLine: false,
+                            pointRadius: 6,
+                            pointHoverRadius: 7,
+                            pointBackgroundColor: 'rgba(255, 99, 132, 1)' // red
+                        },
+                        {
+                            label: 'Meta optimal',
+                            data: [],
+                            showLine: false,
+                            pointRadius: 6,
+                            pointHoverRadius: 7,
+                            pointBackgroundColor: 'rgba(54, 162, 235, 1)' // blue
+                        },
+                        {
+                            label: 'Google curve',
+                            data: [],
+                            showLine: true,
+                            borderWidth: 1,
+                            pointRadius: 0,
+                            borderDash: [4, 3],
+                            borderColor: 'rgba(255, 99, 132, 0.5)',       // red, semi opaque
+                            backgroundColor: 'rgba(255, 99, 132, 0.05)'
+                        },
+                        {
+                            label: 'Meta curve',
+                            data: [],
+                            showLine: true,
+                            borderWidth: 1,
+                            pointRadius: 0,
+                            borderDash: [4, 3],
+                            borderColor: 'rgba(54, 162, 235, 0.5)',       // blue, semi opaque
+                            backgroundColor: 'rgba(54, 162, 235, 0.05)'
+                        },
+                        {
+                            label: 'Google optimal',
+                            data: [],
+                            showLine: false,
+                            pointRadius: 5,
+                            pointHoverRadius: 6,
+                            pointBackgroundColor: 'rgba(255, 99, 132, 0.5)' // red, semi opaque
+                        },
+                        {
+                            label: 'Meta optimal',
+                            data: [],
+                            showLine: false,
+                            pointRadius: 5,
+                            pointHoverRadius: 6,
+                            pointBackgroundColor: 'rgba(54, 162, 235, 0.5)' // blue, semi opaque
+                        }
+                    ]
+                },
+                options: {
+                    parsing: false,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            title: { display: true, text: 'Weekly Spend (£)' }
+                        },
+                        y: {
+                            min: 0,
+                            max: 50000,
+                            type: 'linear',
+                            title: { display: true, text: 'Weekly Uplift (£)' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },   // disable Chart.js legend completely
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => {
+                                    const x = ctx.parsed.x;
+                                    const y = ctx.parsed.y;
+                                    return `${ctx.dataset.label}: spend=${x.toFixed(0)}, uplift=${y.toFixed(2)}`;
+                                }
+                            }
+                        }
+                    }
+
+                }
+            });
+
+            function updateChart() {
+                const budget = Number(budgetSlider.value);
+                budgetLabel.textContent = ` £${budget.toLocaleString()}`;
+
+                const { googleLevel, metaLevel } = getCurrentLevels();
+
+                const comboName = buildComboName(googleLevel, metaLevel);
+                const googleCurveName = buildCurveName(googleLevel);
+                const metaCurveName = buildCurveName(metaLevel);
+
+                const baseCurveName = buildCurveName(BASE_LEVEL);             // uplift2
+                const baseComboName = buildComboName(BASE_LEVEL, BASE_LEVEL); // uplift2_google_uplift2_meta
+
+
+                console.log('BCW update - budget and names', {
+                    budget,
+                    googleLevel,
+                    metaLevel,
+                    comboName,
+                    googleCurveName,
+                    metaCurveName,
+                    baseCurveName,
+                    baseComboName
+                });
+
+                const optimRows = optim.filter(o => o.name === comboName);
+                const googleOptimRow = findClosestByValue(
+                    optimRows.filter(o => o.chan.toLowerCase() === 'google'),
+                    'budget',
+                    budget
+                );
+                const metaOptimRow = findClosestByValue(
+                    optimRows.filter(o => o.chan.toLowerCase() === 'meta'),
+                    'budget',
+                    budget
+                );
+
+                const baseOptimRows = optim.filter(o => o.name === baseComboName);
+                const googleBaseOptimRow = findClosestByValue(
+                    baseOptimRows.filter(o => o.chan.toLowerCase() === 'google'),
+                    'budget',
+                    budget
+                );
+                const metaBaseOptimRow = findClosestByValue(
+                    baseOptimRows.filter(o => o.chan.toLowerCase() === 'meta'),
+                    'budget',
+                    budget
+                );
+
+                const googleCurveRows = curves
+                    .filter(r => r.name === googleCurveName && r.chan.toLowerCase() === 'google')
+                    .sort((a, b) => a.spend - b.spend);
+
+                const metaCurveRows = curves
+                    .filter(r => r.name === metaCurveName && r.chan.toLowerCase() === 'meta')
+                    .sort((a, b) => a.spend - b.spend);
+
+                const googleBaseCurveRows = curves
+                    .filter(r => r.name === baseCurveName && r.chan.toLowerCase() === 'google')
+                    .sort((a, b) => a.spend - b.spend);
+
+                const metaBaseCurveRows = curves
+                    .filter(r => r.name === baseCurveName && r.chan.toLowerCase() === 'meta')
+                    .sort((a, b) => a.spend - b.spend);
+
+                const googleCurve = googleCurveRows.map(r => ({ x: r.spend, y: r.uplift }));
+                const metaCurve = metaCurveRows.map(r => ({ x: r.spend, y: r.uplift }));
+                const googleBaseCurve = googleBaseCurveRows.map(r => ({ x: r.spend, y: r.uplift }));
+                const metaBaseCurve = metaBaseCurveRows.map(r => ({ x: r.spend, y: r.uplift }));
+
+                let googlePoint = [];
+                if (googleOptimRow && googleCurve.length) {
+                    const closestCurve = findClosestByValue(
+                        googleCurve.map(p => ({ spend: p.x, uplift: p.y })),
+                        'spend',
+                        googleOptimRow.spend
+                    );
+                    if (closestCurve) {
+                        googlePoint = [{ x: closestCurve.spend, y: closestCurve.uplift }];
+                    }
+                }
+
+                let metaPoint = [];
+                if (metaOptimRow && metaCurve.length) {
+                    const closestCurve = findClosestByValue(
+                        metaCurve.map(p => ({ spend: p.x, uplift: p.y })),
+                        'spend',
+                        metaOptimRow.spend
+                    );
+                    if (closestCurve) {
+                        metaPoint = [{ x: closestCurve.spend, y: closestCurve.uplift }];
+                    }
+                }
+
+                let googleBasePoint = [];
+                if (googleBaseOptimRow && googleBaseCurve.length) {
+                    const closestCurve = findClosestByValue(
+                        googleBaseCurve.map(p => ({ spend: p.x, uplift: p.y })),
+                        'spend',
+                        googleBaseOptimRow.spend
+                    );
+                    if (closestCurve) {
+                        googleBasePoint = [{ x: closestCurve.spend, y: closestCurve.uplift }];
+                    }
+                }
+
+                let metaBasePoint = [];
+                if (metaBaseOptimRow && metaBaseCurve.length) {
+                    const closestCurve = findClosestByValue(
+                        metaBaseCurve.map(p => ({ spend: p.x, uplift: p.y })),
+                        'spend',
+                        metaBaseOptimRow.spend
+                    );
+                    if (closestCurve) {
+                        metaBasePoint = [{ x: closestCurve.spend, y: closestCurve.uplift }];
+                    }
+                }
+
+                chart.data.datasets[0].data = googleCurve;
+                chart.data.datasets[1].data = metaCurve;
+                chart.data.datasets[2].data = googlePoint;
+                chart.data.datasets[3].data = metaPoint;
+                chart.data.datasets[4].data = googleBaseCurve;
+                chart.data.datasets[5].data = metaBaseCurve;
+                chart.data.datasets[6].data = googleBasePoint;
+                chart.data.datasets[7].data = metaBasePoint;
+
+                metaStableCell.textContent = fmtMoney(metaBaseOptimRow?.spend);
+                metaFutureCell.textContent = fmtMoney(metaOptimRow?.spend);
+                googleStableCell.textContent = fmtMoney(googleBaseOptimRow?.spend);
+                googleFutureCell.textContent = fmtMoney(googleOptimRow?.spend);
+
+                chart.update();
+            }
+
+            budgetSlider.addEventListener('input', updateChart);
+            document
+                .querySelectorAll('input[name="bc-google-level"], input[name="bc-meta-level"]')
+                .forEach(el => el.addEventListener('change', updateChart));
+
+            updateChart();
+        }).catch(err => {
+            console.error('Budget curves widget error', err);
+        });
+    }
+
+    requestAnimationFrame(initBudgetCurvesWidget);
+</script>
