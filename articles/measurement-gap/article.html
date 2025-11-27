@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+
+<head>
+
+  <!-- ** Basic Page Needs ** -->
+  <meta charset="utf-8">
+  <title>Linea Analytics - The Measurement Gap: Is Your GA4 Accurate? Why Marketing Mix Modelling (MMM) is the True Test
+    of Media Activity</title>
+
+  <!-- ** Mobile Specific Metas ** -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Agency HTML Template">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="author" content="linea-analytics">
+  <meta name="generator" content="linea-analytics Html5 Agency Template v1.0">
+
+  <!-- theme meta -->
+  <meta name="theme-name" content="linea-analytics" />
+
+  <!-- bootstrap-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css">
+  <!-- Icon Font Css -->
+  <link rel="stylesheet" href="/plugins/themify/css/themify-icons.css">
+  <link rel="stylesheet" href="/plugins/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="/plugins/magnific-popup/magnific-popup.css">
+  <!-- Owl Carousel CSS -->
+  <link rel="stylesheet" href="/plugins/slick/slick.css">
+  <link rel="stylesheet" href="/plugins/slick/slick-theme.css">
+
+  <!-- Markdown to html -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/custom-dropdown.css">
+
+  <!--Favicon-->
+  <link rel="icon" href="/images/logos/icon.png" type="image/x-icon">
+
+  <!-- CSV parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.5.2/papaparse.min.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    .before-after-wrapper {
+      margin: 2rem;
+      border-radius: 1rem;
+      outline: 0px solid #21caab;
+      position: relative;
+      aspect-ratio: 600/371;
+      box-shadow: 0 0 13px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .before-after-wrapper::before {
+      background-color: hsla(172, 61%, 82%, 75%);
+      border-radius: 40px;
+      top: 10px;
+      color: #21caab;
+      content: 'before';
+      left: 10px;
+      opacity: 0;
+      padding: 5px 10px;
+      position: absolute;
+      transition: opacity 200ms ease-in-out;
+      z-index: 15;
+    }
+
+    :global(.before-after-wrapper.show-before::before) {
+      opacity: 1;
+    }
+
+    .before-after-wrapper::after {
+      background-color: hsla(172, 61%, 82%, 75%);
+      border-radius: 40px;
+      top: 10px;
+      color: #21caab;
+      opacity: 0;
+      padding: 5px 10px;
+      position: absolute;
+      right: 10px;
+      transition: opacity 200ms ease-in-out;
+      z-index: 15;
+      content: 'after';
+    }
+
+    :global(.before-after-wrapper.show-after::after) {
+      opacity: 1;
+    }
+
+    .before-image-wrapper {
+      bottom: 0;
+      left: 0;
+      overflow: hidden;
+      position: absolute;
+      top: 0;
+      z-index: 10;
+    }
+
+    .before-image {
+      background-size: cover;
+      height: 100%;
+      width: 100%;
+    }
+
+    .after-image {
+      background-size: cover;
+      inset: 0;
+      position: absolute;
+    }
+
+    .handle {
+      align-items: center;
+      background: #21caab;
+      bottom: 0;
+      cursor: col-resize;
+      display: flex;
+      justify-content: center;
+      left: 50%;
+      position: absolute;
+      top: 0;
+      width: 4px;
+      z-index: 20;
+    }
+
+    .handle::before {
+      content: '';
+      position: absolute;
+      inset: 0 -20px;
+    }
+
+    .handle::after {
+      align-items: center;
+      background: #21caab;
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 512 512"><path fill="hsl(172, 61%, 82%)" d="M505.7 265.7c3-3 3.1-7.9 .2-11.1l-104-112c-3-3.2-8.1-3.4-11.3-.4s-3.4 8.1-.4 11.3L481.7 252 23.3 252l90.3-90.3c3.1-3.1 3.1-8.2 0-11.3s-8.2-3.1-11.3 0l-104 104c-3.1 3.1-3.1 8.2 0 11.3l104 104c3.1 3.1 8.2 3.1 11.3 0s3.1-8.2 0-11.3L23.3 268l457.4 0-90.3 90.3c-3.1 3.1-3.1 8.2 0 11.3s8.2 3.1 11.3 0l104-104z"/></svg>');
+      background-position: center;
+      background-repeat: no-repeat;
+      border-radius: 50%;
+      color: #21caab;
+      content: '';
+      display: flex;
+      font-size: 16px;
+      font-weight: bold;
+      justify-content: center;
+      max-height: 40px;
+      max-width: 40px;
+      min-height: 40px;
+      min-width: 40px;
+    }
+  </style>
+
+</head>
+
+<body>
+
+
+  <!-- Header Start -->
+  <header id="header-container" class="navigation"></header>
+  <!-- Header Close -->
+
+
+  <!-- Article Container Start -->
+  <div class="container mt-5 ">
+    <div class="row justify-content-center">
+      <div class="col-lg-12 col-md-12 mb-5">
+        <div style="
+          width: 100%;
+          max-width: 100%;
+          height: 300px;
+          overflow: hidden;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 20px;
+        ">
+          <img src="./thumbnail.jpg" alt="thumbnail" class="shadow rounded" style="
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              object-position: center center;
+            ">
+        </div>
+        <!-- ARTICLE CONTENT START -->
+
+        <h1>The Measurement Gap: Is Your GA4 Accurate? Why Marketing Mix Modelling (MMM) is the True Test of Media
+          Activity</h1>
+        <p>Let&#39;s start with a short potted history. The last 10 years in the marketing measurement industry have
+          seen a lot of change. The Big 4 include</p>
+        <ol>
+          <li>A rise of privacy-first web tracking &amp; measurement </li>
+          <li>Walled gardens between tech firms (Google not talking to Meta, for example) </li>
+          <li>Transition from Universal Analytics to Google Analytics 4 </li>
+          <li>An increasing desire for Brands to know “would that sale have happened anyway?”</li>
+        </ol>
+        <p>With those key trends impacting the desire for measurement accuracy, let&#39;s see how GA4 and MMM compare.
+        </p>
+        <h2>What is driving my sales?</h2>
+        <p>This is where we see a diversion. Use the chart below to compare how drivers change between a GA4 &amp; MMM
+          output.</p>
+
+        <!-- before and after html with tailwind css classes -->
+        <div class="overflow-hidden before-after-wrapper rounded-3xl">
+          <!-- before image: width starts at 50% but will change depending on where the slider is -->
+          <div class="before-image-wrapper" style="width: 50%;">
+            <div class="before-image" style="background-image: url('mta.png');">
+            </div>
+          </div>
+
+          <!-- after image: takes up entire width -->
+          <div class="after-image" style="background-image: url('mmm.png');">
+          </div>
+
+          <!-- draggable slider with handle -->
+          <span class="handle draggable"></span>
+        </div>
+
+
+        <h2>The fundamental Divergence: Why do GA4 and MMM produce different results?</h2>
+        <p>One thing we at Linea here very often is: “GA4 is not answering our key media performance questions -
+          especially for upper funnel channels”. </p>
+        <p>At its heart, they are answering different questions. </p>
+        <p>GA4 = of those things we can track. What element had the final contribution<br>MMM = of all things that
+          occurred. Which factors contributed</p>
+        <p>See the table below comparing what is included in each approach</p>
+        <table class="table table-sm align-middle">
+          <thead class="table-light bg-green text-white">
+            <tr>
+              <th>Group</th>
+              <th>Category</th>
+              <th class="text-center">GA4</th>
+              <th class="text-center">Linea MMM</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <!-- Approach -->
+            <tr class="table-group-divider">
+              <td><strong>Approach</strong></td>
+              <td><strong>Measurement type</strong></td>
+              <td class="text-center">Tracked</td>
+              <td class="text-center">Statistical</td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><strong>Customer journeys</strong></td>
+              <td class="text-center">✅</td>
+              <td class="text-center">✖</td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><strong>Longer-term impact</strong></td>
+              <td class="text-center">7–30 day impression window</td>
+              <td class="text-center">Up to 12 months via adstocks</td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><strong>Frequency</strong></td>
+              <td class="text-center">Live / daily</td>
+              <td class="text-center">Monthly (can be faster)</td>
+            </tr>
+
+            <!-- Non-media factors -->
+            <tr class="table-group-divider">
+              <td><strong>Non-media factors</strong></td>
+              <td><strong>Price, product changes, promotions</strong></td>
+              <td class="text-center">✖</td>
+              <td class="text-center">✅</td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><strong>Market and economic factors</strong></td>
+              <td class="text-center">✖</td>
+              <td class="text-center">✅</td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><strong>Seasonality</strong></td>
+              <td class="text-center">✖<br><small>Trends visible with YoY data</small></td>
+              <td class="text-center">✅</td>
+            </tr>
+
+            <!-- Channels -->
+            <tr class="table-group-divider">
+              <td><strong>Channel coverage</strong></td>
+              <td><strong>Google Search</strong></td>
+              <td class="text-center">✅</td>
+              <td class="text-center">✅</td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><strong>Brand Search</strong></td>
+              <td class="text-center">?<br><small>Often overvalued</small></td>
+              <td class="text-center">✅</td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><strong>Meta, TikTok, Display</strong></td>
+              <td class="text-center">✅<br><small>Requires dedicated setup</small></td>
+              <td class="text-center">✅</td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><strong>Mid / upper funnel digital (YouTube, CTV)</strong></td>
+              <td class="text-center">?<br><small>Undervalues non-click channels</small></td>
+              <td class="text-center">✅</td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td><strong>Offline channels</strong></td>
+              <td class="text-center">✖</td>
+              <td class="text-center">✅</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Determining Measurement Accuracy: When to use GA4 and When to use MMM</h2>
+        <p>Which approach is the <strong>most accurate</strong>? This is where we come back to the key question of what
+          specific goal you are trying to achieve. Both tools are highly accurate for their designated purpose, but they
+          serve different decision-making needs.</p>
+        <p>Here at Linea, we recommend the following framework for effective <strong>budget allocation</strong> and
+          <strong>cross-channel measurement</strong>:
+        </p>
+        <ul>
+          <li><strong>Use GA4 when...</strong>
+            <ul>
+              <li>You are looking to compare performance <strong>within a specific media channel</strong> (e.g.,
+                comparing two different Google Search campaigns). </li>
+              <li>You need to analyse digital <strong>customer journey</strong> steps at a user level.</li>
+            </ul>
+          </li>
+          <li><strong>Use MMM when...</strong>
+            <ul>
+              <li>You need <strong>cross-media channel comparison</strong> (e.g., comparing the true return of TV vs.
+                Paid Social). </li>
+              <li>You need to determine <strong>incremental ROI</strong> and calculate overall <strong>marketing budget
+                  allocation</strong>. </li>
+              <li>You need to understand the influence of <strong>non-media factors</strong> (like price changes,
+                economic trends, or seasonality) impacting your media performance.</li>
+            </ul>
+          </li>
+        </ul>
+        <p>For modern marketers, it is vital to have full clarity on the tools you are using, where they should be used,
+          and what questions they are best equipped to answer- <a
+            href="https://linea-analytics.com/articles/choosing-right-tool/article.html">see more here</a>. </p>
+        <p>Only when you combine the tactical <strong>digital attribution</strong> from GA4 with the strategic,
+          <strong>holistic media measurement</strong> of Linea’s MMM can you make cross-channel media decisions that
+          will truly drive business growth.
+        </p>
+
+
+        <!-- ARTICLE CONTENT END -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Article Container Close -->
+
+
+  <!-- Section Contacts Start -->
+  <section class="section cta d-flex align-items-center" id="contactUs">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-5 col-lg-6">
+          <div class="cta-item bg-white p-5 rounded text-center">
+            <span class="h6 text-color">Take control of your data</span>
+            <h2 class="mt-2 mb-4">Contact us</h2>
+            <p class="lead mb-4">Have any project on mind?<br>For immediate support:</p>
+            <a href="mailto:info@linea-analytics.com">
+              <i class="fas fa-envelope mr-2"></i>
+              <span>info@linea-analytics.com</span>
+            </a>
+            <br>
+            <a href="https://calendly.com/david-walsh-linea-analytics/30min">
+              <i class="fas fa-phone mr-2"></i>
+              Schedule a Call
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-70 position-relative">
+    <div class="container">
+      <div class="cta-block-2 bg-gray p-5 rounded border-1">
+        <div class="row justify-content-center align-items-center ">
+          <div class="col-lg-7">
+            <span class="text-color">Why wait</span>
+            <h2 class="mt-2 mb-4 mb-lg-0">Get the <strong>True Impact</strong> of your Marketing.</h2>
+          </div>
+          <div class="col-lg-4">
+            <a href="https://calendly.com/david-walsh-linea-analytics/30min"
+              class="btn btn-main btn-round-full float-lg-right ">Schedule a call</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <footer id="footer-container" class="footer section"></footer>
+
+  <!--Scroll to top-->
+  <div id="scroll-to-top" class="scroll-to-top shadow">
+    <span class="icon fa fa-angle-up"></span>
+  </div>
+
+
+  <!-- JS HELPERS -->
+  <!-- Main jQuery -->
+  <script src="/plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4.3.1 -->
+  <script src="/plugins/bootstrap/bootstrap.min.js"></script>
+  <!--  Magnific Popup-->
+  <script src="/plugins/magnific-popup/jquery.magnific-popup.min.js"></script>
+  <!-- Slick Slider -->
+  <script src="/plugins/slick/slick.min.js"></script>
+
+  <script src="/js/script.js"></script>
+  <script src="/js/views.js"></script>
+  <script src="/js/customDropdown.js"></script>
+  <script src="/js/blog-single.js"></script
+
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-5LHVS45SP4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-5LHVS45SP4');
+  </script>
+  <script>
+    // get the div containing both the before and after images
+    const imageWrapper = document.querySelector(`.before-after-wrapper`);
+    // check if the user is using a touch device
+    const isTouch = window.matchMedia('(pointer: coarse)').matches;
+
+    // initialize the dragElement function below
+    dragElement(imageWrapper.querySelector('.handle'));
+
+    // get the current coordinates of the .handle
+    function getCoords(e) {
+      let x, y;
+
+      // get the current x and y of the users input (dragging .handle)
+      // check if the device is a touch device
+      if (isTouch) {
+        // touchscreen: if the devices is a touch device, the x and y will be in the touches[0] object
+        x = e.touches[0].clientX;
+        y = e.touches[0].clientY;
+      } else {
+        // 
+        // desktop: if the device is not a touch device we can get it right from the event (e) object
+        x = e.clientX;
+        y = e.clientY;
+      }
+
+      return { x, y };
+    }
+
+    // listens for the user touch/mouse input on the .handle element and drags the slider
+    function dragElement(el) {
+      let pos1 = 0,
+        pos2 = 0,
+        pos3 = 0,
+        pos4 = 0;
+
+      // initialize the slider being dragged when the .handle is pressed
+      if (isTouch) {
+        el.ontouchstart = dragInit;
+      } else {
+        el.onmousedown = dragInit;
+      }
+
+      // call elementDrag/closeElementDrag when the users interacts with .handle
+      function dragInit(e) {
+        e = e || window.event;
+        e.preventDefault();
+
+        // get the mouse cursor/touch position at startup
+        const { x, y } = getCoords(e);
+        pos3 = x;
+        pos4 = y;
+
+        if (isTouch) {
+          document.ontouchend = closeElementDrag; // stop moving
+          document.ontouchmove = elementDrag; // call function whenever the cursor moves
+        } else {
+          document.onmouseup = closeElementDrag; // stop moving
+          document.onmousemove = elementDrag; // call function whenever the cursor moves
+        }
+      }
+
+      // as the element is dragged update the .before-image-wrapper width
+      function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+
+        // calculate new cursor position:
+        const { x, y } = getCoords(e);
+        pos1 = pos3 - x;
+        pos2 = pos4 - y;
+        pos3 = x;
+        pos4 = y;
+
+        let wrapperRight = el.offsetLeft - pos1;
+
+        if (wrapperRight >= 0 && wrapperRight <= imageWrapper.offsetWidth) {
+          // set the element's new position:
+          el.style.left = `${el.offsetLeft - pos1}px`;
+          imageWrapper.querySelector('.before-image-wrapper').style.width = `${wrapperRight}px`;
+        }
+      }
+
+      function closeElementDrag() {
+        if (isTouch) {
+          document.ontouchend = null;
+          document.ontouchmove = null;
+        } else {
+          document.onmouseup = null;
+          document.onmousemove = null;
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>
