@@ -115,6 +115,33 @@ function insertLatest() {
   contactUs.parentNode.insertBefore(featuredContainer, contactUs);
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("pre > code").forEach(codeBlock => {
+
+        // wrap <pre> in a container
+        const pre = codeBlock.parentElement;
+        const wrapper = document.createElement("div");
+        wrapper.className = "pre-wrapper";
+        pre.parentNode.insertBefore(wrapper, pre);
+        wrapper.appendChild(pre);
+
+        // create the copy button
+        const button = document.createElement("button");
+        button.className = "copy-btn";
+        button.innerText = "Copy";
+
+        // click action
+        button.addEventListener("click", () => {
+            const text = codeBlock.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                button.innerText = "Copied!";
+                setTimeout(() => (button.innerText = "Copy"), 1500);
+            });
+        });
+
+        wrapper.appendChild(button);
+    });
+});
 
 
 window.addEventListener('DOMContentLoaded', () => {

@@ -1762,5 +1762,55 @@ h3.quote::before {
   background-color: #f3f3f3;
 }
 
+.container.mt-5 .row.justify-content-center p a {
+  color: #222;                    /* text colour */
+  font-weight: bold;
+  text-decoration: underline;
+  text-decoration-thickness: 3px; /* thickness */
+  text-decoration-color: #21caab; /* underline colour */
+  transition: .2s;
+}
+.container.mt-5 .row.justify-content-center p a:hover{
+  text-decoration: underline;
+  text-decoration-thickness: 3px; /* thickness */
+  text-decoration-color: #cccccc; /* underline colour */
+  color: #666666;
+}
 
 
+/* wrapper around each code block */
+.pre-wrapper {
+    position: relative;
+    margin: 1.2em 0;
+}
+
+/* style the <pre> itself */
+.pre-wrapper pre {
+    color: white;
+    background: #111C28;          /* light grey */
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 12px 14px;
+    overflow: auto;
+    font-size: 0.9rem;
+    line-height: 1.4rem;
+}
+
+/* style for the copy button */
+.copy-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    background: #21caab;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: background 0.15s;
+}
+
+/* hover effect */
+.copy-btn:hover {
+    background: #eaeaea;
+}

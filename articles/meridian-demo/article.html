@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<head>
+
+  <!-- ** Basic Page Needs ** -->
+  <meta charset="utf-8">
+  <title>Linea Analytics - Getting Started with Meridian</title>
+
+  <!-- ** Mobile Specific Metas ** -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Agency HTML Template">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="author" content="linea-analytics">
+  <meta name="generator" content="linea-analytics Html5 Agency Template v1.0">
+
+  <!-- theme meta -->
+  <meta name="theme-name" content="linea-analytics" />
+
+  <!-- bootstrap-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css">
+  <!-- Icon Font Css -->
+  <link rel="stylesheet" href="/plugins/themify/css/themify-icons.css">
+  <link rel="stylesheet" href="/plugins/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="/plugins/magnific-popup/magnific-popup.css">
+  <!-- Owl Carousel CSS -->
+  <link rel="stylesheet" href="/plugins/slick/slick.css">
+  <link rel="stylesheet" href="/plugins/slick/slick-theme.css">
+
+  <!-- Markdown to html -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/custom-dropdown.css">
+
+  <!--Favicon-->
+  <link rel="icon" href="/images/logos/icon.png" type="image/x-icon">
+
+  <!-- CSV parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.5.2/papaparse.min.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+
+  <!-- Header Start -->
+  <header id="header-container" class="navigation"></header>
+  <!-- Header Close -->
+
+
+  <!-- Article Container Start -->
+  <div class="container mt-5 ">
+    <div class="row justify-content-center">
+      <div class="col-lg-12 col-md-12 mb-5">
+        <div style="
+          width: 100%;
+          max-width: 100%;
+          height: 300px;
+          overflow: hidden;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 20px;
+        ">
+          <img src="./thumbnail.jpg" alt="thumbnail" class="shadow rounded" style="
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              object-position: center center;
+            ">
+        </div>
+        <!-- ARTICLE CONTENT START -->
+
+        <h1>Google's Meridian: Getting Started with Modern Bayesian Marketing Mix Modelling</h1>
+        <p>
+          Many teams are testing Marketing Mix Modelling (MMM) internally right now, and some of that has been driven by
+          the rise of Meridian from Google.
+          Meridian is an open-source MMM framework developed by Google that offers a flexible, transparent, and
+          well-documented workflow to accurately
+          measure the incremental return on investment (ROI) of marketing channels.
+        </p>
+        <p>
+          Meridian uses a Bayesian MMM approach. This, in Linea’s opinion, is the gold standard for measuring
+          incremental impact. The structure of
+          Bayesian MMM allows marketers to best measure the uncertainty that exists in media campaigns and use external
+          information to improve the
+          accuracy of marketing decisions.
+        </p>
+        <p>
+          This article walks through a fully reproducible example using a simple dataset containing one revenue KPI and
+          five
+          media channels in a national-level model. The CSV file containing the data for this example is available
+          <a href="https://github.com/linea-analytics/public-data/blob/main/formatted_data_simple.csv">here</a>.
+        </p>
+        <p>We will cover the 7 steps to running your open source Meridian Marketing Mix Modelling:</p>
+        <ol>
+          <li>Installing Meridian </li>
+          <li>Importing packages and data </li>
+          <li>Specifying the model for Meridian </li>
+          <li>Running the model </li>
+          <li>Inspecting model quality </li>
+          <li>Exploring model results </li>
+          <li>Running a basic budget optimization</li>
+        </ol>
+        <p>You can use this article to learn about Meridian without necessarily running the code, but if you do want to
+          test Meridian yourself here are the requirements:</p>
+        <ul>
+          <li>Python: version 3.12 (or 3.11) </li>
+          <li>A coding environment: I&#39;ll be using Jupyter</li>
+        </ul>
+        <h2>Installing Meridian</h2>
+        <p>As mentioned above, you will need to be running Python version 3.12 or 3.11 as per the Meridian
+          documentation. Then you can run the code below to install the Meridian package in your Python environment.</p>
+        <pre><code>pip install google-meridian
+</code></pre>
+        <p>This will install several other dependencies that will only work properly on the versions of Python specified
+          above.</p>
+        <h2>Importing packages and data</h2>
+        <p>We start by importing the Meridian package into our coding environment.</p>
+        <pre><code># meridian functions
+from meridian.data.data_frame_input_data_builder import DataFrameInputDataBuilder
+from meridian.model.model import Meridian
+from meridian.analysis import optimizer
+from meridian.analysis import summarizer
+from meridian.analysis import visualizer
+from meridian.model import model
+from meridian.model import prior_distribution as pdist, spec as specmod
+
+# data manipulation
+import pandas as pd
+</code></pre>
+        <p>Then, using Pandas, we import our CSV file. This contains the breadth of variables that we are looking to
+          test in our modelling.</p>
+        <pre><code>df = pd.read_csv(&quot;./formatted_data_simple.csv&quot;)
+df[&quot;date&quot;] = pd.to_datetime(df[&quot;date&quot;],format = &quot;%d/%m/%Y&quot;)
+df.head()
+</code></pre>
+        <figure class="p-5">
+          <img src="./data_head.png" alt="data_head" width="100%" class="rounded">
+        </figure>
+        <h2>Specifying the model for Meridian</h2>
+        <p>Now that we have our data, we can store the relevant variable names in the objects below, to specify:</p>
+        <ul>
+          <li>The dependent variable (<code>kpi_name</code>)</li>
+          <li>The media variables (<code>media_cols</code>)</li>
+          <li>The non-media variables (<code>control_cols</code>)</li>
+        </ul>
+        <p>
+          As a modeller, it is important at this point to ensure you have a wide breadth of control variables for model
+          testing. When building a robust model, especially for an initial update, you will need to consider making
+          variable
+          transformations.
+          For example, if you expect warm temperatures to impact the drivers of your ice-cream sales, then you could
+          test:
+        </p>
+        <ul>
+          <li>Average temperature</li>
+          <li>Deviation from the average temperature vs. the historic average</li>
+          <li>A threshold level (e.g. 25 degrees)</li>
+        </ul>
+        <p>
+          This is just an example of why expertise is still crucial when using tools like Meridian.
+        </p>
+        <pre><code># all columns in the dataframe
+all_cols = df.columns.tolist()
+
+# the dependent variable
+kpi_name = &quot;sales&quot;
+
+# the media variables
+media_cols = [
+ &#39;tv_spend&#39;,
+ &#39;radio_spend&#39;,
+ &#39;display_spend&#39;,
+ &#39;vod_spend&#39;,
+ &#39;non_brand_ppc_spend&#39;,
+ &#39;brand_ppc_spend&#39;]
+
+# the control variables
+exclude = set(media_cols + [&quot;date&quot;, kpi_name])
+control_cols = [c for c in all_cols if c not in exclude]
+</code></pre>
+        <p>Then, using Meridian&#39;s DataFrameInputDataBuilder, we construct the model specification. This,
+          <code>input_data</code>, is the object that stores the data that we will pass to the modelling function.
+        </p>
+        <pre><code>builder = DataFrameInputDataBuilder(kpi_type="revenue") \
+    .with_kpi(df, kpi_col=kpi_name, time_col="date") \
+    .with_media(
+        df,
+        media_cols=media_cols,
+        media_spend_cols=media_cols,
+        media_channels=media_cols,
+        time_col="date"
+    )\
+    .with_non_media_treatments(
+        df, 
+        non_media_treatment_cols=control_cols, 
+        time_col="date"
+    )
+
+input_data = builder.build()
+model_spec = specmod.ModelSpec(
+    knots=1,   # single coefficient over time -> constant baseline
+)
+</code></pre>
+        <p>
+          Meridian's model specification does allow for some complexity to be added to the model (e.g. priors and
+          different prior distributions).
+          One critical aspect that is lacking in Meridian's, and most approaches available, is handling <a
+            href="https://linea-analytics.com/articles/optim-and-synergy/article.html">synergies</a>.
+          properly (i.e. will my marketing perform as well in periods with lower demand?).
+          At Linea we developed an approach that not only tests synergies, but also measures the how much these
+          synergies impact each variable.
+        </p>
+        <h2>Running the model</h2>
+        <p>Using the <code>input_data</code> object, we can now instantiate the Meridian model. This creates a Bayesian
+          MMM object that holds the model structure, priors and data. The next step is to run prior sampling to verify
+          that the priors behave sensibly, followed by posterior sampling where the actual inference happens.</p>
+        <pre><code>mmm = Meridian(input_data=input_data)
+mmm.sample_prior(500)
+mmm.sample_posterior(
+    n_chains=2, n_adapt=2000, n_burnin=500, n_keep=1000, seed=0
+)
+</code></pre>
+        <p>For the purpose of this article we are using lightweight settings to keep computation fast enough for a
+          tutorial. When running models in production, you will usually want to increase the number of chains, warmup
+          period and kept samples to improve stability and convergence.</p>
+        <p>
+          In our experience, we find that those running Bayesian models struggle with the time taken to run.
+          For example, the default Meridian MMM model from the official documentation can take upto 1 hour to run.
+          Other Bayesian modellers have suggested that they leave it to run overnight.
+          This need not be the case. If you want Linea to speed up your Bayesian MMM model then <a
+            href="https://calendly.com/david-walsh-linea-analytics/30min">arrange a call</a>.
+        </p>
+        <pre><code># mmm.sample_posterior(
+#     n_chains=4,
+#     n_adapt=4000,
+#     n_burnin=1000,
+#     n_keep=2000,
+#     seed=0,
+# )
+</code></pre>
+        <h2>Inspecting model quality</h2>
+        <p>Before looking at the results, it is good practice to examine diagnostics to confirm that the model converged
+          properly. Meridian provides several built in tools for inspecting chain behaviour. Below we plot the R hat
+          distribution, which is a common MCMC diagnostic indicating whether chains converged toward the same region of
+          the posterior.</p>
+        <pre><code>model_diagnostics = visualizer.ModelDiagnostics(mmm)
+model_diagnostics.plot_rhat_boxplot()
+</code></pre>
+
+        <figure class="p-5">
+          <img src="./rhats.png" alt="rhats" width="50%" class="rounded">
+        </figure>
+        <p>Once the sampler has converged, we can look at the overall fit of the model. The plot below compares observed
+          data with modelled predictions across time, helping identify underfitting, overfitting and systematic
+          deviations.</p>
+        <pre><code>model_fit = visualizer.ModelFit(mmm)
+model_fit.plot_model_fit()
+</code></pre>
+
+        <figure class="p-5">
+          <img src="./model_fit.png" alt="model_fit" width="100%" class="rounded">
+        </figure>
+
+        <h2>Exploring model results</h2>
+        <p>After confirming model quality, we can explore what the model learned about channel contributions. The
+          following chart breaks down incremental impact over time, showing how each media input contributes to the
+          outcome.</p>
+        <pre><code>media_summary = visualizer.MediaSummary(mmm)
+media_summary.plot_channel_contribution_area_chart()
+</code></pre>
+        <figure class="p-5">
+          <img src="./meridian_decomp.png" alt="meridian_decomp" width="100%" class="rounded">
+        </figure>
+        <p>Another useful view compares spend with contribution, helping identify whether channels are delivering value
+          relative to their cost. This plot can highlight under-invested or over-invested channels.</p>
+        <pre><code>media_summary.plot_spend_vs_contribution()
+</code></pre>
+        <figure class="p-5">
+          <img src="./rois.png" alt="rois" width="50%" class="rounded">
+        </figure>
+        <p>You can also access the contribution of each variable, using the <code>media_summary</code> object, to dive
+          deeper into your model&#39;s results.</p>
+        <pre><code>contrib = media_summary.contribution_metrics(
+    include_non_paid=True,
+    aggregate_times=False
+)
+contrib.head()
+</code></pre>
+        <figure class="p-5">
+          <img src="./contrib_head.png" alt="contrib_head" width="100%" class="rounded">
+        </figure>
+
+        <figure class="p-5">
+          <img src="./seaborn_decomp.png" alt="seaborn_decomp" width="100%" class="rounded">
+        </figure>
+        <h2>Running a basic budget optimization</h2>
+        <p>With estimated diminishing returns and channel response curves available, we can run a basic optimisation
+          analysis. The optimizer searches for a better allocation of spend based on expected outcomes. Here we use the
+          default configuration, which reallocates the historical budget to maximise performance.</p>
+        <pre><code>budget_optimizer = optimizer.BudgetOptimizer(mmm)
+optimization_results = budget_optimizer.optimize()
+optimization_results.plot_response_curves()
+</code></pre>
+        <p>This produces a set of recommended allocations and visual response curves, offering a first pass at how
+          budget could be redistributed according to the model.</p>
+
+        <p>
+          At Linea, we have found that the Meridian optimisation solution lacks the flexibility to run what-if
+          scenarios.
+          Also, as a code-based interface, it’s not a tool that Marketing teams or media agencies can easily use.
+          That’s why we built the Linea Scenario Tool. It plugs into your Meridian MMM and offers an intuitive user
+          interface for cross-channel allocation and campaign planning. Crucially, it allows you to overlay how future
+          factors such as media cost inflation, economic impacts, or market changes will impact your cross-channel
+          budget decisions. <a href="https://app.linea-analytics.com/">Test it with a free trial here</a>.
+        </p>
+        <figure class="p-5">
+          <img src="./optimisation_curves.png" alt="optimisation_curves" width="100%" class="rounded">
+        </figure>
+
+        <p>
+          The Meridian library is a useful option for teams that need a clear, technically robust MMM without relying on
+          extensive internal tooling. It works well for organisations early in their analytics journey or those looking
+          for a quick topline view of performance.
+        </p>
+        <p>
+          As modelling needs grow, though, generic frameworks reach their limits. Bespoke structures will deliver
+          stronger accuracy and flexibility, especially when industry specifics and real world dynamics matter.
+
+        </p>
+        <p>
+          Linea provides custom MMMs built for each sector, incorporating features such as variable <a
+            href="https://linea-analytics.com/articles/optim-and-synergy/article.html">synergies</a>, scenario
+          and optimised <a href="https://linea-analytics.com/articles/running-scenarios/article.html">scenarios</a> that
+          generate complete media plans. If you’re looking to move from a basic overview to a model that can
+          support confident, detailed decision making, we’re here to help.
+        </p>
+
+        <div class="text-center">
+          <a href="https://calendly.com/david-walsh-linea-analytics/30min"
+            class="btn d-inline-block bg-green my-5 px-4 py-2 rounded-pill fw-bold text-white h1 shadow"
+            style="background:#21caab; text-transform:none; font-size: 1.5rem">
+            <i class="fas fa-phone mr-2"></i> Book a call to get started
+          </a>
+        </div>
+
+
+        <!-- ARTICLE CONTENT END -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Article Container Close -->
+
+
+  <!-- Section Contacts Start -->
+  <section class="section cta d-flex align-items-center" id="contactUs">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-5 col-lg-6">
+          <div class="cta-item bg-white p-5 rounded text-center">
+            <span class="h6 text-color">Take control of your data</span>
+            <h2 class="mt-2 mb-4">Contact us</h2>
+            <p class="lead mb-4">Have any project on mind?<br>For immediate support:</p>
+            <a href="mailto:info@linea-analytics.com">
+              <i class="fas fa-envelope mr-2"></i>
+              <span>info@linea-analytics.com</span>
+            </a>
+            <br>
+            <a href="https://calendly.com/david-walsh-linea-analytics/30min">
+              <i class="fas fa-phone mr-2"></i>
+              Schedule a Call
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-70 position-relative">
+    <div class="container">
+      <div class="cta-block-2 bg-gray p-5 rounded border-1">
+        <div class="row justify-content-center align-items-center ">
+          <div class="col-lg-7">
+            <span class="text-color">Why wait</span>
+            <h2 class="mt-2 mb-4 mb-lg-0">Get the <strong>True Impact</strong> of your Marketing.</h2>
+          </div>
+          <div class="col-lg-4">
+            <a href="https://calendly.com/david-walsh-linea-analytics/30min"
+              class="btn btn-main btn-round-full float-lg-right ">Schedule a call</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <footer id="footer-container" class="footer section"></footer>
+
+  <!--Scroll to top-->
+  <div id="scroll-to-top" class="scroll-to-top shadow">
+    <span class="icon fa fa-angle-up"></span>
+  </div>
+
+
+  <!-- JS HELPERS -->
+  <!-- Main jQuery -->
+  <script src="/plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4.3.1 -->
+  <script src="/plugins/bootstrap/bootstrap.min.js"></script>
+  <!--  Magnific Popup-->
+  <script src="/plugins/magnific-popup/jquery.magnific-popup.min.js"></script>
+  <!-- Slick Slider -->
+  <script src="/plugins/slick/slick.min.js"></script>
+
+  <script src="/js/script.js"></script>
+  <script src="/js/views.js"></script>
+  <script src="/js/customDropdown.js"></script>
+  <script src="/js/blog-single.js"></script
+
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-5LHVS45SP4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-5LHVS45SP4');
+  </script>
+</body>
+
+</html>

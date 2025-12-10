@@ -326,5 +326,13 @@
     "author": "David Walsh",
     "date": "2025-11-27",
     "category": "Article"
+  },
+  {
+    "title": "Google's Meridian",
+    "teaser": "Getting Started with Modern Bayesian Marketing Mix Modelling",
+    "folder": "meridian-demo",
+    "author": "Claudio Paladini",
+    "date": "2025-12-02",
+    "category": "Article"
   }
 ]
