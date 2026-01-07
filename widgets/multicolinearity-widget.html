@@ -1,0 +1,246 @@
+<!-- MULTICOLLINEARITY WIDGET (ALLOCATION BUTTONS) -->
+<div class="py-4">
+    <h4 class="text-center mb-3">Overlapping drivers</h4>
+
+    <div class="card p-5 shadow">
+        <div class="row g-0">
+            <!-- controls -->
+            <div class="col-md-4 p-3 border-end">
+                <form class="d-flex h-100 flex-column justify-content-between">
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            Promo coefficient:
+                            <span id="mc-bPromoValue" class="fw-normal">1.00</span>
+                        </label>
+                        <input type="range" id="mc-bPromo" class="form-range" min="0" max="3" step="0.05" value="1" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            Social coefficient:
+                            <span id="mc-bSocialValue" class="fw-normal">1.00</span>
+                        </label>
+                        <input type="range" id="mc-bSocial" class="form-range" min="0" max="3" step="0.05" value="1" />
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            TV coefficient:
+                            <span id="mc-bTvValue" class="fw-normal">1.00</span>
+                        </label>
+                        <input type="range" id="mc-bTv" class="form-range" min="0" max="3" step="0.05" value="1" />
+                    </div>
+
+                    <div class="w-100 p-1">
+                        <button type="button" id="mc-all-social" class="btn  bg-green rounded-pill shadow-sm font-weight-bold primary w-100">
+                            100% Social
+                        </button>
+                    </div>
+                    <div class="w-100 p-1">
+                        <button type="button" id="mc-all-promo" class="btn bg-green rounded-pill shadow-sm font-weight-bold w-100">
+                            100% Promotions
+                        </button>
+                    </div>
+                    <div class="w-100 p-1">
+                        <button type="button" id="mc-fifty" class="btn bg-green rounded-pill shadow-sm w-100 font-weight-bold">
+                            50 / 50
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- charts -->
+            <div class="col-md-8">
+                <div class="d-flex flex-column gap-3 align-items-stretch justify-content-center">
+                    <div>
+                        <div class="text-center fw-semibold mb-2">Model Decomposition</div>
+                        <canvas id="mc-chart" width="600" height="240"></canvas>
+                    </div>
+                    <hr>
+                    <div>
+                        <div class="text-center fw-semibold mb-2">Model Error</div>
+                        <canvas id="mc-resid-chart" width="600" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function initMulticollinearityWidget() {
+        const ctx = document.getElementById('mc-chart')?.getContext('2d');
+        const rctx = document.getElementById('mc-resid-chart')?.getContext('2d');
+        if (!ctx || !rctx) return;
+
+        const weeks = 14;
+        const labels = Array.from({ length: weeks }, (_, i) => `W${i + 1}`);
+
+        const base = 12000;
+        const baseSeries = Array(weeks).fill(base);
+
+        const tvRaw = [0, 0, 0, 1500, 4500, 7000, 4500, 1500, 0, 0, 0, 0, 0, 0];
+        const socialRaw = [0, 0, 0, 0, 0, 0, 0, 0, 9000, 0, 0, 0, 0, 0];
+        const promoRaw = [0, 0, 0, 0, 0, 0, 0, 0, 8000, 0, 0, 0, 0, 0];
+
+        const trueCoefs = { tv: 1.05, social: 0.85, promo: 1.15 };
+
+        function pseudoNoise(i) {
+            const x = Math.sin((i + 1) * 999) * 10000;
+            return x - Math.floor(x);
+        }
+        const noiseAmp = 900;
+        const eps = Array.from({ length: weeks }, (_, i) => (pseudoNoise(i) - 0.5) * 2 * noiseAmp);
+
+        const salesFixed = Array.from({ length: weeks }, (_, i) =>
+            base +
+            trueCoefs.tv * tvRaw[i] +
+            trueCoefs.social * socialRaw[i] +
+            trueCoefs.promo * promoRaw[i] +
+            eps[i]
+        );
+
+        const yMax = Math.ceil(Math.max(...salesFixed) * 1.5);
+
+        let bSocial = 1.0;
+        let bTv = 1.0;
+        let bPromo = 1.0;
+
+        const scaled = (arr, k) => arr.map(v => v * k);
+
+        const modelSeries = () =>
+            Array.from({ length: weeks }, (_, i) =>
+                baseSeries[i] +
+                (tvRaw[i] * bTv) +
+                (socialRaw[i] * bSocial) +
+                (promoRaw[i] * bPromo)
+            );
+
+        const residualSeries = () => {
+            const pred = modelSeries();
+            return salesFixed.map((y, i) => y - pred[i]);
+        };
+
+        // Residual chart (top)
+        const residChart = new Chart(rctx, {
+            type: 'bar',
+            data: {
+                labels,
+                datasets: [
+                    {
+                        label: 'Residuals',
+                        data: residualSeries(),
+                        borderColor: 'red',
+                        backgroundColor: 'red',
+                        borderWidth: 2,
+                        pointRadius: 2,
+                        fill: false,
+                        tension: 0.25
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                interaction: { mode: 'index', intersect: false },
+                scales: {
+                    x: {},
+                    y: {
+                        min: -10000,
+                        max: 10000,
+                        title: { display: true, text: 'Residual' },
+                        ticks: { maxTicksLimit: 10 }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // Main chart (bottom)
+        const chart = new Chart(ctx, {
+            data: {
+                labels,
+                datasets: [
+                    {
+                        label: 'Sales',
+                        type: 'line',
+                        data: salesFixed,
+                        backgroundColor: "black",
+                        borderColor: "black",
+                        borderWidth: 2,
+                        pointRadius: 2,
+                        fill: false,
+                        tension: 0.25
+                    },
+                    { label: 'Base', type: 'bar', data: baseSeries, stack: 's', backgroundColor: '#ccc' },
+                    { label: 'TV', type: 'bar', data: scaled(tvRaw, bTv), stack: 's', backgroundColor: '#79fce2' },
+                    { label: 'Social', type: 'bar', data: scaled(socialRaw, bSocial), stack: 's', backgroundColor: '#9d98f9' },
+                    { label: 'Promotion', type: 'bar', data: scaled(promoRaw, bPromo), stack: 's', backgroundColor: '#FFBA00' },
+                ]
+            },
+            options: {
+                responsive: true,
+                interaction: { mode: 'index', intersect: false },
+                scales: {
+                    x: { stacked: true },
+                    y: { stacked: true, min: 0, max: yMax ,
+                        title: { display: true, text: 'Sales (£)' },}
+                },
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        const setText = (id, v) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = v.toFixed(2);
+        };
+
+        function update() {
+            bSocial = parseFloat(document.getElementById('mc-bSocial').value);
+            bTv = parseFloat(document.getElementById('mc-bTv').value);
+            bPromo = parseFloat(document.getElementById('mc-bPromo').value);
+
+            setText('mc-bSocialValue', bSocial);
+            setText('mc-bTvValue', bTv);
+            setText('mc-bPromoValue', bPromo);
+
+            chart.data.datasets[2].data = scaled(tvRaw, bTv);
+            chart.data.datasets[3].data = scaled(socialRaw, bSocial);
+            chart.data.datasets[4].data = scaled(promoRaw, bPromo);
+
+            residChart.data.datasets[0].data = residualSeries();
+
+            chart.update();
+            residChart.update();
+        }
+
+        document.getElementById('mc-bSocial').addEventListener('input', update);
+        document.getElementById('mc-bTv').addEventListener('input', update);
+        document.getElementById('mc-bPromo').addEventListener('input', update);
+
+        // Allocation buttons
+        document.getElementById('mc-all-social').addEventListener('click', () => {
+            document.getElementById('mc-bSocial').value = 1.95;
+            document.getElementById('mc-bPromo').value = 0;
+            update();
+        });
+
+        document.getElementById('mc-all-promo').addEventListener('click', () => {
+            document.getElementById('mc-bSocial').value = 0;
+            document.getElementById('mc-bPromo').value = 2.15;
+            update();
+        });
+
+        document.getElementById('mc-fifty').addEventListener('click', () => {
+            document.getElementById('mc-bSocial').value = 0.95;
+            document.getElementById('mc-bPromo').value = 1;
+            update();
+        });
+
+        update();
+    }
+
+    requestAnimationFrame(initMulticollinearityWidget);
+</script>

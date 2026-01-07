@@ -128,7 +128,7 @@
     "category": "Article"
   },
   {
-    "title": "First step to measuring the long-term impact of Marketing: The Memory Effect",
+    "title": "First step to measuring the long-term impact of Marketing: Adstock",
     "teaser": "Different ways of measuring adstock in MMM",
     "folder": "adstocks",
     "author": "Claudio Paladini",
@@ -333,6 +333,30 @@
     "folder": "meridian-demo",
     "author": "Claudio Paladini",
     "date": "2025-12-02",
+    "category": "Article"
+  },
+  {
+    "title": "Media Measurement Planning: Solving the Multicollinearity Problem",
+    "teaser": "Factoring in measurement from the planning stage",
+    "folder": "multicolinearity",
+    "author": "Claudio Paladini",
+    "date": "2025-12-02",
+    "category": "Article"
+  },
+  {
+    "title": "How Linea Analytics provide the best Always-on Marketing Mix Modelling",
+    "teaser": "Comparing Types of MMM Providers",
+    "folder": "best-always-on",
+    "author": "David Walsh",
+    "date": "2026-01-06",
+    "category": "Article"
+  },
+  {
+    "title": "How to Set Media Budgets for Maximum ROI",
+    "teaser": "A Guide to the Meridian Optimiser",
+    "folder": "budget-allocation-meridian",
+    "author": "David Walsh",
+    "date": "2026-01-06",
     "category": "Article"
   }
 ]

@@ -212,7 +212,31 @@
 		);
 
 		counters.forEach(counter => observer.observe(counter));
+
+		document.querySelectorAll('.card').forEach(function (card) {
+			card.addEventListener('mouseenter', function () {
+				card.style.transform = 'translateY(-6px)';
+				card.style.boxShadow = '0 1rem 2rem rgba(0,0,0,.08)';
+			});
+			card.addEventListener('mouseleave', function () {
+				card.style.transform = '';
+				card.style.boxShadow = '';
+			});
+		});
 	});
+
+	// SLIDERS
+	document.querySelectorAll('input[type="range"]').forEach(slider => {
+		const update = () => {
+			const min = slider.min || 0
+			const max = slider.max || 100
+			const val = slider.value
+			slider.style.setProperty('--value', `${((val - min) / (max - min)) * 100}%`)
+		}
+		update()
+		slider.addEventListener('input', update)
+	})
+
 
 
 })(jQuery);

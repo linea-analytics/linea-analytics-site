@@ -1353,6 +1353,15 @@ h3.quote::before {
   /* Adjust space as needed */
 }
 
+.equal-rows tr {
+  height: 75px;
+}
+
+@media (max-width: 992px) {
+  .equal-rows tr {
+    height: 150px;
+  }
+}
 
 .widget {
   margin-bottom: 30px;
@@ -1694,6 +1703,7 @@ h3.quote::before {
   padding-left: 20px;
 }
 
+.client-logos,
 .carosel-slider .slide img {
   width: 200px;
   height: 100px;
@@ -1762,55 +1772,122 @@ h3.quote::before {
   background-color: #f3f3f3;
 }
 
+.linea-url,
 .container.mt-5 .row.justify-content-center p a {
-  color: #222;                    /* text colour */
+  color: #222;
+  /* text colour */
   font-weight: bold;
   text-decoration: underline;
-  text-decoration-thickness: 3px; /* thickness */
-  text-decoration-color: #21caab; /* underline colour */
+  text-decoration-thickness: 3px;
+  /* thickness */
+  text-decoration-color: #21caab;
+  /* underline colour */
   transition: .2s;
 }
-.container.mt-5 .row.justify-content-center p a:hover{
+
+.container.mt-5 .row.justify-content-center p a:hover {
   text-decoration: underline;
-  text-decoration-thickness: 3px; /* thickness */
-  text-decoration-color: #cccccc; /* underline colour */
+  text-decoration-thickness: 3px;
+  /* thickness */
+  text-decoration-color: #cccccc;
+  /* underline colour */
   color: #666666;
 }
 
 
 /* wrapper around each code block */
 .pre-wrapper {
-    position: relative;
-    margin: 1.2em 0;
+  position: relative;
+  margin: 1.2em 0;
 }
 
 /* style the <pre> itself */
 .pre-wrapper pre {
-    color: white;
-    background: #111C28;          /* light grey */
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 12px 14px;
-    overflow: auto;
-    font-size: 0.9rem;
-    line-height: 1.4rem;
+  color: white;
+  background: #111C28;
+  /* light grey */
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 12px 14px;
+  overflow: auto;
+  font-size: 0.9rem;
+  line-height: 1.4rem;
 }
 
 /* style for the copy button */
 .copy-btn {
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    padding: 4px 8px;
-    font-size: 12px;
-    cursor: pointer;
-    background: #21caab;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    transition: background 0.15s;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  background: #21caab;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: background 0.15s;
 }
 
 /* hover effect */
 .copy-btn:hover {
-    background: #eaeaea;
+  background: #eaeaea;
+}
+
+.transition-2 {
+  transition: .2s;
+}
+
+/* SLIDER INPUT */
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #21caab;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #21caab;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  cursor: grab;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type="range"]:active::-webkit-slider-thumb {
+  cursor: grabbing;
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+input[type="range"]::-moz-range-thumb {
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #21caab;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  cursor: grab;
+}
+
+input[type="range"]::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: #e5e7eb;
+}
+
+input[type="range"]:hover::-webkit-slider-thumb,
+input[type="range"]:hover::-moz-range-thumb {
+  border-color: #21caab;
+}
+
+input[type="range"]:focus-visible {
+  outline: none;
 }

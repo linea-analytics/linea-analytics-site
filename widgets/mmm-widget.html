@@ -1,0 +1,266 @@
+<!-- NON-OVERLAPPING DRIVERS WIDGET + RESIDUALS -->
+<div class="py-4">
+  <h4 class="text-center mb-3">Sales = Base + TV + Promotion + Social</h4>
+  <div class="card p-5 shadow">
+    <div class="row g-0">
+      <!-- controls -->
+      <div class="col-md-4 p-3 border-end">
+        <form class="d-flex h-100 flex-column justify-content-between">
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              Base coefficient:
+              <span id="no-bBaseValue" class="fw-normal">1.00</span>
+            </label>
+            <input type="range" id="no-bBase" class="form-range" min="0" max="2" step="0.05" value="1" />
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              TV coefficient:
+              <span id="no-bTvValue" class="fw-normal">1.00</span>
+            </label>
+            <input type="range" id="no-bTv" class="form-range" min="0" max="3" step="0.05" value="1" />
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              Promo coefficient:
+              <span id="no-bPromoValue" class="fw-normal">1.00</span>
+            </label>
+            <input type="range" id="no-bPromo" class="form-range" min="0" max="3" step="0.05" value="1" />
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              Social coefficient:
+              <span id="no-bSocialValue" class="fw-normal">1.00</span>
+            </label>
+            <input type="range" id="no-bSocial" class="form-range" min="0" max="3" step="0.05" value="1" />
+          </div>
+
+          <button type="button" id="no-reset" class="btn  bg-green rounded-pill shadow-sm font-weight-bold w-100">
+            Reset sliders
+          </button>
+
+        </form>
+      </div>
+
+      <!-- charts -->
+      <div class="col-md-8">
+        <div class="d-flex flex-column gap-3 align-items-stretch justify-content-center">
+          <div>
+            <div class="text-center fw-semibold mb-2">Model Decomposition</div>
+            <canvas id="no-chart" width="620" height="260"></canvas>
+          </div>
+          <hr>
+          <div>
+            <div class="text-center fw-semibold mb-2">Model Error (to be minimised)</div>
+            <canvas id="no-resid-chart" width="620" height="110"></canvas>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  function initNonOverlapWidgetWithResiduals() {
+    const ctx = document.getElementById('no-chart')?.getContext('2d');
+    const rctx = document.getElementById('no-resid-chart')?.getContext('2d');
+    if (!ctx || !rctx) return;
+
+    const weeks = 14;
+    const labels = Array.from({ length: weeks }, (_, i) => `W${i + 1}`);
+
+    // Components (mostly non-overlapping; social has two bursts, one aligned with promo)
+    const baseRaw = Array(weeks).fill(12000);
+
+    const tvRaw =     [0, 2500, 5500, 3500, 1200, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    const promoRaw =  [0, 0, 0, 0, 0, 0, 0, 0, 7500, 3500, 0, 0, 0, 0];
+    const socialRaw = [0, 0, 0, 0, 3000, 1500, 0, 0, 2500, 0, 0, 0, 0, 0];
+
+    // True coefs for generating fixed sales (do not change with sliders)
+    const trueCoefs = { base: 1.0, tv: 0.95, promo: 1.10, social: 0.90 };
+
+    // Small fixed noise
+    function pseudoNoise(i) {
+      const x = Math.sin((i + 1) * 733) * 10000;
+      return x - Math.floor(x);
+    }
+    const noiseAmp = 800;
+    const eps = Array.from({ length: weeks }, (_, i) => (pseudoNoise(i) - 0.5) * 2 * noiseAmp);
+
+    const salesFixed = Array.from({ length: weeks }, (_, i) =>
+      trueCoefs.base * baseRaw[i] +
+      trueCoefs.tv * tvRaw[i] +
+      trueCoefs.promo * promoRaw[i] +
+      trueCoefs.social * socialRaw[i] +
+      eps[i]
+    );
+
+    const yMax = Math.ceil(Math.max(...salesFixed) * 1.5);
+
+    // Sliders = fitted coefs (affect decomposition + residuals)
+    let bBase = 1.0, bTv = 1.0, bPromo = 1.0, bSocial = 1.0;
+
+    const scaled = (arr, k) => arr.map(v => v * k);
+
+    const modelSeries = () =>
+      Array.from({ length: weeks }, (_, i) =>
+        (baseRaw[i] * bBase) +
+        (tvRaw[i] * bTv) +
+        (promoRaw[i] * bPromo) +
+        (socialRaw[i] * bSocial)
+      );
+
+    const residualSeries = () => {
+      const pred = modelSeries();
+      return salesFixed.map((y, i) => y - pred[i]);
+    };
+
+
+    // Residual chart
+    const residChart = new Chart(rctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Residuals',
+            data: residualSeries(),
+            backgroundColor: 'rgba(255, 99, 132, 0.7)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        scales: {
+          x: { ticks: { maxRotation: 0 } },
+          y: {
+            min: -10000,
+            max:  10000,
+            title: { display: true, text: 'Residual' },
+            ticks: { maxTicksLimit: 6 }
+          }
+        },
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+
+    // Main chart
+    const chart = new Chart(ctx, {
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Sales (fixed)',
+            type: 'line',
+            data: salesFixed,
+            borderColor: '#000000',
+            backgroundColor: '#000000',
+            borderWidth: 2,
+            pointRadius: 2,
+            fill: false,
+            tension: 0.25
+          },
+          {
+            label: 'Base',
+            type: 'bar',
+            data: scaled(baseRaw, bBase),
+            stack: 's',
+            backgroundColor: 'rgba(160,160,160,0.6)'
+          },
+          {
+            label: 'TV',
+            type: 'bar',
+            data: scaled(tvRaw, bTv),
+            stack: 's',
+            backgroundColor: 'rgba(54,162,235,0.6)'
+          },
+          {
+            label: 'Promotion',
+            type: 'bar',
+            data: scaled(promoRaw, bPromo),
+            stack: 's',
+            backgroundColor: 'rgba(255,159,64,0.6)'
+          },
+          {
+            label: 'Social',
+            type: 'bar',
+            data: scaled(socialRaw, bSocial),
+            stack: 's',
+            backgroundColor: 'rgba(153,102,255,0.6)'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        scales: {
+          x: { stacked: true },
+          y: {
+            stacked: true,
+            min: 0,
+            max: yMax,
+            title: { display: true, text: 'Sales (£)' }
+          }
+        },
+        plugins: {
+          legend: { position: 'bottom' }
+        }
+      }
+    });
+
+    const setText = (id, v) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = v.toFixed(2);
+    };
+
+    function update() {
+      bBase = parseFloat(document.getElementById('no-bBase').value);
+      bTv = parseFloat(document.getElementById('no-bTv').value);
+      bPromo = parseFloat(document.getElementById('no-bPromo').value);
+      bSocial = parseFloat(document.getElementById('no-bSocial').value);
+
+      setText('no-bBaseValue', bBase);
+      setText('no-bTvValue', bTv);
+      setText('no-bPromoValue', bPromo);
+      setText('no-bSocialValue', bSocial);
+
+      chart.data.datasets[1].data = scaled(baseRaw, bBase);
+      chart.data.datasets[2].data = scaled(tvRaw, bTv);
+      chart.data.datasets[3].data = scaled(promoRaw, bPromo);
+      chart.data.datasets[4].data = scaled(socialRaw, bSocial);
+
+      residChart.data.datasets[0].data = residualSeries();
+
+
+
+      chart.update();
+      residChart.update();
+    }
+
+    document.getElementById('no-bBase').addEventListener('input', update);
+    document.getElementById('no-bTv').addEventListener('input', update);
+    document.getElementById('no-bPromo').addEventListener('input', update);
+    document.getElementById('no-bSocial').addEventListener('input', update);
+
+    document.getElementById('no-reset').addEventListener('click', () => {
+      document.getElementById('no-bBase').value = 1;
+      document.getElementById('no-bTv').value = 1;
+      document.getElementById('no-bPromo').value = 1;
+      document.getElementById('no-bSocial').value = 1;
+      update();
+    });
+
+    update();
+  }
+
+  requestAnimationFrame(initNonOverlapWidgetWithResiduals);
+</script>
