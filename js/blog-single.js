@@ -277,7 +277,7 @@ function applyTableStyling() {
     // Find or create THEAD
     let thead = table.querySelector('thead');
     if (thead) {
-      thead.classList.add('table-light', 'bg-green', 'text-white');
+      thead.classList.add('table-light', 'bg-green', 'text-white', 'text-center');
     }
   });
 }
