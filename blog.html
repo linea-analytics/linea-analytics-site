@@ -42,8 +42,24 @@
   <!-- CSV parsing -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.5.2/papaparse.min.js"></script>
 
-<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+  <style>
+    /* Default: mobile → behaves like normal block */
+    .js-sticky.is-fixed {
+      position: static;
+    }
+
+    /* Desktop / tablet only */
+    @media (min-width: 992px) {
+      .js-sticky.is-fixed {
+        position: fixed;
+        top: 24px;
+        width: 100%;
+        max-width: 420px;
+      }
+    }
+  </style>
 
 </head>
 
@@ -54,8 +70,7 @@
   <header id="header-container" class="navigation"></header>
   <!-- Header Close -->
 
-  <section class="page-title bg-1"
-    style="background-image:  linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('images/stock/library.jpg');">
+  <section class="page-title bg-1" style="background-image:  linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('images/stock/library.jpg');">
     <div class="container">
       <div class="row">
         <div class="col-md-12">
@@ -84,7 +99,9 @@
 
         <!-- Sidebar -->
         <div class="col-lg-4 col-md-12 order-1 order-lg-2 pb-5">
-          <div class="p-4 bg-white rounded shadow-sm">
+          <div class="sticky-sentinel"></div>
+          <div class="p-4 bg-white rounded shadow-sm js-sticky">
+
             <h3 class="mb-4">Most Popular Articles</h3>
             <div id="featured-articles">
               <!-- Featured articles will be inserted here by JavaScript -->
@@ -133,8 +150,7 @@
               </strong><span class="">of your Marketing.</span></h2>
           </div>
           <div class="col-lg-4">
-            <a href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/david-walsh-linea-analytics/30min'});return false;"
-              class="btn btn-main btn-round-full float-lg-right tc31">Schedule a call</a>
+            <a href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/david-walsh-linea-analytics/30min'});return false;" class="btn btn-main btn-round-full float-lg-right tc31">Schedule a call</a>
           </div>
         </div>
       </div>
@@ -174,31 +190,61 @@ Essential Scripts
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-5LHVS45SP4"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
     gtag('js', new Date());
 
     gtag('config', 'G-5LHVS45SP4');
   </script>
 
-<script>
-  function isCalendlyEvent(e) {
-    return e.origin === "https://calendly.com" && e.data && e.data.event && e.data.event.indexOf("calendly.") === 0;
-  }
+  <script>
+    function isCalendlyEvent(e) {
+      return e.origin === "https://calendly.com" && e.data && e.data.event && e.data.event.indexOf("calendly.") === 0;
+    }
 
-  window.addEventListener("message", function(e) {
-    if (!isCalendlyEvent(e)) return;
+    window.addEventListener("message", function(e) {
+      if (!isCalendlyEvent(e)) return;
 
-    if (e.data.event === "calendly.event_scheduled") {
+      if (e.data.event === "calendly.event_scheduled") {
 
-      gtag("event", "generate_lead", {
-        lead_source: "calendly",
-        calendly_event: e.data.payload && e.data.payload.event && e.data.payload.event.uri
+        gtag("event", "generate_lead", {
+          lead_source: "calendly",
+          calendly_event: e.data.payload && e.data.payload.event && e.data.payload.event.uri
+        });
+
+
+      }
+    });
+  </script>
+  <script>
+    (function() {
+      const sticky = document.querySelector(".js-sticky");
+      const sentinel = document.querySelector(".sticky-sentinel");
+      if (!sticky || !sentinel) return;
+
+      const initialWidth = () => {
+        const col = sticky.closest('[class*="col-"]');
+        if (!col) return;
+        sticky.style.maxWidth = col.getBoundingClientRect().width + "px";
+      };
+
+      const obs = new IntersectionObserver(([entry]) => {
+        sticky.classList.toggle("is-fixed", !entry.isIntersecting);
+        if (!entry.isIntersecting) initialWidth();
+      }, {
+        threshold: 0
       });
 
+      window.addEventListener("resize", () => {
+        if (sticky.classList.contains("is-fixed")) initialWidth();
+      });
 
-    }
-  });
-</script>
+      obs.observe(sentinel);
+    })();
+  </script>
+
 </body>
 
 </html>
