@@ -414,5 +414,37 @@
     "author": "David Walsh",
     "date": "2026-02-04",
     "category": "Article"
+  },
+  {  
+    "title": "MMM Tools vs. MMM Consultancies vs. In-House MMM: How to Choose the Right Marketing Mix Modeling Set Up?",
+    "teaser": "We compare the different set up's for MMM and what are the strengths of each approach",
+    "folder": "mmm-tools-consultancy-agency",
+    "author": "David Walsh",
+    "date": "2026-02-25",
+    "category": "Article"
+  },
+  {
+    "title": "Run Faster Econometrics Modelling: The Blueprint for Reducing Econometrics Turnaround Time",
+    "teaser": "Read our 4 step process to run faster Econometric Model's",
+    "folder": "faster-econometric-modelling",
+    "author": "David Walsh",
+    "date": "2026-02-25",
+    "category": "Article"
+  },
+  {
+    "title": "Comparing the difference between last-click attribution and Econometrics",
+    "teaser": "Understand how accurate measurement approaches can better measure the impact of your marketing",
+    "folder": "econometric-modelling",
+    "author": "David Walsh",
+    "date": "2026-02-25",
+    "category": "Article"
+  },
+  {
+    "title": "Measuring Adstock for Digital Advertising in 2026",
+    "teaser": "Learn what adstock is and how it works in Marketing Mix Modelling with our interactive charts",
+    "folder": "adstock-guide-digital-advertising-2026",
+    "author": "David Walsh",
+    "date": "2026-02-25",
+    "category": "Article"
   }
 ]

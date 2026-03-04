@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<head>
+
+  <!-- ** Basic Page Needs ** -->
+  <meta charset="utf-8">
+  <title>Linea Analytics - Measuring Adstock for Digital Advertising in 2026</title>
+
+  <!-- ** Mobile Specific Metas ** -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Agency HTML Template">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="author" content="linea-analytics">
+  <meta name="generator" content="linea-analytics Html5 Agency Template v1.0">
+
+  <!-- theme meta -->
+  <meta name="theme-name" content="linea-analytics" />
+
+  <!-- bootstrap.min css -->
+  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css">
+  <!-- Icon Font Css -->
+  <link rel="stylesheet" href="/plugins/themify/css/themify-icons.css">
+  <link rel="stylesheet" href="/plugins/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="/plugins/magnific-popup/magnific-popup.css">
+  <!-- Owl Carousel CSS -->
+  <link rel="stylesheet" href="/plugins/slick/slick.css">
+  <link rel="stylesheet" href="/plugins/slick/slick-theme.css">
+
+  <!-- Markdown to html -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/custom-dropdown.css">
+
+  <!--Favicon-->
+  <link rel="icon" href="/images/logos/icon.png" type="image/x-icon">
+
+  <!-- CSV parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.5.2/papaparse.min.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- calendly -->
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
+</head>
+
+<body>
+
+
+  <!-- Header Start -->
+  <header id="header-container" class="navigation"></header>
+  <!-- Header Close -->
+
+
+  <!-- Article Container Start -->
+  <div class="container mt-5 ">
+    <div class="row justify-content-center">
+      <div class="col-lg-12 col-md-12 mb-5">
+        <div style="
+          width: 100%;
+          max-width: 100%;
+          height: 300px;
+          overflow: hidden;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 20px;
+        ">
+          <img src="./thumbnail.jpg" alt="thumbnail" class="shadow rounded" style="
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              object-position: center center;
+            ">
+        </div>
+        <!-- ARTICLE CONTENT START -->
+        <h1>A Deep Dive into Measuring Adstock for Digital Advertising in 2026</h1>
+        <p>In the world of modern marketing, understanding the true payback of your media spend is the difference between scaling profitably and wasting budget. </p>
+        <p>As measurement experts at <a href="https://linea-analytics.com/">Linea Analytics</a>, we specialise in moving beyond surface-level metrics to uncover the incremental impact of every pound spent. A critical, yet often misunderstood, component of this is the <strong>adstock effect</strong>.</p>
+        <h2>What is an adstock?</h2>
+        <p>Adstock, often referred to as the &quot;memory effect,&quot; represents the theory that the impact of advertising is not immediate and fleeting. Instead, advertising awareness and brand equity decay over time rather than vanishing instantly.</p>
+        <p>In a <a href="https://linea-analytics.com/articles/what-is-marketing-mix-modelling-a-complete-guide/article.html">Marketing Mix Model (MMM)</a>, we use adstock to measure how an investment made today continues to drive purchases tomorrow, next week, and even next month. By capturing this carry-over effect, we can calculate more accurate ROIs and better understand the long-term value of your campaigns.</p>
+        <h2>Why GA4 doesn&#39;t measure this impact</h2>
+        <p>Platforms like Google Analytics 4 (GA4) and other digital tracking approaches typically rely on <strong>last-click attribution</strong>. These methodologies are inherently short-term; they focus on the channel closest to the purchase and only capture a short window after the date of advertisement.</p>
+        <p>GA4 falls short because:</p>
+        <ul>
+          <li><strong>It ignores the purchase pathway</strong>: It fails to account for the awareness and trust built by upper-funnel activities weeks before the final click. </li>
+          <li><strong>No accounting for external factors</strong>: GA4 does not control for seasonality, economic trends, or competitor activity, which can lead to overestimating digital channel performance. </li>
+          <li><strong>Static view of conversion</strong>: It assumes a direct line from ad to sale. Sometimes capturing a 7-day or 30-day window if no other touchpoints are included. It largely misses the &quot;memory&quot; that drives a customer to return later through a different channel, promotion or purchase driver.</li>
+        </ul>
+        <h2>How do you measure the adstock effect?</h2>
+        <p>At Linea, we measure the adstock effect by building bespoke statistical models that test how different retention rates impact sales. Using <a href="https://linea-analytics.com/articles/best-always-on/article.html">Always-on MMM</a>, we analyse each marketing channel to compare their memory impact for instance, determining if your Social Media activity has a longer-lasting effect than your TV advertising.</p>
+        <h2>The 4 types of adstock Linea measures</h2>
+        <p>To provide the most transparent and actionable measurement, we utilise four primary adstock forms depending on the media channel and strategy:</p>
+        <h3><strong>Geometric-decay adstock</strong>:</h3>
+        <p>The most common baseline, assumes a constant rate of decay. We use a single retention parameter to determine what proportion of last period’s effect survives into the next. Whilst it is the simplest of our examples, the geometric decay assumes a “constant rate” reduction of effect over the coming days/ weeks.</p>
+        <p>To capture this, we use a single retention parameter θ (0 &lt; θ &lt; 1). This says what proportion of last period’s effect survives into the next. A high amount, then we get lots of ongoing impact, potentially an upper funnel campaign. A lower amount means most of the impact comes in day/ week 1.</p>
+        <p>Mathematically, for spend x​:<br>x̃t = xt + θ xt-1 + θ² xt-2 + …</p>
+
+        <div id="ads-geom-widget"></div>
+        <h3><strong>Weibull adstock</strong>:</h3>
+        <p>A more flexible approach where the decay rate itself can vary over time. This is ideal for media that builds slowly or has a delayed &quot;peak&quot; impact. Instead of a constant decay, the Weibull kernel lets the decay rate itself vary with time. This reflects that the impact in weeks 1-2 may be different to weeks 2-3 and so on.</p>
+        <p>With shape k and scale λ:</p>
+        <p>wl = exp​[−(l ⁄ λ)k], l = 0, 1, 2, …</p>
+        <ul>
+          <li>k &lt; 1 → fast initial drop, then long tail (good for quick-impact media). </li>
+          <li>k &gt; 1 → “S-shaped” build-up before decaying, capturing delayed awareness (e.g., TV bursts).</li>
+        </ul>
+        <p>Advantages &amp; cautions</p>
+        <ol>
+          <li>Greater flexibility reflects real funnel dynamics. </li>
+          <li>Requires non-linear optimisation; risk of over-fitting if data are scarce. </li>
+          <li>More parameters to estimate compared to geometric decay.</li>
+        </ol>
+        <div id="ads-weibul-widget"></div>
+        <h3><strong>Delayed adstock</strong>:</h3>
+        <p>Specifically designed for channels where the impact isn&#39;t felt immediately (e.g., direct mail or long-form content), allowing us to model a &quot;lag&quot; between spend and conversion. Unlike geometric adstock, which assumes media impact starts immediately and decays, delayed adstock models the case where the effect builds gradually to a peak and then fades symmetrically.</p>
+        <p>This is useful for media like TV or Direct, where response may be delayed as audiences take time to act or in the case of a direct mail may not receive the brochure for 1 or 2 weeks after sending.</p>
+        <p>Mathematically, the weights applied to past media are based on both a decay rate α and a delay parameter θ:</p>
+        <p>wl = α(l − θ)², l = 0, 1, 2, …</p>
+        <p>So the transformed media variable becomes:<br>x̃t = ∑l=0L−1 α(l − θ)² · xt − l</p>
+        <div id="ads-rad-widget"></div>
+        <h3><strong>Split-variable (current + lagged geometric)</strong>:</h3>
+        <p>This allows us to separate the initial marketing from its subsequent decay. This is better used when there are known delays to the activity, e.g. direct mail (delayed by post) or an influencer activity (when activity is seen over time). It allows planners to see exactly how much revenue is &quot;instant&quot; versus &quot;delayed.&quot;</p>
+        <p>To build this, we use two variables in our analysis:</p>
+        <ol>
+          <li>Current-week spend xt – captures immediate “pop”. </li>
+          <li>Lagged geometric adstock x̃t(θ)​ – same θ as classic geometric.</li>
+        </ol>
+        <p>This lets the model estimate separate coefficients, often revealing that short-term ROI differs sharply from long-term brand effect.</p>
+        <p>Pros &amp; cons</p>
+        <ul>
+          <li>Pros: Extra flexibility; aids interpretability for campaign planners and addresses known delays (e.g. delivery). </li>
+          <li>Cons: Adds collinearity risk and degrees of freedom</li>
+        </ul>
+        <div id="ads-split-widget"></div>
+        <h2>What is the right adstock to use?</h2>
+        <p>The &quot;right&quot; adstock depends entirely on the channel and the marketing goal:</p>
+        <ul>
+          <li>Digital/Performance: Often follows a Geometric decay as the impact is usually more immediate. </li>
+          <li>TV/Upper-funnel: Usually requires Weibull or Delayed adstock to account for the slower build of brand equity and long memory. </li>
+          <li>Strategic Planning: Use Split-variable when stakeholders need to justify brand spend by seeing the distinct tactical vs. long-term payoffs.</li>
+        </ul>
+        <table>
+          <thead>
+            <tr>
+              <th align="center">Criterion</th>
+              <th align="center">Geometric</th>
+              <th align="center">Weibull</th>
+              <th align="center">Delay Adstock</th>
+              <th align="center">Split Variable</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td align="center"><strong># Parameters</strong></td>
+              <td align="center">1</td>
+              <td align="center">2</td>
+              <td align="center">α and θ</td>
+              <td align="center">1 (θ) + extra β</td>
+            </tr>
+            <tr>
+              <td align="center"><strong>Computation</strong></td>
+              <td align="center">Fast linear</td>
+              <td align="center">Non-linear</td>
+              <td align="center">Fast linear</td>
+              <td align="center">Linear but multicollinear</td>
+            </tr>
+            <tr>
+              <td align="center"><strong>Captures delay of media delivery?</strong></td>
+              <td align="center">No</td>
+              <td align="center">Yes</td>
+              <td align="center">Yes</td>
+              <td align="center">Yes (via lag)</td>
+            </tr>
+            <tr>
+              <td align="center"><strong>Risk of overfit</strong></td>
+              <td align="center">Low</td>
+              <td align="center">Medium–High</td>
+              <td align="center">Medium</td>
+              <td align="center">Medium</td>
+            </tr>
+            <tr>
+              <td align="center"><strong>When to prefer</strong></td>
+              <td align="center">Exploratory, digital</td>
+              <td align="center">TV, upper-funnel, long memory</td>
+              <td align="center">Direct Mail or influencer</td>
+              <td align="center">Stakeholders need to see short vs long-term</td>
+            </tr>
+          </tbody>
+        </table>
+        <h2>In summary</h2>
+        <p>Measuring the longer term impact of marketing requires moving beyond the &quot;now&quot; of GA4 and into the &quot;memory&quot; of <a href="https://linea-analytics.com/articles/what-is-marketing-mix-modelling-a-complete-guide/article.html">Marketing Mix Modelling</a>. At Linea Analytics, we deliver:</p>
+        <ul>
+          <li>Faster results: Through our &quot;Always-on MMM&quot; automation. </li>
+          <li>Greater transparency: By providing the tools to see exactly how these adstock curves are built. </li>
+          <li>Actionable Scenarios: Empowering you to run scenarios and optimise future media budgets with confidence.</li>
+        </ul>
+        <h3></h3>
+
+
+        <!-- ARTICLE CONTENT END -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Article Container Close -->
+
+
+  <!-- Section Contacts Start -->
+  <section class="section cta d-flex align-items-center" id="contactUs">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-5 col-lg-6">
+          <div class="cta-item bg-white p-5 rounded text-center">
+            <span class="h6 text-color">Take control of your data</span>
+            <h2 class="mt-2 mb-4">Contact us</h2>
+            <p class="lead mb-4">Have any project on mind?<br>For immediate support:</p>
+            <a href="mailto:info@linea-analytics.com">
+              <i class="fas fa-envelope mr-2"></i>
+              <span>info@linea-analytics.com</span>
+            </a>
+            <br>
+            <a href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/david-walsh-linea-analytics/30min'});return false;">
+              <i class="fas fa-phone mr-2"></i>
+              Schedule a Call
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-70 position-relative">
+    <div class="container">
+      <div class="cta-block-2 bg-gray p-5 rounded border-1">
+        <div class="row justify-content-center align-items-center ">
+          <div class="col-lg-7">
+            <span class="text-color">Why wait</span>
+            <h2 class="mt-2 mb-4 mb-lg-0">Get the <strong>True Impact</strong> of your Marketing.</h2>
+          </div>
+          <div class="col-lg-4">
+            <a href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/david-walsh-linea-analytics/30min'});return false;" class="btn btn-main btn-round-full float-lg-right ">Schedule a call</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <footer id="footer-container" class="footer section"></footer>
+
+  <!--Scroll to top-->
+  <div id="scroll-to-top" class="scroll-to-top">
+    <span class="icon fa fa-angle-up"></span>
+  </div>
+
+
+  <!-- JS HELPERS -->
+  <!-- Main jQuery -->
+  <script src="/plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4.3.1 -->
+  <script src="/plugins/bootstrap/bootstrap.min.js"></script>
+  <!--  Magnific Popup-->
+  <script src="/plugins/magnific-popup/jquery.magnific-popup.min.js"></script>
+  <!-- Slick Slider -->
+  <script src="/plugins/slick/slick.min.js"></script>
+
+  <script src="/js/script.js"></script>
+  <script src="/js/views.js"></script>
+  <script src="/js/customDropdown.js"></script>
+  <script src="/js/blog-single.js"></script>
+  <script src="/js/translate.js"></script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5LHVS45SP4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'G-5LHVS45SP4');
+  </script>
+</body>
+
+</html>
