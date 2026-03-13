@@ -415,7 +415,7 @@
     "date": "2026-02-04",
     "category": "Article"
   },
-  {  
+  {
     "title": "MMM Tools vs. MMM Consultancies vs. In-House MMM: How to Choose the Right Marketing Mix Modeling Set Up?",
     "teaser": "We compare the different set up's for MMM and what are the strengths of each approach",
     "folder": "mmm-tools-consultancy-agency",
@@ -445,6 +445,30 @@
     "folder": "adstock-guide-digital-advertising-2026",
     "author": "David Walsh",
     "date": "2026-02-25",
+    "category": "Article"
+  },
+  {
+    "title": "How to stop your customer acquisition cost (CAC) rising in 2026",
+    "teaser": "See our two recommended strategies to stop CAC rising",
+    "folder": "stop-cac-rising",
+    "author": "David Walsh",
+    "date": "2026-03-11",
+    "category": "Article"
+  },
+  {  
+    "title": "13 Actions to Take from Your Marketing Mix Modelling",
+    "teaser": "MMM is all about improving your marketing ROI. Here are 13 actions to help drive a 30% uplift in your ROI.",
+    "folder": "13-actions-from-marketing-mix-modelling",
+    "author": "David Walsh",
+    "date": "2026-03-11",
+    "category": "Article"
+  },
+  {
+    "title": "Why your highest ROI Channel might be the worst place for your next £1",
+    "teaser": "How do you set budget between two media channels",
+    "folder": "highest-roi-channel-allocate",
+    "author": "David Walsh",
+    "date": "2026-03-05",
     "category": "Article"
   }
 ]
