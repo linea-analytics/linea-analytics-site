@@ -455,7 +455,7 @@
     "date": "2026-03-11",
     "category": "Article"
   },
-  {  
+  {
     "title": "13 Actions to Take from Your Marketing Mix Modelling",
     "teaser": "MMM is all about improving your marketing ROI. Here are 13 actions to help drive a 30% uplift in your ROI.",
     "folder": "13-actions-from-marketing-mix-modelling",
@@ -469,6 +469,14 @@
     "folder": "highest-roi-channel-allocate",
     "author": "David Walsh",
     "date": "2026-03-05",
+    "category": "Article"
+  },
+  {
+    "title": "Comparing the Best Market Mix Modelling Agencies in the UK",
+    "teaser": "Speed vs. Impact: Where does your MMM provider sit?  📊 Whether you're looking for a specialised marketing mix modelling consultancy or considering an open-source DIY approach, don't get stuck with out-of-date results. Discover why the 'Modern MMM' model is transforming how UK brands scale their ROI.",
+    "folder": "comparing-marketing-mix-modelling-providers",
+    "author": "David Walsh",
+    "date": "2026-03-20",
     "category": "Article"
   }
 ]
