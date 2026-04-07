@@ -1,0 +1,334 @@
+<!-- SEASONALITY 3-YEAR AMBIGUITY WIDGET -->
+<!-- Placement: after "visual showing 2 years of similar spend" placeholders (section: Why 3 years is ideal) -->
+<div class="py-4">
+  <h4 class="text-center mb-3">The 2-Year Ambiguity: Why More Data Matters</h4>
+  <div class="card p-5 shadow">
+    <div class="row g-0">
+
+      <!-- Controls -->
+      <div class="col-md-4 p-3 border-end d-flex flex-column justify-content-between">
+
+        <!-- Ambiguity controls (shown initially) -->
+        <div id="s3yr-controls">
+          <p class="text-muted small mb-3">
+            Both years show the same pattern: December spend goes up, December revenue goes up.
+            But does the spend <em>cause</em> the uplift, or is December simply a strong month every year?
+          </p>
+          <p class="fw-semibold mb-2">Both interpretations fit:</p>
+
+          <button id="s3yr-btn-season" class="btn w-100 text-start p-3 mb-2"
+            style="border:2px solid #ff9f40;background:rgba(255,159,64,0.12);border-radius:8px;line-height:1.5;">
+            <span style="color:#c85800;font-weight:600">Theory A &mdash; Seasonal Pattern</span><br>
+            <span class="text-muted small">December is always strong. Spend just happens to go up at the same time.</span>
+          </button>
+
+          <button id="s3yr-btn-media" class="btn w-100 text-start p-3"
+            style="border:2px solid #4bc0c0;background:#fff;border-radius:8px;line-height:1.5;">
+            <span style="color:#008080;font-weight:600">Theory B &mdash; Media Effect</span><br>
+            <span class="text-muted small">Spend drives the December uplift. Without it, December would be ordinary.</span>
+          </button>
+
+          <p class="text-muted small fst-italic mt-3 mb-3">
+            With 2 years of correlated spend and revenue, there is no way to tell which is right.
+          </p>
+
+          <button id="s3yr-btn-reveal" class="btn bg-green rounded-pill shadow-sm font-weight-bold w-100">
+            Add Year 3 &rarr;
+          </button>
+        </div>
+
+        <!-- Verdict (shown after Year 3 revealed) -->
+        <div id="s3yr-verdict" style="display:none;">
+          <div class="p-3 rounded mb-3" style="background:rgba(34,197,94,0.1);border:2px solid rgb(34,197,94);">
+            <p class="small mb-1">
+              <strong style="color:rgb(22,150,60)">Dec 2024: £141,300 &mdash; zero media spend.</strong>
+            </p>
+            <p class="small mb-0 text-muted">
+              December spiked again, without a single pound of spend.
+              This rules out Theory B and confirms: <strong>the uplift is seasonal</strong>.
+            </p>
+          </div>
+          <p class="text-muted small">
+            Years 1 and 2 were even higher because seasonality and media spend added together.
+            A third year — with no spend — finally reveals the baseline seasonal pattern.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Chart -->
+      <div class="col-md-8 d-flex flex-column align-items-center justify-content-center p-3">
+        <canvas id="s3yr-chart"></canvas>
+        <p class="text-muted small text-center mt-2 mb-0" id="s3yr-legend">
+          <span style="color:rgb(255,159,64)">&#9472; 2022</span>&nbsp;&nbsp;
+          <span style="color:rgb(54,162,235)">&#9472; 2023</span>&nbsp;&nbsp;
+          <span style="background:rgba(99,102,241,0.75);color:white;padding:1px 6px;border-radius:3px;">&#9632; Media Spend</span>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  function initS3yr() {
+    var el = document.getElementById('s3yr-chart');
+    if (!el) return;
+    var ctx = el.getContext('2d');
+
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    // Year 1 (2022): Dec has spend + revenue spike — ambiguous
+    var rev2022   = [102800,101900,103400,104100,106200,101100,102700,100800,104500,102200,105300,156200];
+    var spend2022 = [0,0,0,0,0,0,0,0,0,0,0,19000];
+
+    // Year 2 (2023): same pattern — still ambiguous
+    var rev2023   = [103100,102400,103900,105200,107100,101600,103400,101300,105100,102900,106200,159800];
+    var spend2023 = [0,0,0,0,0,0,0,0,0,0,0,22000];
+
+    // Year 3 (2024): no December spend — but December still spikes! → seasonal
+    var rev2024   = [102100,101700,103700,104800,106800,100900,102500,101100,104200,101900,105700,141300];
+    var spend2024 = [0,0,0,0,0,0,0,0,0,0,0,0];
+
+    var mk = function (yr) { return months.map(function (m) { return m + ' \'' + yr; }); };
+    var labels2yr = mk('22').concat(mk('23'));
+    var labels3yr = labels2yr.concat(mk('24'));
+
+    var spend2yr = spend2022.concat(spend2023);
+    var spend3yr = spend2yr.concat(spend2024);
+    var null12   = Array(12).fill(null);
+    var null24   = Array(24).fill(null);
+
+    var mode      = 'season';
+    var year3Shown = false;
+
+    var highlightFill = { season: 'rgba(255,159,64,0.15)', media: 'rgba(75,192,192,0.15)' };
+
+    // Plugin: shade each December column and draw year boundary lines
+    var highlightPlugin = {
+      id: 's3yrHighlight',
+      beforeDatasetsDraw: function (chart) {
+        var xScale = chart.scales.x;
+        var ca     = chart.chartArea;
+        if (!xScale || !ca || xScale.ticks.length < 2) return;
+        var step = Math.abs(xScale.getPixelForTick(1) - xScale.getPixelForTick(0));
+        var cCtx = chart.ctx;
+
+        // Shade Dec 2022 (index 11) and Dec 2023 (index 23) — ambiguous years
+        [11, 23].forEach(function (idx) {
+          if (idx >= xScale.ticks.length) return;
+          var xC = xScale.getPixelForTick(idx);
+          cCtx.save();
+          cCtx.fillStyle = highlightFill[mode];
+          cCtx.fillRect(xC - step / 2, ca.top, step, ca.bottom - ca.top);
+          cCtx.restore();
+        });
+
+        // Shade Dec 2024 (index 35) in green after reveal
+        if (chart._showYear3 && xScale.ticks.length > 35) {
+          var xC35 = xScale.getPixelForTick(35);
+          cCtx.save();
+          cCtx.fillStyle = 'rgba(34,197,94,0.18)';
+          cCtx.fillRect(xC35 - step / 2, ca.top, step, ca.bottom - ca.top);
+          cCtx.restore();
+        }
+      },
+      afterDatasetsDraw: function (chart) {
+        var xScale = chart.scales.x;
+        var ca     = chart.chartArea;
+        if (!xScale || !ca || xScale.ticks.length < 2) return;
+        var cCtx = chart.ctx;
+
+        // Year boundary lines
+        var boundaries = chart._showYear3 ? [11, 23] : [11];
+        boundaries.forEach(function (idx) {
+          if (idx + 1 >= xScale.ticks.length) return;
+          var xA  = xScale.getPixelForTick(idx);
+          var xB  = xScale.getPixelForTick(idx + 1);
+          var xMid = (xA + xB) / 2;
+          cCtx.save();
+          cCtx.strokeStyle = 'rgba(0,0,0,0.18)';
+          cCtx.lineWidth = 1.5;
+          cCtx.setLineDash([6, 4]);
+          cCtx.beginPath();
+          cCtx.moveTo(xMid, ca.top);
+          cCtx.lineTo(xMid, ca.bottom);
+          cCtx.stroke();
+          cCtx.restore();
+        });
+
+        // Year labels
+        cCtx.save();
+        cCtx.font = '11px sans-serif';
+        cCtx.fillStyle = 'rgba(0,0,0,0.35)';
+        cCtx.textAlign = 'center';
+        var x11 = xScale.getPixelForTick(11);
+        var x12 = xScale.getPixelForTick(12);
+        var mid1 = (x11 + x12) / 2;
+        cCtx.fillText('2022', (ca.left + mid1) / 2, ca.top + 14);
+        cCtx.fillText('2023', (mid1 + (chart._showYear3
+          ? (xScale.getPixelForTick(23) + xScale.getPixelForTick(24)) / 2
+          : ca.right)) / 2, ca.top + 14);
+        if (chart._showYear3 && xScale.ticks.length > 24) {
+          var x23 = xScale.getPixelForTick(23);
+          var x24 = xScale.getPixelForTick(24);
+          var mid2 = (x23 + x24) / 2;
+          cCtx.fillText('2024', (mid2 + ca.right) / 2, ca.top + 14);
+        }
+        cCtx.restore();
+      }
+    };
+
+    var chart = new Chart(ctx, {
+      type: 'bar',
+      plugins: [highlightPlugin],
+      data: {
+        labels: labels2yr,
+        datasets: [
+          {
+            // 2022 Revenue
+            type: 'line',
+            label: '2022 Revenue',
+            data: rev2022.concat(null12),
+            borderColor: 'rgb(255,159,64)',
+            backgroundColor: 'transparent',
+            borderWidth: 2.5,
+            tension: 0.2,
+            pointRadius: 3,
+            pointBackgroundColor: 'rgb(255,159,64)',
+            yAxisID: 'y',
+            order: 0,
+            spanGaps: false
+          },
+          {
+            // 2023 Revenue
+            type: 'line',
+            label: '2023 Revenue',
+            data: null12.concat(rev2023),
+            borderColor: 'rgb(54,162,235)',
+            backgroundColor: 'transparent',
+            borderWidth: 2.5,
+            tension: 0.2,
+            pointRadius: 3,
+            pointBackgroundColor: 'rgb(54,162,235)',
+            yAxisID: 'y',
+            order: 1,
+            spanGaps: false
+          },
+          {
+            // 2024 Revenue — hidden until revealed
+            type: 'line',
+            label: '2024 Revenue (no spend)',
+            data: [],
+            hidden: true,
+            borderColor: 'rgb(34,197,94)',
+            backgroundColor: 'transparent',
+            borderWidth: 2.5,
+            tension: 0.2,
+            pointRadius: 3,
+            pointBackgroundColor: 'rgb(34,197,94)',
+            yAxisID: 'y',
+            order: 2,
+            spanGaps: false
+          },
+          {
+            // Media Spend bars
+            label: 'Media Spend',
+            data: spend2yr,
+            backgroundColor: 'rgba(99,102,241,0.75)',
+            yAxisID: 'yS',
+            order: 3,
+            barPercentage: 0.4
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        animation: { duration: 700 },
+        scales: {
+          x: { grid: { display: false }, ticks: { maxRotation: 45 } },
+          y: {
+            position: 'left',
+            min: 0,
+            max: 200000,
+            title: { display: true, text: 'Revenue (£)' },
+            ticks: { callback: function (v) { return '£' + (v / 1000).toFixed(0) + 'k'; } }
+          },
+          yS: {
+            position: 'right',
+            min: 0,
+            max: 40000,
+            title: { display: true, text: 'Media Spend (£)' },
+            grid: { display: false },
+            ticks: { callback: function (v) { return '£' + (v / 1000).toFixed(0) + 'k'; } }
+          }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function (i) {
+                var v = i.raw;
+                return v == null ? null : i.dataset.label + ': £' + v.toLocaleString();
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Theory toggle buttons
+    function setMode(m) {
+      mode = m;
+      var bs = document.getElementById('s3yr-btn-season');
+      var bm = document.getElementById('s3yr-btn-media');
+      if (bs && bm) {
+        bs.style.background = (m === 'season') ? 'rgba(255,159,64,0.12)' : '#fff';
+        bm.style.background = (m === 'media')  ? 'rgba(75,192,192,0.12)' : '#fff';
+      }
+      chart.update('none');
+    }
+
+    var btnS = document.getElementById('s3yr-btn-season');
+    var btnM = document.getElementById('s3yr-btn-media');
+    if (btnS) btnS.addEventListener('click', function () { setMode('season'); });
+    if (btnM) btnM.addEventListener('click', function () { setMode('media');  });
+
+    // Reveal Year 3
+    document.getElementById('s3yr-btn-reveal').addEventListener('click', function () {
+      if (year3Shown) return;
+      year3Shown = true;
+
+      chart.data.labels = labels3yr;
+      // Extend existing lines with nulls for 2024 months
+      chart.data.datasets[0].data = rev2022.concat(null12).concat(null12);
+      chart.data.datasets[1].data = null12.concat(rev2023).concat(null12);
+      // Show 2024 line
+      chart.data.datasets[2].data   = null24.concat(rev2024);
+      chart.data.datasets[2].hidden = false;
+      // Extend spend bars
+      chart.data.datasets[3].data = spend3yr;
+      chart._showYear3 = true;
+      chart.update();
+
+      // Swap controls for verdict
+      document.getElementById('s3yr-controls').style.display = 'none';
+      document.getElementById('s3yr-verdict').style.display  = 'block';
+
+      // Update legend
+      var legend = document.getElementById('s3yr-legend');
+      if (legend) {
+        legend.innerHTML =
+          '<span style="color:rgb(255,159,64)">&#9472; 2022</span>&nbsp;&nbsp;' +
+          '<span style="color:rgb(54,162,235)">&#9472; 2023</span>&nbsp;&nbsp;' +
+          '<span style="color:rgb(34,197,94)">&#9472; 2024 (no spend)</span>&nbsp;&nbsp;' +
+          '<span style="background:rgba(99,102,241,0.75);color:white;padding:1px 6px;border-radius:3px;">&#9632; Media Spend</span>';
+      }
+    });
+  }
+
+  requestAnimationFrame(initS3yr);
+})();
+</script>
