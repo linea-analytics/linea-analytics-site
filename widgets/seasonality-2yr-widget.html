@@ -1,0 +1,221 @@
+<!-- SEASONALITY 2-YEAR REVEAL WIDGET -->
+<!-- Placement: after "visual of 2-year kpi" placeholder (section: What seasonality actually is) -->
+<div class="py-4">
+  <h4 class="text-center mb-3">Adding a Second Year Reveals the Seasonal Pattern</h4>
+  <div class="card p-5 shadow">
+    <div class="row g-0">
+
+      <!-- Controls -->
+      <div class="col-md-4 p-3 border-end d-flex flex-column justify-content-between">
+        <div>
+          <p class="text-muted small mb-3">
+            The chart shows one year of data. December has a spike that lines up with media spend.
+            Add a second year to see whether December was already strong before any spend.
+          </p>
+          <button id="s2yr-btn" class="btn bg-green rounded-pill shadow-sm font-weight-bold w-100">
+            Add Year 2 &rarr;
+          </button>
+        </div>
+
+        <!-- Note revealed after button click -->
+        <div id="s2yr-note" style="display:none;" class="mt-3">
+          <div class="p-3 rounded mb-2" style="background:rgba(255,159,64,0.1);border:1px solid #ff9f40;">
+            <p class="small mb-1">
+              <strong style="color:#c85800">Dec 2023: £137,544 &mdash; no media spend.</strong>
+            </p>
+            <p class="small mb-0 text-muted">
+              December spiked the prior year too, without any spend. A seasonal pattern clearly exists.
+            </p>
+          </div>
+          <div class="p-3 rounded" style="background:rgba(54,162,235,0.08);border:1px solid rgb(54,162,235);">
+            <p class="small mb-1">
+              <strong style="color:rgb(30,100,200)">Dec 2024: £197,559 &mdash; spend: £20,000.</strong>
+            </p>
+            <p class="small mb-0 text-muted">
+              The higher December 2024 = seasonal baseline + media-driven uplift on top.
+              Now we can separate the two.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div class="col-md-8 d-flex flex-column align-items-center justify-content-center p-3">
+        <canvas id="s2yr-chart"></canvas>
+        <p class="text-muted small text-center mt-2 mb-0">
+          <span style="color:rgb(255,159,64)">&#9472; 2023 Revenue</span>&nbsp;&nbsp;
+          <span style="color:rgb(54,162,235)">&#9472; 2024 Revenue</span>&nbsp;&nbsp;
+          <span style="background:rgba(99,102,241,0.75);color:white;padding:1px 6px;border-radius:3px;">&#9632; Media Spend</span>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  function initS2yr() {
+    var el = document.getElementById('s2yr-chart');
+    if (!el) return;
+    var ctx = el.getContext('2d');
+
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    // 2023: Jan–Mar estimated, Apr–Dec from CSV. December: no spend, still spikes.
+    var rev2023 = [103000,102000,103500,102785,103629,107563,107957,103794,105614,108723,107255,137544];
+    // 2024: full year from CSV. December: £20k spend.
+    var rev2024 = [101526,102578,102880,106516,109291,101256,103289,100586,106618,101563,106730,197559];
+
+    var labels1yr = months.map(function (m) { return m + ' \'24'; });
+    var labels2yr = months.map(function (m) { return m + ' \'23'; })
+                      .concat(months.map(function (m) { return m + ' \'24'; }));
+
+    var spend1yr = [0,0,0,0,0,0,0,0,0,0,0,20000];
+    var spend2yr = [0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,20000];
+    var null12   = Array(12).fill(null);
+
+    var showingYear2 = false;
+
+    // Plugin: draw year boundary line and labels when both years visible
+    var yearBoundaryPlugin = {
+      id: 's2yrBoundary',
+      afterDatasetsDraw: function (chart) {
+        if (!chart._showBoundary) return;
+        var xScale = chart.scales.x;
+        var ca     = chart.chartArea;
+        if (!xScale || !ca) return;
+
+        var x11 = xScale.getPixelForTick(11);
+        var x12 = xScale.getPixelForTick(12);
+        var xMid = (x11 + x12) / 2;
+        var cCtx = chart.ctx;
+
+        cCtx.save();
+        cCtx.strokeStyle = 'rgba(0,0,0,0.2)';
+        cCtx.lineWidth = 1.5;
+        cCtx.setLineDash([6, 4]);
+        cCtx.beginPath();
+        cCtx.moveTo(xMid, ca.top);
+        cCtx.lineTo(xMid, ca.bottom);
+        cCtx.stroke();
+
+        cCtx.font = '11px sans-serif';
+        cCtx.fillStyle = 'rgba(0,0,0,0.35)';
+        cCtx.textAlign = 'center';
+        cCtx.fillText('2023', (ca.left + xMid) / 2, ca.top + 14);
+        cCtx.fillText('2024', (xMid + ca.right) / 2, ca.top + 14);
+        cCtx.restore();
+      }
+    };
+
+    var chart = new Chart(ctx, {
+      type: 'bar',
+      plugins: [yearBoundaryPlugin],
+      data: {
+        labels: labels1yr,
+        datasets: [
+          {
+            // 2023 Revenue — hidden until Year 2 revealed
+            type: 'line',
+            label: '2023 Revenue',
+            data: [],
+            hidden: true,
+            borderColor: 'rgb(255,159,64)',
+            backgroundColor: 'transparent',
+            borderWidth: 2.5,
+            tension: 0.2,
+            pointRadius: 4,
+            pointBackgroundColor: 'rgb(255,159,64)',
+            yAxisID: 'y',
+            order: 0,
+            spanGaps: false
+          },
+          {
+            // 2024 Revenue — always visible
+            type: 'line',
+            label: '2024 Revenue',
+            data: rev2024,
+            borderColor: 'rgb(54,162,235)',
+            backgroundColor: 'transparent',
+            borderWidth: 2.5,
+            tension: 0.2,
+            pointRadius: 4,
+            pointBackgroundColor: 'rgb(54,162,235)',
+            yAxisID: 'y',
+            order: 1,
+            spanGaps: false
+          },
+          {
+            // Media Spend bars
+            label: 'Media Spend',
+            data: spend1yr,
+            backgroundColor: 'rgba(99,102,241,0.75)',
+            yAxisID: 'yS',
+            order: 2,
+            barPercentage: 0.5
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        animation: { duration: 700 },
+        scales: {
+          x: { grid: { display: false } },
+          y: {
+            position: 'left',
+            min: 0,
+            max: 240000,
+            title: { display: true, text: 'Revenue (£)' },
+            ticks: { callback: function (v) { return '£' + (v / 1000).toFixed(0) + 'k'; } }
+          },
+          yS: {
+            position: 'right',
+            min: 0,
+            max: 40000,
+            title: { display: true, text: 'Media Spend (£)' },
+            grid: { display: false },
+            ticks: { callback: function (v) { return '£' + (v / 1000).toFixed(0) + 'k'; } }
+          }
+        },
+        plugins: {
+          legend: { display: false }, // using custom legend in HTML
+          tooltip: {
+            callbacks: {
+              label: function (i) {
+                var v = i.raw;
+                return v == null ? null : i.dataset.label + ': £' + v.toLocaleString();
+              }
+            }
+          }
+        }
+      }
+    });
+
+    document.getElementById('s2yr-btn').addEventListener('click', function () {
+      if (showingYear2) return;
+      showingYear2 = true;
+
+      // Expand to 24-month view
+      chart.data.labels = labels2yr;
+      // 2023 line: real values first 12 months, null for 2024 months
+      chart.data.datasets[0].data   = rev2023.concat(null12);
+      chart.data.datasets[0].hidden = false;
+      // 2024 line: null for 2023 months, real values for 2024 months
+      chart.data.datasets[1].data = null12.concat(rev2024);
+      // Spend: all 24 months
+      chart.data.datasets[2].data = spend2yr;
+      chart._showBoundary = true;
+      chart.update();
+
+      document.getElementById('s2yr-note').style.display = 'block';
+      var btn = document.getElementById('s2yr-btn');
+      btn.disabled = true;
+      btn.textContent = '✓ Year 2 Added';
+    });
+  }
+
+  requestAnimationFrame(initS2yr);
+})();
+</script>

@@ -1,0 +1,151 @@
+<!-- SEASONALITY 1-YEAR WIDGET -->
+<!-- Placement: after "A predictable Christmas uplift..." paragraph (section: What seasonality actually is) -->
+<div class="py-4">
+  <h4 class="text-center mb-3">1 Year of Data: What Caused the December Spike?</h4>
+  <div class="card p-5 shadow">
+    <div class="row g-0">
+
+      <!-- Controls -->
+      <div class="col-md-4 p-3 border-end d-flex flex-column justify-content-between">
+        <div>
+          <p class="text-muted small mb-3">
+            December revenue spikes sharply — and media spend also peaks in December.
+            With only one year of data, these two stories fit the same chart equally well.
+          </p>
+          <p class="fw-semibold mb-2">Select an interpretation:</p>
+
+          <button id="s1yr-btn-season" class="btn w-100 text-start p-3 mb-2"
+            style="border:2px solid #ff9f40;background:rgba(255,159,64,0.12);border-radius:8px;line-height:1.5;">
+            <span style="color:#c85800;font-weight:600">Theory A &mdash; Seasonal Pattern</span><br>
+            <span class="text-muted small">December always performs better. This would happen every year regardless of spend.</span>
+          </button>
+
+          <button id="s1yr-btn-media" class="btn w-100 text-start p-3"
+            style="border:2px solid #4bc0c0;background:#fff;border-radius:8px;line-height:1.5;">
+            <span style="color:#008080;font-weight:600">Theory B &mdash; Media Effect</span><br>
+            <span class="text-muted small">The spend drove the uplift. Without it, December would have been an ordinary month.</span>
+          </button>
+        </div>
+
+        <p class="text-muted small fst-italic mt-3 mb-0">
+          Both theories produce an identical chart.
+          <strong>1 year of data cannot distinguish them.</strong>
+        </p>
+      </div>
+
+      <!-- Chart -->
+      <div class="col-md-8 d-flex align-items-center justify-content-center p-3">
+        <canvas id="s1yr-chart"></canvas>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  function initS1yr() {
+    var el = document.getElementById('s1yr-chart');
+    if (!el) return;
+    var ctx = el.getContext('2d');
+
+    var months  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var revenue = [101526,102578,102880,106516,109291,101256,103289,100586,106618,101563,106730,197559];
+    var spend   = [0,0,0,0,0,0,0,0,0,0,0,20000];
+
+    var mode = 'season';
+    var highlightFill = { season: 'rgba(255,159,64,0.15)', media: 'rgba(75,192,192,0.15)' };
+
+    // Plugin: shade December column before datasets are drawn
+    var decShadePlugin = {
+      id: 's1yrDecShade',
+      beforeDatasetsDraw: function (chart) {
+        var xScale = chart.scales.x;
+        var ca     = chart.chartArea;
+        if (!xScale || !ca) return;
+        var xC  = xScale.getPixelForTick(11);
+        var step = Math.abs(xScale.getPixelForTick(1) - xScale.getPixelForTick(0));
+        chart.ctx.save();
+        chart.ctx.fillStyle = highlightFill[mode];
+        chart.ctx.fillRect(xC - step / 2, ca.top, step, ca.bottom - ca.top);
+        chart.ctx.restore();
+      }
+    };
+
+    var chart = new Chart(ctx, {
+      type: 'bar',
+      plugins: [decShadePlugin],
+      data: {
+        labels: months,
+        datasets: [
+          {
+            type: 'line',
+            label: 'Revenue',
+            data: revenue,
+            borderColor: 'rgb(54,162,235)',
+            backgroundColor: 'transparent',
+            borderWidth: 2.5,
+            tension: 0.2,
+            pointRadius: 4,
+            pointBackgroundColor: 'rgb(54,162,235)',
+            yAxisID: 'y',
+            order: 0
+          },
+          {
+            label: 'Media Spend',
+            data: spend,
+            backgroundColor: 'rgba(99,102,241,0.75)',
+            yAxisID: 'yS',
+            order: 1,
+            barPercentage: 0.5
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        scales: {
+          x: { grid: { display: false } },
+          y: {
+            position: 'left',
+            min: 0,
+            max: 240000,
+            title: { display: true, text: 'Revenue (£)' },
+            ticks: { callback: function (v) { return '£' + (v / 1000).toFixed(0) + 'k'; } }
+          },
+          yS: {
+            position: 'right',
+            min: 0,
+            max: 40000,
+            title: { display: true, text: 'Media Spend (£)' },
+            grid: { display: false },
+            ticks: { callback: function (v) { return '£' + (v / 1000).toFixed(0) + 'k'; } }
+          }
+        },
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              label: function (i) { return i.dataset.label + ': £' + (i.raw || 0).toLocaleString(); }
+            }
+          }
+        }
+      }
+    });
+
+    function setMode(m) {
+      mode = m;
+      var bs = document.getElementById('s1yr-btn-season');
+      var bm = document.getElementById('s1yr-btn-media');
+      bs.style.background = (m === 'season') ? 'rgba(255,159,64,0.12)' : '#fff';
+      bm.style.background = (m === 'media')  ? 'rgba(75,192,192,0.12)' : '#fff';
+      chart.update('none'); // redraw without animation to update highlight
+    }
+
+    document.getElementById('s1yr-btn-season').addEventListener('click', function () { setMode('season'); });
+    document.getElementById('s1yr-btn-media').addEventListener('click',  function () { setMode('media');  });
+  }
+
+  requestAnimationFrame(initS1yr);
+})();
+</script>

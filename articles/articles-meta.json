@@ -486,5 +486,13 @@
     "author": "David Walsh",
     "date": "2026-03-27",
     "category": "Article"
+  },
+  {
+    "title": "Why MMM needs 3 years of data",
+    "teaser": "Why 3 years: an explanation of why so much historical data is needed for MMM",
+    "folder": "mmm-seasonality-why-3-years",
+    "author": "Claudio Paladini",
+    "date": "2026-04-07",
+    "category": "Article"
   }
 ]

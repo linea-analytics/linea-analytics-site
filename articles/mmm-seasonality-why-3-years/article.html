@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<head>
+
+  <!-- ** Basic Page Needs ** -->
+  <meta charset="utf-8">
+  <title>Linea Analytics - Why MMM needs 3 years of data</title>
+
+  <!-- ** Mobile Specific Metas ** -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Why 3 years: an explanation of why so much historical data is needed for MMM">
+  <link rel="canonical" href="https://linea-analytics.com/articles/mmm-seasonality-why-3-years/article.html">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="author" content="linea-analytics">
+  <meta name="generator" content="linea-analytics">
+
+  <!-- theme meta -->
+  <meta name="theme-name" content="linea-analytics" />
+
+  <!-- bootstrap.min css -->
+  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css">
+  <!-- Icon Font Css -->
+  <link rel="stylesheet" href="/plugins/themify/css/themify-icons.css">
+  <link rel="stylesheet" href="/plugins/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="/plugins/magnific-popup/magnific-popup.css">
+  <!-- Owl Carousel CSS -->
+  <link rel="stylesheet" href="/plugins/slick/slick.css">
+  <link rel="stylesheet" href="/plugins/slick/slick-theme.css">
+
+  <!-- Markdown to html -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/custom-dropdown.css">
+
+  <!--Favicon-->
+  <link rel="icon" href="/images/logos/icon.png" type="image/x-icon">
+
+  <!-- CSV parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.5.2/papaparse.min.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- calendly -->
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
+</head>
+
+<body>
+
+
+  <!-- Header Start -->
+  <header id="header-container" class="navigation"></header>
+  <!-- Header Close -->
+
+
+  <!-- Article Container Start -->
+  <div class="container mt-5 ">
+    <div class="row justify-content-center">
+      <div class="col-lg-12 col-md-12 mb-5">
+        <div style="
+          width: 100%;
+          max-width: 100%;
+          height: 300px;
+          overflow: hidden;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 20px;
+        ">
+          <img src="./thumbnail.jpg" alt="thumbnail" class="shadow rounded" style="
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              object-position: center center;
+            ">
+        </div>
+        <!-- ARTICLE CONTENT START -->
+        <h1><strong>Why MMM needs 3 years of data</strong></h1>
+<p>Seasonality is one of the most fundamental concepts in Marketing Mix Modelling but also one of the most common reasons they go wrong.</p>
+<p>When people think about the data needed for MMM, they often focus on media spend, sales, or how many channels are included. But before any of that, there is a more basic requirement: enough history to understand the natural rhythm of the business. In practice, that usually means <strong>at least three years of data</strong>. Without that, the model is much more likely to confuse normal seasonal movement for media impact.</p>
+<p><strong>Note:</strong> This does not apply to all industries. Some brands will not have this 3-years requirement because their KPIs do not exhibit repeated seasonal patterns. For example, the new-customers KPIs for fintech brands might closely follow stock market trends which do not follow easily predictable patterns like seasonality.</p>
+<h2><strong>What seasonality actually is</strong></h2>
+<p>In a general time series sense, seasonality is any pattern that repeats at a fixed interval over time:</p>
+<ul>
+<li>Looking at daily data, consumer behavior depends on the specific week day.  </li>
+<li>Looking at weekly data, consumer behavior depends periods with in the year (e.g. pre-christmas purchases)</li>
+</ul>
+<p>In MMM, seasonality matters for a more specific reason.</p>
+<p>The goal of MMM is to estimate the incremental impact of media. That means separating the effect of advertising from everything else. Let&#39;s look at an example:</p>
+<p><em>The revenue of this month (December) is up by 50% compared to last month (November), and 10% compared to the same period (December) last year.</em></p>
+<ul>
+<li>The 50% increase might very well be caused by seasonality: December performing better than November. Suggesting marketing drove the 50% jump might be incorrect.  </li>
+<li>The 10% increase instead could be related to changes in the marketing activities of that period, and/or other factors.</li>
+</ul>
+<p>If a model cannot properly recognise seasonality, it starts assigning credit in the wrong places. </p>
+<p>A predictable Christmas uplift may be attributed to a media campaign.<br>A summer dip may be blamed on weak creative.</p>
+<p>This is how measurement becomes dangerous rather than helpful. A model that misreads seasonal patterns can still produce neat charts, coefficients, and ROI figures. But those outputs are not insight, they are false confidence. In MMM, bad attribution does not stay inside the model. It flows directly into planning, optimisation, and budget decisions.</p>
+<div id="seasonality-1yr-widget"></div>
+<div id="seasonality-2yr-widget"></div>
+<h2><strong>Why 3 years is ideal</strong></h2>
+<p>Two years of data can sometimes be enough to build a model. But that does not mean it is ideal. The issue is simple: <strong>with only two years, the model only sees each point in the calendar twice.</strong></p>
+<p>Three years is not magic, but it is a major improvement. It gives the model a third look at each point in the annual cycle. It also provides additional variance in other factors, allowing the model to distinguish actual impact from coincidence. </p>
+<p>In other words, three years gives seasonality more chances to reveal itself.</p>
+<div id="seasonality-3yr-widget"></div>
+
+<p>Three years is also the sweet spot between getting enough variance, and not having to retrieve and include old data, which might bring new issues into the model.</p>
+<h2><strong>Seasonality is not just a control variable</strong></h2>
+<p>A lot of MMM work treats seasonality as something to account for and then move past it.</p>
+<p>That is understandable, but incomplete. Seasonality is something that can change media effectiveness itself and should be taken into account appropriately.</p>
+<p>This matters because the same campaign does not perform in the same way in every month. Consumer responsiveness changes throughout the year. Demand context changes. Competitive pressure changes. Purchase intent changes. The same spend, on the same channel, with the same creative quality, can produce very different returns in June and in December.</p>
+<p>That is where seasonality becomes strategically important, not just statistically important.</p>
+<p>At Linea, we leverage the synergy between variables to provide a complete picture. This also allows us to move beyond total annual optimisations, and produce actual media plans that account for various scenarios. </p>
+<h2><strong>The bottom line</strong></h2>
+<p>MMM needs enough history to separate recurring demand patterns from media-driven movement.</p>
+<p>It is tempting to set up a model covering just 2 years since it is less work when collecting data.</p>
+<p>But if that data can be retrieved, it will be worth collecting. And if someone suggests 24 months of data is good enough, send them this article and give us a call.</p>
+
+
+        <!-- ARTICLE CONTENT END -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Article Container Close -->
+
+
+  <!-- Section Contacts Start -->
+  <section class="section cta d-flex align-items-center" id="contactUs">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-5 col-lg-6">
+          <div class="cta-item bg-white p-5 rounded text-center">
+            <span class="h6 text-color">Take control of your data</span>
+            <h2 class="mt-2 mb-4">Contact us</h2>
+            <p class="lead mb-4">Have any project on mind?<br>For immediate support:</p>
+            <a href="mailto:info@linea-analytics.com">
+              <i class="fas fa-envelope mr-2"></i>
+              <span>info@linea-analytics.com</span>
+            </a>
+            <br>
+            <a href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/david-walsh-linea-analytics/30min'});return false;">
+              <i class="fas fa-phone mr-2"></i>
+              Schedule a Call
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-70 position-relative">
+    <div class="container">
+      <div class="cta-block-2 bg-gray p-5 rounded border-1">
+        <div class="row justify-content-center align-items-center ">
+          <div class="col-lg-7">
+            <span class="text-color">Why wait</span>
+            <h2 class="mt-2 mb-4 mb-lg-0">Get the <strong>True Impact</strong> of your Marketing.</h2>
+          </div>
+          <div class="col-lg-4">
+            <a href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/david-walsh-linea-analytics/30min'});return false;" class="btn btn-main btn-round-full float-lg-right ">Schedule a call</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <footer id="footer-container" class="footer section"></footer>
+
+  <!--Scroll to top-->
+  <div id="scroll-to-top" class="scroll-to-top">
+    <span class="icon fa fa-angle-up"></span>
+  </div>
+
+
+  <!-- JS HELPERS -->
+  <!-- Main jQuery -->
+  <script src="/plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4.3.1 -->
+  <script src="/plugins/bootstrap/bootstrap.min.js"></script>
+  <!--  Magnific Popup-->
+  <script src="/plugins/magnific-popup/jquery.magnific-popup.min.js"></script>
+  <!-- Slick Slider -->
+  <script src="/plugins/slick/slick.min.js"></script>
+
+  <script src="/js/script.js"></script>
+  <script src="/js/views.js"></script>
+  <script src="/js/customDropdown.js"></script>
+  <script src="/js/blog-single.js"></script>
+  <script src="/js/translate.js"></script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5LHVS45SP4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'G-5LHVS45SP4');
+  </script>
+</body>
+
+</html>
