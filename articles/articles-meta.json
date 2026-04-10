@@ -502,5 +502,13 @@
     "author": "Claudio Paladini",
     "date": "2026-04-08",
     "category": "Article"
+  },
+  {
+    "title": "Is Bayesian Marketing Mix Modelling (MMM) right for my brand?",
+    "teaser": "Dive into what Bayesian MMM is and the strengths and weaknesses of this approach",
+    "folder": "bayesian-marketing-mix-modelling",
+    "author": "David Walsh",
+    "date": "2026-04-10",
+    "category": "Article"
   }
 ]
