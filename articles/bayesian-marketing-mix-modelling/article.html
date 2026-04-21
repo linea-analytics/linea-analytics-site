@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<head>
+
+  <!-- ** Basic Page Needs ** -->
+  <meta charset="utf-8">
+  <title>Linea Analytics - Is Bayesian Marketing Mix Modelling (MMM) right for my brand?</title>
+
+  <!-- ** Mobile Specific Metas ** -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Dive into what Bayesian MMM is and the strengths and weaknesses of this approach">
+  <link rel="canonical" href="https://linea-analytics.com/articles/bayesian-marketing-mix-modelling/article.html">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="author" content="linea-analytics">
+  <meta name="generator" content="linea-analytics">
+
+  <!-- theme meta -->
+  <meta name="theme-name" content="linea-analytics" />
+
+  <!-- bootstrap.min css -->
+  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css">
+  <!-- Icon Font Css -->
+  <link rel="stylesheet" href="/plugins/themify/css/themify-icons.css">
+  <link rel="stylesheet" href="/plugins/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="/plugins/magnific-popup/magnific-popup.css">
+  <!-- Owl Carousel CSS -->
+  <link rel="stylesheet" href="/plugins/slick/slick.css">
+  <link rel="stylesheet" href="/plugins/slick/slick-theme.css">
+
+  <!-- Markdown to html -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/custom-dropdown.css">
+
+  <!--Favicon-->
+  <link rel="icon" href="/images/logos/icon.png" type="image/x-icon">
+
+  <!-- CSV parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.5.2/papaparse.min.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- calendly -->
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
+</head>
+
+<body>
+
+
+  <!-- Header Start -->
+  <header id="header-container" class="navigation"></header>
+  <!-- Header Close -->
+
+
+  <!-- Article Container Start -->
+  <div class="container mt-5 ">
+    <div class="row justify-content-center">
+      <div class="col-lg-12 col-md-12 mb-5">
+        <div style="
+          width: 100%;
+          max-width: 100%;
+          height: 300px;
+          overflow: hidden;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 20px;
+        ">
+          <img src="./thumbnail.jpg" alt="thumbnail" class="shadow rounded" style="
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              object-position: center center;
+            ">
+        </div>
+        <!-- ARTICLE CONTENT START -->
+        <h1><strong>Is Bayesian Marketing Mix Modelling (MMM) right for my brand?</strong></h1>
+<p>As marketing measurement undergoes a shift away from flawed tracking toward incremental impact, Marketing Mix Modelling (MMM) has reclaimed its spot as the gold standard for strategic decision-making. </p>
+<p>At Linea Analytics, we have been pioneering always-on MMM using Bayesian frameworks to provide the speed, transparency, and depth required by modern brands. </p>
+<p>Let&#39;s dive into what Bayesian MMM is and the strengths and weaknesses of this approach.</p>
+<h2><strong>What is Bayesian MMM?</strong></h2>
+<p>Bayesian Marketing Mix Modelling is a statistical approach that combines historical data with &quot;prior&quot; knowledge to estimate the impact of marketing activities. The Bayesian part is a distinct form of statistics.  </p>
+<p>Unlike traditional methods that only look at the data in a vacuum, a Bayesian model allows us to incorporate existing expertise into the mathematical framework, this can include: </p>
+<ul>
+<li>Results from previous lift tests  </li>
+<li>Industry benchmarks  </li>
+<li>Historical campaign performance</li>
+</ul>
+<p>This helps create a more robust &quot;posterior&quot; distribution, hopefully reflecting a more accurate view of media performance.</p>
+<h2><strong>How does it differ and overlap with other MMM approaches?</strong></h2>
+<p>Most traditional models use Ordinary Least Squares (OLS) or frequentist regressions, which focus solely on minimising errors between predicted and actual sales. </p>
+<p><strong>Overlap:</strong></p>
+<ul>
+<li>Both Bayesian and frequentist MMM seek to isolate the impact of marketing factors (spend, reach) from external drivers like seasonality and economic conditions.   </li>
+<li>Baysian &amp; frequentist approaches overlap when a Bayesian approach gives no information or a wide &quot;prior&quot;. From an MMM perspective, this is often used in the initial project set-up.</li>
+</ul>
+<p><strong>Difference:</strong> </p>
+<ul>
+<li>Traditional OLS, if we were to be critical, with media impact making up a small % of sales it is hard to measure impact amongst all the noise of other factors such as promotions, seasonality etc.  </li>
+<li>Bayesian MMM provides a more stable structure by using &quot;priors&quot; to guide the model, then using the data to pull us in a particular direction. For example setting out that we typically see a Meta ROI between £0-£4 then allowing the data to tell us it is closer to £3.50.  </li>
+<li>In a measurement framework that relies on multiple measurement approaches a Bayesian approach can allow the integration of external information from a lift test or MTA approach - providing a more integrated measurement approach</li>
+</ul>
+<p>
+      <figure class="p-5">
+        <img width="100%" class="rounded" src="./Image_1__Screenshot_2026-04-09_180830.png" alt="Comparing Bayesian and frequentist approaches. With Bayesian delivering probability distribution and frequentist providing a point estimate.">
+      </figure>
+    </p>
+<h2><strong>What&#39;s special about Linea&#39;s Bayesian approach?</strong></h2>
+<h3><strong>1. Stan: The Engine of Accuracy</strong></h3>
+<p>We have built our own approach using the Stan library. It is a state-of-the-art C++ library for Bayesian inference. This allows us to run complex, high-performance simulations that &quot;free&quot; MMM tools often struggle with, ensuring your model isn&#39;t just a best guess but a statistically rigorous calculation. </p>
+<p>We built our own Bayesian approach, rather than using an open source framework, so that we were both <em>building the car and driving the car</em> - to use a metaphor. We believe that when you combine both elements, you can increase the quality of the outputs and produce more tailored models for our clients. It is, to continue the metaphor, easier to know how to get the most use out of the car when you know how it is built.</p>
+<h3><strong>2. Multiplicative Relationships</strong></h3>
+<p>Our bespoke approach allows us to measure the <strong>multiplicative relationship</strong> between media and external factors. Rather than assuming media simply &quot;adds&quot; sales, we recognise that media <em>multiplies</em> the effect of other drivers. </p>
+<p>For example, your TV ad is more effective during a peak seasonal period than in a quiet month; our models capture this synergy. Too often, measurement doesn’t reflect this real-world factor, meaning that brands over/ under invest during peak seasonal periods.</p>
+<h3><strong>3. Dive deeper within the channel</strong></h3>
+<p>A key reason for building our own modelling infrastructure is to answer one of MMM’s key questions: How do you get deeper insights within a channel? By this I mean: </p>
+<p>✅CAC/ CPA of Meta but also<br>✅CAC/ CPA of Meta by placement and creative</p>
+<p>
+      <figure class="p-5">
+        <img width="100%" class="rounded" src="./Image_2__Screenshot_2026-04-09_164107.png" alt="An example of how Linea drive deeper with MMM to channel and placement ROI">
+      </figure>
+    </p>
+<p>Our Bayesian modelling infrastructure offers two clear advantages for gaining this depth of insight:</p>
+<ul>
+<li>It provides the uncertainty in the form of a confidence interval behind the estimate. This means we can assess the exact confidence level behind each estimate, making in-channel decisions with confidence or not, as the case may be.  </li>
+<li>We can also overlay external information. Normally, a lift test or attribution results. This can improve the accuracy/ confidence of the in-channel results</li>
+</ul>
+<p>By using our standardised modelling infrastructure, we are able to uncover greater depth of insight to help drive action from measurement</p>
+<h3><strong>4. Speed of update</strong></h3>
+<p>Traditional MMM is often a &quot;once-a-year&quot; exercise, but at Linea, we’ve pioneered Always-on MMM. Building our own modelling framework to sit alongside data ingestion, reporting and tools to action, allows us to own the full MMM process at speed. </p>
+<p>With this control means we can move at a pace allowing for faster building of models with greater accuracy.</p>
+<h2><strong>Why do we at Linea think it&#39;s the best approach for brands?</strong></h2>
+<p>For brands, understanding incrementality is a step forward from last click measurement. But a Bayesian MMM is the best approach, here’s why:</p>
+<ol>
+<li><strong>Measurement Framework:</strong> It naturally bridges the gap between top-down MMM and bottom-up lift tests and attribution. This allows your MMM to sit as complementary rather than competing  </li>
+<li><strong>Speed:</strong> The historic critique of MMM is that it is slow and expensive. A structured Bayesian approach is best placed to solve this. Providing a perfect combination of stability and accuracy.  </li>
+<li><strong>Accuracy:</strong> Reducing the depth of analysis or missing synergy relationships between Media and External factors ultimately reduces the quality of your analysis. Our approach keeps brands at the cutting edge.</li>
+</ol>
+<h2><strong>What are the key challenges of Bayesian MMM?</strong></h2>
+<p>Let&#39;s be clear, Bayesian isn’t all sunny uplands! Three things for builders to consider:</p>
+<ul>
+<li><strong>Complexity:</strong></li>
+</ul>
+<p>It requires significant data science expertise to set up the initial &quot;priors&quot; correctly without introducing bias. Additionally, many teams struggle with how to interpret the model. For example, some statistical tests that model builders are used to are not available.</p>
+<ul>
+<li><strong>Computational Intensity:</strong></li>
+</ul>
+<p>These models take longer to run than simple regressions, which is why Linea uses automation to ensure they remain &quot;always-on&quot;.  For some teams, building frequentist models, you run multiple iterations of the models. A Bayesian modelling framework doesn’t work like that. Some teams we have spoken with set up models to run overnight. We think that is too slow and often that comes from over specified model set-up. </p>
+<p>Let&#39;s take, for example, the default model in Meridian. This will run in an hour, but do you need the split by Geo, the daily update or the time varying base? If you don’t the model can be run in sub 2 mins.</p>
+<ul>
+<li><strong>Trust:</strong></li>
+</ul>
+<p>If you don’t know how the &quot;black box&quot; of the model is made then how are you going to explain that to stakeholders? When a model validation is a mixture of statistics and communication, model builders must be able to drive confidence in both.</p>
+<h2><strong>How we help teams build Bayesian models</strong></h2>
+<p>At Linea, we solve these challenges through <strong>transparency and partnership</strong>:</p>
+<ol>
+<li><a href="https://linea-analytics.com/full-service-mmm"><strong>Model builders</strong></a><strong>:</strong></li>
+</ol>
+<p>For brands looking to further explore using a Bayesian MMM approach, we are on hand to offer support. Through our bespoke model approach, combined with data ingestion and reporting we are able to deliver an <strong>always-on MMM</strong> framework.</p>
+<ol start="2">
+<li><strong>Already using Bayesian:</strong> We Audit and Guide best practice</li>
+</ol>
+<p>We often help brands that have tried &quot;free&quot; MMM tools (like Meridian) but found the results confusing. We bridge the gap between data science and marketing, auditing models to ensure they reflect the true marketing context of your business.</p>
+
+
+        <!-- ARTICLE CONTENT END -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Article Container Close -->
+
+
+  <!-- Section Contacts Start -->
+  <section class="section cta d-flex align-items-center" id="contactUs">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-5 col-lg-6">
+          <div class="cta-item bg-white p-5 rounded text-center">
+            <span class="h6 text-color">Take control of your data</span>
+            <h2 class="mt-2 mb-4">Contact us</h2>
+            <p class="lead mb-4">Have any project on mind?<br>For immediate support:</p>
+            <a href="mailto:info@linea-analytics.com">
+              <i class="fas fa-envelope mr-2"></i>
+              <span>info@linea-analytics.com</span>
+            </a>
+            <br>
+            <a href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/david-walsh-linea-analytics/30min'});return false;">
+              <i class="fas fa-phone mr-2"></i>
+              Schedule a Call
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-70 position-relative">
+    <div class="container">
+      <div class="cta-block-2 bg-gray p-5 rounded border-1">
+        <div class="row justify-content-center align-items-center ">
+          <div class="col-lg-7">
+            <span class="text-color">Why wait</span>
+            <h2 class="mt-2 mb-4 mb-lg-0">Get the <strong>True Impact</strong> of your Marketing.</h2>
+          </div>
+          <div class="col-lg-4">
+            <a href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/david-walsh-linea-analytics/30min'});return false;" class="btn btn-main btn-round-full float-lg-right ">Schedule a call</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <footer id="footer-container" class="footer section"></footer>
+
+  <!--Scroll to top-->
+  <div id="scroll-to-top" class="scroll-to-top">
+    <span class="icon fa fa-angle-up"></span>
+  </div>
+
+
+  <!-- JS HELPERS -->
+  <!-- Main jQuery -->
+  <script src="/plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4.3.1 -->
+  <script src="/plugins/bootstrap/bootstrap.min.js"></script>
+  <!--  Magnific Popup-->
+  <script src="/plugins/magnific-popup/jquery.magnific-popup.min.js"></script>
+  <!-- Slick Slider -->
+  <script src="/plugins/slick/slick.min.js"></script>
+
+  <script src="/js/script.js"></script>
+  <script src="/js/views.js"></script>
+  <script src="/js/customDropdown.js"></script>
+  <script src="/js/blog-single.js"></script>
+  <script src="/js/translate.js"></script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5LHVS45SP4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'G-5LHVS45SP4');
+  </script>
+</body>
+
+</html>

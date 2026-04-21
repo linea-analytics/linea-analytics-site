@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<head>
+
+  <!-- ** Basic Page Needs ** -->
+  <meta charset="utf-8">
+  <title>Linea Analytics - Red Flags in Analytics</title>
+
+  <!-- ** Mobile Specific Metas ** -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Are you wasting money on bad measurement? Here are the questions you should be asking">
+  <link rel="canonical" href="https://linea-analytics.com/articles/red-flags-in-marketing-measurement-asking-the-right-questions/article.html">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="author" content="linea-analytics">
+  <meta name="generator" content="linea-analytics">
+
+  <!-- theme meta -->
+  <meta name="theme-name" content="linea-analytics" />
+
+  <!-- bootstrap.min css -->
+  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css">
+  <!-- Icon Font Css -->
+  <link rel="stylesheet" href="/plugins/themify/css/themify-icons.css">
+  <link rel="stylesheet" href="/plugins/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="/plugins/magnific-popup/magnific-popup.css">
+  <!-- Owl Carousel CSS -->
+  <link rel="stylesheet" href="/plugins/slick/slick.css">
+  <link rel="stylesheet" href="/plugins/slick/slick-theme.css">
+
+  <!-- Markdown to html -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/custom-dropdown.css">
+
+  <!--Favicon-->
+  <link rel="icon" href="/images/logos/icon.png" type="image/x-icon">
+
+  <!-- CSV parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.5.2/papaparse.min.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- calendly -->
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
+</head>
+
+<body>
+
+
+  <!-- Header Start -->
+  <header id="header-container" class="navigation"></header>
+  <!-- Header Close -->
+
+
+  <!-- Article Container Start -->
+  <div class="container mt-5 ">
+    <div class="row justify-content-center">
+      <div class="col-lg-12 col-md-12 mb-5">
+        <div style="
+          width: 100%;
+          max-width: 100%;
+          height: 300px;
+          overflow: hidden;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 20px;
+        ">
+          <img src="./thumbnail.jpg" alt="thumbnail" class="shadow rounded" style="
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              object-position: center center;
+            ">
+        </div>
+        <!-- ARTICLE CONTENT START -->
+        <h1><strong>Red Flags in Analytics</strong></h1>
+<p>In this article we look at why no measurement is better than bad measurement, and how to distinguish good and bad measurement.</p>
+<p>Marketing measurement is no longer a “nice to have”. It is a must for modern businesses to allocate budget, justify spend, and grow efficiently. Yet despite its importance, it is one of the most misunderstood and misused areas in marketing.</p>
+<p>The uncomfortable truth: <strong>bad measurement can be worse than no measurement at all.</strong></p>
+<h2><strong>Why marketing measurement matters</strong></h2>
+<p>At its core, marketing measurement exists to answer a simple question: <em>what is driving results, and where should we invest next to grow further?</em></p>
+<p>Done well, it enables:</p>
+<ul>
+<li>Smarter budget allocation  </li>
+<li>Clear understanding of ROI by channel/campaign/platform  </li>
+<li>Confidence in scaling spend  </li>
+<li>Alignment between marketing and finance</li>
+</ul>
+<p>Done poorly, it does the opposite.</p>
+<h3><strong>When measurement destroys value</strong></h3>
+<p>There is a tendency to assume that any form of measurement is better than none. That is not true.</p>
+<p>If your model is flawed:</p>
+<ul>
+<li>You shift budget away from what works  </li>
+<li>You double down on ineffective channels  </li>
+<li>You misread causality as correlation</li>
+</ul>
+<p>In practice, this means <strong>negative ROI on the measurement itself</strong>. You are paying for the analysis and you are also losing money through bad decisions driven by it.</p>
+<p>Historically, this risk was partially mitigated by cost. Traditional Marketing Mix Modelling (MMM) projects often came with a ~£50k price tag, which naturally limited adoption and encouraged scrutiny.</p>
+<p>Today, the landscape has changed.</p>
+<h3><strong>The cost shift: from £50k to £2k/month</strong></h3>
+<p>Modern tools and open-source frameworks have significantly reduced the cost of running MMM and similar approaches.</p>
+<p>This is, in many ways, a positive development:</p>
+<ul>
+<li>More businesses can access measurement  </li>
+<li>Iteration is faster  </li>
+<li>Models can be refreshed regularly</li>
+</ul>
+<p>However, it introduces a new risk.</p>
+<p>Paying £2k per month for a poor model is arguably worse than paying £50k once for a rigorous one. The lower barrier to entry means it is easier than ever to deploy something that <em>looks</em> like measurement but lacks robustness.</p>
+<p>At that point, the real question becomes:</p>
+<p><strong>How do you know if your measurement is actually good?</strong></p>
+<h2><strong>Asking the right questions</strong></h2>
+<p>Most vendors and tools will present polished dashboards and confident recommendations. The real signal lies beneath that surface.</p>
+<p>Here are the questions that matter.</p>
+<h3><strong>1. What data is being used?</strong></h3>
+<p>The foundation of any model is the data.</p>
+<p>You should understand:</p>
+<ul>
+<li>How many years of history are included?  <ul>
+<li>An analysis built on 2 years or less of data might not have enough information to distinguish marketing’s impact from other factors (e.g. seasonality, competitors, market conditions).</li>
+</ul>
+</li>
+<li>Are key variables highly collinear?  <ul>
+<li>If your campaigns go live on the same days, a model will not be able to confidently attribute merit to any of these (<a href="https://linea-analytics.com/articles/multicolinearity/article.html">collinear</a>) activities.</li>
+</ul>
+</li>
+</ul>
+<p>&gt; At Linea, we consider <a href="https://linea-analytics.com/articles/mmm-seasonality-why-3-years/article.html">3 years of data to be a minimum</a> for most models.</p>
+<h3><strong>2. What factors are included?</strong></h3>
+<p>Marketing does not operate in isolation.</p>
+<p>A credible model should incorporate:</p>
+<ul>
+<li>Media activity (spend, impressions, etc.)  <ul>
+<li>A model will need media variables to calculate ROIs but a complete analysis should also review changes in cost per clicks/impressions to monitor changes in each campaign’s performance.</li>
+</ul>
+</li>
+<li>Non-media factors (seasonality, pricing, promotions, distribution, product changes)  <ul>
+<li>In order to isolate the incremental impact of marketing, other factors must also be measured. For example: <em>“Am I seeing an increase in revenue relative to last month because of my marketing or because of a seasonal trend?”</em></li>
+</ul>
+</li>
+</ul>
+<p>If the model only looks at media, it is almost certainly over-attributing impact to it.</p>
+<h3><strong>3. How granular is the analysis?</strong></h3>
+<p>Granularity determines how actionable the results are.</p>
+<p>Key considerations:</p>
+<ul>
+<li>Is the breakdown at channel level only, or deeper (e.g. campaign, platform, or format level)?  <ul>
+<li>If the data provided is at a channel level, the analysis will only be able to deliver channel-level ROIs.</li>
+</ul>
+</li>
+<li>Is there enough data to support that granularity?  <ul>
+<li>A common trade-off in statistical models is number of variables (i.e. 3 variables, one for each channel, or 10 variables one for each creative) vs number of observations (i.e. modelling period, datapoints per variable). If a model with 150 weeks of data has 50 variables sophisticated techniques should be implemented to ensure <strong>model stability and prevent overfitting.</strong></li>
+</ul>
+</li>
+</ul>
+<p>There is a balance here. Too coarse, and insights are vague. Too granular, and the model becomes unstable.</p>
+<p>&gt; At Linea we use a hierarchical Bayesian approach to ensure reliable models with maximum granularity.</p>
+<h3><strong>4. Are synergies measured?</strong></h3>
+<p>Channels rarely operate independently.</p>
+<p>For example:</p>
+<ul>
+<li>TV may amplify search  </li>
+<li>An increase in product range might increase the effectiveness of Social  </li>
+<li>A worst economic condition might decrease marketing performance</li>
+</ul>
+<p>Ask:</p>
+<ul>
+<li>Are interactions between channels modelled?  </li>
+<li>What about the synergies of media and non-media variables?  </li>
+<li>If so, how are they quantified?  </li>
+<li>Are they assumed, or statistically estimated?</li>
+</ul>
+<p>Ignoring synergies can lead to systematically undervaluing upper-funnel activity and misrepresenting performance over time.</p>
+<p>&gt; Finding the usual approaches lacking when it comes to measuring synergies, <a href="https://linea-analytics.com/articles/optim-and-synergy/article.html">we at Linea developed our own Bayesian framework and model specification</a> to measure and quantify these interactions. We then feed these insights into ROIs as well as forward looking optimisations to plan for any scenario.</p>
+<h3><strong>5. How is uncertainty handled?</strong></h3>
+<p>All models are approximations. The question is whether uncertainty is acknowledged. </p>
+<p>Look for:</p>
+<ul>
+<li>Confidence intervals  </li>
+<li>Prior and posterior distributions (for Bayesian models)  </li>
+<li>Variance and stability of key parameters</li>
+</ul>
+<p>If outputs are presented as precise and deterministic, that is a red flag. <a href="https://linea-analytics.com/articles/roi-distributions/article.html">Stability tests and confidence measures</a> are essential for a complete analysis. Otherwise, a model might show completely different results then next time you run it using the most recent data.</p>
+<h3><strong>6. Can you inspect the model?</strong></h3>
+<p>Transparency matters.</p>
+<p>You should be able to access:</p>
+<ul>
+<li>Coefficients  </li>
+<li>Priors (if Bayesian)  </li>
+<li>Functional forms (e.g. saturation curves, adstock)</li>
+</ul>
+<p>If the model is a black box, you are being asked to trust results you cannot validate.</p>
+<p>&gt; Model specification (i.e. coefficients and transformations) are often left out of deliverables. At Linea we provide a complete view on all inputs and outputs of our models.</p>
+<h3><strong>7. How far do recommendations extrapolate?</strong></h3>
+<p>Optimisation often pushes beyond historical data.</p>
+<p>Ask:</p>
+<ul>
+<li>Are recommendations within observed ranges?  </li>
+<li>If not, how far beyond?  </li>
+<li>What assumptions justify that extrapolation?</li>
+</ul>
+<p>Models are strongest within the data they have seen. The further you move away from that, the more speculative the outputs become.</p>
+<p>&gt; Our Scenario Tool, for example, has built-in constraints that will prevent an optimisation from recommending more than 2x the spend the model has seen, since going beyond that would be uncharted territory.</p>
+<h2><strong>Final thought</strong></h2>
+<p>Marketing measurement is not just about having a model. It is about having a model you can trust.</p>
+<p>The shift towards cheaper, more accessible solutions is a positive one, but it places more responsibility on the user to ask the right questions.</p>
+<p>Because in this space, the real risk is not <em>lack</em> of measurement.</p>
+<p>It is <strong>false confidence in the wrong answer</strong>.</p>
+
+
+        <!-- ARTICLE CONTENT END -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Article Container Close -->
+
+
+  <!-- Section Contacts Start -->
+  <section class="section cta d-flex align-items-center" id="contactUs">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-5 col-lg-6">
+          <div class="cta-item bg-white p-5 rounded text-center">
+            <span class="h6 text-color">Take control of your data</span>
+            <h2 class="mt-2 mb-4">Contact us</h2>
+            <p class="lead mb-4">Have any project on mind?<br>For immediate support:</p>
+            <a href="mailto:info@linea-analytics.com">
+              <i class="fas fa-envelope mr-2"></i>
+              <span>info@linea-analytics.com</span>
+            </a>
+            <br>
+            <a href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/david-walsh-linea-analytics/30min'});return false;">
+              <i class="fas fa-phone mr-2"></i>
+              Schedule a Call
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-70 position-relative">
+    <div class="container">
+      <div class="cta-block-2 bg-gray p-5 rounded border-1">
+        <div class="row justify-content-center align-items-center ">
+          <div class="col-lg-7">
+            <span class="text-color">Why wait</span>
+            <h2 class="mt-2 mb-4 mb-lg-0">Get the <strong>True Impact</strong> of your Marketing.</h2>
+          </div>
+          <div class="col-lg-4">
+            <a href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/david-walsh-linea-analytics/30min'});return false;" class="btn btn-main btn-round-full float-lg-right ">Schedule a call</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <footer id="footer-container" class="footer section"></footer>
+
+  <!--Scroll to top-->
+  <div id="scroll-to-top" class="scroll-to-top">
+    <span class="icon fa fa-angle-up"></span>
+  </div>
+
+
+  <!-- JS HELPERS -->
+  <!-- Main jQuery -->
+  <script src="/plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4.3.1 -->
+  <script src="/plugins/bootstrap/bootstrap.min.js"></script>
+  <!--  Magnific Popup-->
+  <script src="/plugins/magnific-popup/jquery.magnific-popup.min.js"></script>
+  <!-- Slick Slider -->
+  <script src="/plugins/slick/slick.min.js"></script>
+
+  <script src="/js/script.js"></script>
+  <script src="/js/views.js"></script>
+  <script src="/js/customDropdown.js"></script>
+  <script src="/js/blog-single.js"></script>
+  <script src="/js/translate.js"></script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5LHVS45SP4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'G-5LHVS45SP4');
+  </script>
+</body>
+
+</html>
