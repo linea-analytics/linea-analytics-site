@@ -1,0 +1,340 @@
+<style>
+  /* ── Slider ── */
+  #optim-widget-root .optim-slider-wrap {
+    padding: 0 4px;
+  }
+  #optim-widget-root #optim-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 5px;
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    /* background updated via JS to show fill */
+  }
+  #optim-widget-root #optim-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2.5px solid #21caab;
+    box-shadow: 0 1px 6px rgba(33,202,171,0.35);
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+  }
+  #optim-widget-root #optim-slider::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 0 5px rgba(33,202,171,0.18);
+  }
+  #optim-widget-root #optim-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2.5px solid #21caab;
+    box-shadow: 0 1px 6px rgba(33,202,171,0.35);
+    cursor: pointer;
+  }
+  #optim-widget-root #optim-slider::-moz-range-track {
+    height: 5px;
+    border-radius: 3px;
+    background: #e5e7eb;
+  }
+  #optim-widget-root #optim-slider::-moz-range-progress {
+    height: 5px;
+    border-radius: 3px;
+    background: #21caab;
+  }
+  #optim-widget-root .optim-slider-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 7px;
+  }
+  #optim-widget-root .optim-slider-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #9ca3af;
+    transition: color 0.2s, font-weight 0.2s;
+    cursor: pointer;
+    user-select: none;
+  }
+  #optim-widget-root .optim-slider-label.active {
+    color: #21caab;
+    font-weight: 700;
+  }
+  #optim-widget-root .optim-slider-label:first-child { text-align: left; }
+  #optim-widget-root .optim-slider-label:last-child  { text-align: right; }
+  #optim-widget-root .optim-slider-label:nth-child(2){ text-align: center; }
+
+  /* ── Grid ── */
+  #optim-widget-root #optim-grid {
+    border-collapse: separate;
+    border-spacing: 5px;
+    width: 100%;
+    table-layout: fixed;
+  }
+  #optim-widget-root #optim-grid th.channel-col {
+    width: 115px;
+    font-weight: 600;
+    font-size: 0.73rem;
+    color: #374151;
+    text-align: right;
+    padding-right: 10px;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+  #optim-widget-root #optim-grid th.month-col {
+    font-weight: 500;
+    font-size: 0.7rem;
+    color: #6b7280;
+    text-align: center;
+    padding-bottom: 6px;
+    white-space: nowrap;
+  }
+  #optim-widget-root #optim-grid td.row-label {
+    width: 115px;
+    font-weight: 600;
+    font-size: 0.73rem;
+    color: #374151;
+    text-align: right;
+    padding-right: 10px;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+  #optim-widget-root .ch-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 5px;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+  #optim-widget-root #optim-grid td.bar-cell {
+    padding: 4px;
+    background: transparent;
+    cursor: default;
+    height: 56px;
+    vertical-align: bottom;
+  }
+  #optim-widget-root .bar-wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #f1f5f9;
+    border-radius: 7px;
+    overflow: hidden;
+  }
+  #optim-widget-root .bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 6px 6px 0 0;
+  }
+  #optim-widget-root #optim-grid td.bar-cell:hover .bar-wrap {
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.12);
+  }
+  #optim-widget-root #optim-grid td.bar-cell:hover .bar {
+    filter: brightness(1.08);
+  }
+</style>
+
+<div id="optim-widget-root" class="py-4">
+  
+  <div class="card p-3 p-md-4 shadow">
+
+    <!-- Slider -->
+     <div class="row">
+      <div class="col-4">
+        <h4 class="mt-2">Select the Optimisation Goal</h4>
+      </div>
+       <div class="col-8 optim-slider-wrap mb-4 mx-auto px-5">
+         <input type="range" id="optim-slider" min="0" max="2" step="1" value="0">
+         <div class="optim-slider-labels">
+           <span class="optim-slider-label active" data-idx="0">Budget</span>
+           <span class="optim-slider-label"         data-idx="1">Hybrid</span>
+           <span class="optim-slider-label"         data-idx="2">Uplift</span>
+          </div>
+        </div>
+      </div>
+
+    <hr class="mt-0 mb-3">
+
+    <!-- Grid -->
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+      <table id="optim-grid"></table>
+    </div>
+
+    <p class="text-muted small mt-4">Bar height shows relative spend within each channel. Hover a cell for the monthly value.</p>
+
+  </div>
+</div>
+
+
+<script>
+function initOptimWidget() {
+
+  const monthSeasonality = [0.57, 0.66, 0.76, 0.97, 0.81, 0.84, 0.92, 0.88, 0.87, 0.96, 1.25, 1.44];
+  const weeksInMonth     = [4, 4, 5, 4, 4, 5, 4, 5, 4, 4, 4, 5];
+
+  const tv_budget  = [0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0.6,  1   ];
+  const ooh_budget = [0,    0,    0,    0.65, 0,    0,    0,    0,    0,    0,    0,    0.75];
+  const tv_hybrid  = [0,    0,    0,    0.85, 0,    0.55, 1,    0.55, 0,    1,    1,    1   ];
+  const ooh_hybrid = [0,    0.3,  0.55, 1,    0.6,  0.9,  1,    0.6,  0.45, 0.85, 1,    0.9 ];
+  const tv_uplift  = [0.4,  0.2,  0.65, 1,    0.65, 0.85, 1,    0.85, 0.6,  1,    1,    1   ];
+  const ooh_uplift = [0.55, 0.65, 0.85, 1,    0.75, 1,    1,    0.85, 0.75, 1,    1,    1   ];
+
+  const OBJECTIVES = {
+    budget: {
+      tv:      { base: 55,  pulse: tv_budget,  min: 0  },
+      social:  { base: 36,  pulse: null,        min: 20 },
+      display: { base: 18,  pulse: null,        min: 12 },
+      ooh:     { base: 22,  pulse: ooh_budget,  min: 0  },
+      search:  { base: 34,  pulse: null,        min: 22 },
+    },
+    hybrid: {
+      tv:      { base: 195, pulse: tv_hybrid,  min: 0  },
+      social:  { base: 62,  pulse: null,        min: 38 },
+      display: { base: 40,  pulse: null,        min: 25 },
+      ooh:     { base: 55,  pulse: ooh_hybrid,  min: 10 },
+      search:  { base: 66,  pulse: null,        min: 44 },
+    },
+    uplift: {
+      tv:      { base: 390, pulse: tv_uplift,  min: 0  },
+      social:  { base: 108, pulse: null,        min: 68 },
+      display: { base: 88,  pulse: null,        min: 55 },
+      ooh:     { base: 98,  pulse: ooh_uplift,  min: 30 },
+      search:  { base: 108, pulse: null,        min: 70 },
+    }
+  };
+
+  const OBJ_KEYS = ['budget', 'hybrid', 'uplift'];
+
+  const CHANNELS = [
+    { key: 'tv',      label: 'TV'            },
+    { key: 'social',  label: 'Social'        },
+    { key: 'display', label: 'Display Video' },
+    { key: 'ooh',     label: 'OOH'           },
+    { key: 'search',  label: 'Paid Search'   },
+  ];
+
+  const COLORS = [
+    { main: '#21caab', light: '#a2ede2' },
+    { main: '#8b5cf6', light: '#c4b5fd' },
+    { main: '#f97316', light: '#fcd0a8' },
+    { main: '#06b6d4', light: '#a5f3fc' },
+    { main: '#3b82f6', light: '#bfdbfe' },
+  ];
+
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  function variation(ci, mi) {
+    return 1 + Math.sin(ci * 2.71 + mi * 1.37) * 0.05;
+  }
+
+  function generateData(objective) {
+    const cfg = OBJECTIVES[objective];
+    return CHANNELS.map((ch, ci) => {
+      const c = cfg[ch.key];
+      return Array.from({ length: 12 }, (_, mi) => {
+        const s = monthSeasonality[mi];
+        const p = c.pulse ? c.pulse[mi] : 1;
+        if (c.pulse && p === 0) return 0;
+        const weekly = Math.max(c.min, c.base * s * p * variation(ci, mi));
+        return Math.round(weekly * weeksInMonth[mi] / 5) * 5;
+      });
+    });
+  }
+
+  function barGradient(color) {
+    return `radial-gradient(circle at 18% 22%, ${color.light}, ${color.main})`;
+  }
+
+  function formatMoney(v) {
+    return v >= 1000 ? `£${(v / 1000).toFixed(1)}M` : `£${v}k`;
+  }
+
+  function buildGrid() {
+    const table = document.getElementById('optim-grid');
+    let html = '<thead><tr><th class="channel-col"></th>';
+    MONTHS.forEach(m => { html += `<th class="month-col">${m}</th>`; });
+    html += '</tr></thead><tbody>';
+
+    CHANNELS.forEach((ch, ci) => {
+      const color = COLORS[ci];
+      const grad  = barGradient(color);
+      html += '<tr>';
+      html += `<td class="row-label"><span class="ch-dot" style="background:${color.main};"></span>${ch.label}</td>`;
+      MONTHS.forEach((m, mi) => {
+        const delay = mi * 22;
+        html += `<td class="bar-cell" title="">
+          <div class="bar-wrap">
+            <div class="bar" style="height:0%;background:${grad};transition:height 0.5s ease ${delay}ms;"></div>
+          </div>
+        </td>`;
+      });
+      html += '</tr>';
+    });
+
+    html += '</tbody>';
+    table.innerHTML = html;
+  }
+
+  function updateBars(objective) {
+    const data  = generateData(objective);
+    const bars  = document.querySelectorAll('#optim-widget-root .bar');
+    const cells = document.querySelectorAll('#optim-widget-root .bar-cell');
+
+    data.forEach((row, ci) => {
+      const rowMax = Math.max(...row);
+      row.forEach((val, mi) => {
+        const idx = ci * 12 + mi;
+        const pct = rowMax > 0 ? Math.max(val > 0 ? 7 : 0, Math.round((val / rowMax) * 100)) : 0;
+        bars[idx].style.height = pct + '%';
+        cells[idx].title = val === 0
+          ? `${CHANNELS[ci].label} – ${MONTHS[mi]}: No spend`
+          : `${CHANNELS[ci].label} – ${MONTHS[mi]}: ${formatMoney(val)}`;
+      });
+    });
+  }
+
+  // ── Slider ──────────────────────────────────────────────────────────────────
+  const slider = document.getElementById('optim-slider');
+  const labelEls = document.querySelectorAll('#optim-widget-root .optim-slider-label');
+
+  function setSliderFill(val) {
+    const pct = (val / 2) * 100;
+    slider.style.background =
+      `linear-gradient(to right, #21caab ${pct}%, #e5e7eb ${pct}%)`;
+  }
+
+  function setLabelActive(val) {
+    labelEls.forEach((el, i) => el.classList.toggle('active', i === val));
+  }
+
+  // Clicking a label jumps the slider
+  labelEls.forEach(el => {
+    el.addEventListener('click', () => {
+      const idx = parseInt(el.dataset.idx);
+      slider.value = idx;
+      slider.dispatchEvent(new Event('input'));
+    });
+  });
+
+  slider.addEventListener('input', () => {
+    const val = parseInt(slider.value);
+    setSliderFill(val);
+    setLabelActive(val);
+    updateBars(OBJ_KEYS[val]);
+  });
+
+  // ── Init ────────────────────────────────────────────────────────────────────
+  buildGrid();
+  setSliderFill(0);
+  requestAnimationFrame(() => updateBars('budget'));
+}
+
+requestAnimationFrame(initOptimWidget);
+</script>
