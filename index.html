@@ -184,6 +184,54 @@
 	</section>
 	<!-- Section Carosel END -->
 
+	<!-- Section Video Start -->
+	<section class="py-5 reveal">
+		<div class="container">
+			<div class="video-hover-wrapper" style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:8px; box-shadow:0 4px 20px rgba(0,0,0,0.15);">
+				<iframe id="linea-yt-player"
+					src="https://www.youtube-nocookie.com/embed/dFR6evbQC6o?autoplay=1&mute=1&loop=1&playlist=dFR6evbQC6o&controls=0&rel=0&enablejsapi=1"
+					style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"
+					frameborder="0"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+					referrerpolicy="strict-origin-when-cross-origin"
+					allowfullscreen
+					data-cookieconsent="ignore"
+					title="Linea Analytics video">
+				</iframe>
+				<button id="yt-mute-btn" onclick="lineaToggleMute()" title="Toggle sound" style="position:absolute; bottom:14px; right:14px; z-index:2; background:rgba(0,0,0,0.55); border:none; border-radius:50%; width:42px; height:42px; cursor:pointer; color:#fff; font-size:1.1rem; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .2s;">
+					<i id="yt-mute-icon" class="bi bi-volume-mute-fill"></i>
+				</button>
+			</div>
+			<style>
+				.video-hover-wrapper:hover #yt-mute-btn { opacity: 1; }
+			</style>
+		</div>
+	</section>
+	<script>
+		var lineaYtPlayer = null;
+		var lineaIsMuted = true;
+
+		function onYouTubeIframeAPIReady() {
+			lineaYtPlayer = new YT.Player('linea-yt-player');
+		}
+
+		function lineaToggleMute() {
+			if (!lineaYtPlayer) return;
+			if (lineaIsMuted) {
+				lineaYtPlayer.unMute();
+				lineaYtPlayer.setVolume(80);
+				lineaIsMuted = false;
+				document.getElementById('yt-mute-icon').className = 'bi bi-volume-up-fill';
+			} else {
+				lineaYtPlayer.mute();
+				lineaIsMuted = true;
+				document.getElementById('yt-mute-icon').className = 'bi bi-volume-mute-fill';
+			}
+		}
+	</script>
+	<script src="https://www.youtube.com/iframe_api"></script>
+	<!-- Section Video End -->
+
 	<section class="py-5 bg-light">
 		<div class="container text-center p-3">
 			<div class="text-center mb-3 col-lg-8 col-sm-8 mx-auto">
