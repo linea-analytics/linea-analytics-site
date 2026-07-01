@@ -526,5 +526,13 @@
     "author": "David Walsh",
     "date": "2026-07-01",
     "category": "Article"
+  },
+  {
+    "title": "Measure Marketing Incrementality with Econometrics",
+    "teaser": "Escape the last-click attribution trap. Learn how modern econometrics (MMM) isolates true marketing incrementality and optimizes your media budget.",
+    "folder": "incrementality-with-econometric",
+    "author": "David Walsh",
+    "date": "2026-07-01",
+    "category": "Article"
   }
 ]
