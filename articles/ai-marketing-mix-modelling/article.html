@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<head>
+
+  <!-- ** Basic Page Needs ** -->
+  <meta charset="utf-8">
+  <title>Linea Analytics - AI Marketing Mix Modelling: Where it Belongs and Doesn’t</title>
+
+  <!-- ** Mobile Specific Metas ** -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="We deep dive into the 5 areas of MMM and how to introduce AI into each stage to improve the speed and quality of your marketing mix modelling">
+  <link rel="canonical" href="https://linea-analytics.com/articles/ai-marketing-mix-modelling/article.html">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="author" content="linea-analytics">
+  <meta name="generator" content="linea-analytics">
+
+  <!-- theme meta -->
+  <meta name="theme-name" content="linea-analytics" />
+
+  <!-- bootstrap.min css -->
+  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css">
+  <!-- Icon Font Css -->
+  <link rel="stylesheet" href="/plugins/themify/css/themify-icons.css">
+  <link rel="stylesheet" href="/plugins/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="/plugins/magnific-popup/magnific-popup.css">
+  <!-- Owl Carousel CSS -->
+  <link rel="stylesheet" href="/plugins/slick/slick.css">
+  <link rel="stylesheet" href="/plugins/slick/slick-theme.css">
+
+  <!-- Markdown to html -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/custom-dropdown.css">
+
+  <!--Favicon-->
+  <link rel="icon" href="/images/logos/icon.png" type="image/x-icon">
+
+  <!-- CSV parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.5.2/papaparse.min.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- calendly -->
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
+</head>
+
+<body>
+
+
+  <!-- Header Start -->
+  <header id="header-container" class="navigation"></header>
+  <!-- Header Close -->
+
+
+  <!-- Article Container Start -->
+  <div class="container mt-5 ">
+    <div class="row justify-content-center">
+      <div class="col-lg-12 col-md-12 mb-5">
+        <div style="
+          width: 100%;
+          max-width: 100%;
+          height: 300px;
+          overflow: hidden;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 20px;
+        ">
+          <img src="./thumbnail.jpg" alt="thumbnail" class="shadow rounded" style="
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              object-position: center center;
+            ">
+        </div>
+        <!-- ARTICLE CONTENT START -->
+        <h1><strong>AI Marketing Mix Modelling: Where it Belongs and Doesn’t</strong></h1>
+<p>We’ve been told to use AI for <em>everything</em>, haven’t we? From automated creative generation to self-optimising media buys, the promise of LLM’s is everywhere in adtech. But when it comes to measuring true incrementality, applying AI blindly is a recipe for big mistakes.</p>
+<p>So, here is my breakdown of how we are using LLMs at Linea for building Marketing Mix Modelling. Where you should, and explicitly should <em>not</em>, be leveraging AI to build your marketing mix modelling framework. </p>
+<h2><strong>Phases of Modern MMM</strong></h2>
+<p>To understand where AI adds value, let’s first break down the core components of a typical marketing mix model set up we will then deep dive into how to build AI into each phase</p>
+<ol>
+<li>Data Gathering &amp; Transformation  </li>
+<li>Model Build  </li>
+<li>Reporting &amp; Insight   </li>
+<li>Take Action &amp; Stakeholder Engagement  </li>
+<li>The Measurement System</li>
+</ol>
+<p>
+      <figure class="p-5">
+        <img width="100%" class="rounded" src="./image_1_v1.png" alt="This image visualises the 4 stages of an MMM project and how an MMM system connects each stage">
+      </figure>
+    </p>
+<h2><strong>1. Data Gathering &amp; Transformation: The Big AI Winner</strong></h2>
+<p>If there is a clear win for AI and automation in modern measurement, it’s in data engineering.</p>
+<p>Historically, data ingestion took up &gt;50% of an MMM project’s lifespan. Data science teams spent months cleaning messy CSVs, reconciling disparate data, and aligning weekly or daily tracking.</p>
+<p>A combination of Automation and AI tools drastically compress this processing time. By building automated data connectors, marketing teams can continuously pull from multiple media platforms, DSPs, and internal data warehouses. AI transformation scripts can reformat non-standard inputs, flag missing data, and verify data accuracy instantly.</p>
+<p>This is also the perfect use case. You talk to any data expert and this is the bit they have always wanted to skip! AI handles the heavy lifting of ingestion and anomaly detection leaving data teams to focus on validation &amp; interpretation as the final step. At Linea, this step is what makes <a href="https://linea-analytics.com/measurement-platform-mmm">always-on MMM</a> possible, moving measurement from an annual post-mortem to a continuous measurement cycle.</p>
+<p>
+      <figure class="p-5">
+        <img width="100%" class="rounded" src="./image_2_screenshot_v1.png" alt="An example of Linea's AI data transformation platform to automate the process">
+      </figure>
+    </p>
+<h2><strong>2. Model Build: Not quite ready</strong></h2>
+<p>It’s tempting to hand the entire modeling phase over to an autonomous AI agent. However, while AI-driven model generation is fast, its comparison to real-world statistical accuracy is, at best, mixed.</p>
+<p>In our experience, even after spending 12 months training and fine-tuning AI modeling engines, purely automated model building requires significant human intervention. To some extent that is understandable given the complexities you expect across different business models. Here are some of the watchouts:</p>
+<ul>
+<li><strong>Endogenous Variables:</strong> AI struggles to identify when a variable is both driving and being driven by business outcomes (such as brand search volume or performance retargeting spend). That’s the simple explanation of the fancy word.  </li>
+<li><strong>Over-Correlation:</strong> High mathematical correlation does not equal causation. An unguided AI model will happily attribute sales growth to a random campaign simply because both happened to spike during peak seasonality.  </li>
+<li><strong>Peculiar Media Variables:</strong> Without domain expertise, automated systems can produce negative return curves or illogical channel interactions.</li>
+</ul>
+<p>While AI MMM packages might offer a foundation, running them on &quot;autopilot&quot; without expert oversight often leads to misinterpretation and untrusted outputs. Accurate model building that actually drives change does still require strict guardrails &amp; human validation.</p>
+<h2><strong>3. Reporting &amp; Insight: Transforming Data into Intelligence</strong></h2>
+<p>Once your model build is mathematically sound, AI becomes an invaluable asset for reporting and insight generation.</p>
+<p>The secret to unlocking AI in reporting is standardising your underlying data infrastructure. When your metrics, channel taxonomies, and results follow a structured pattern, you can safely overlay automated interpretation models.</p>
+<p>This is where advanced reporting platforms like the <a href="https://www.youtube.com/watch?v=dFR6evbQC6o"><strong>Linea AI Measurement Engine</strong></a> become important. Instead of forcing brand managers to manually review outputs, an AI-driven insight layer can instantly detect trend deviations, highlight diminishing returns of channels, and surface subtle shifts in media efficiency as soon as fresh results arrive.</p>
+<h2><strong>4. Take Action &amp; Stakeholder Engagement: Don’t Skimp Here</strong></h2>
+<p>Data and dashboards don&#39;t make strategic decisions: people do.</p>
+<p>When it comes to stakeholder management, budget reallocation, and executive alignment, do not skimp on human expertise. CMOs, CFOs, and growth leads rarely make major multi-million-pound decisions on your media budget based purely on a dashboard. They want consultative support, context, and trust in the approach.</p>
+<p>AI provides an interactive layer and answers questions quicker. But experienced human advisors bridge the gap between data science and commercial strategy. Understanding the true meaning behind business questions and not just answering the question at hand is the difference to ensure that stakeholders fully trust and act on the results.</p>
+<h2><strong>5. The AI Measurement System: The Connective Glue</strong></h2>
+<p>Your AI set up shouldn&#39;t just be a bit built in each of the layers of MMM. You also need to have a connective system that unifies every stage of the pipeline. That’s why using an open source model is only solving part of the problem. It allows you to build a model but not run the end to end of an MMM project.</p>
+<p>At <a href="https://linea-analytics.com/">Linea</a> we have built this connective layer to drive faster updates. Our integrated AI layer acts as an automated project manager, to:</p>
+<ul>
+<li>Flag incoming data inconsistencies before they corrupt the model.  </li>
+<li>Alert model builders when issues arise - such as a channel&#39;s return curve deviating from historical norms.  </li>
+<li>Ensures that the data warehouse, modelling infrastructure and reporting suite directly feed each other</li>
+</ul>
+<p>Only with this step does each stage of the MMM process talk to each other.</p>
+<p>
+      <figure class="p-5">
+        <img width="100%" class="rounded" src="./Image_3.png" alt="A visual of the measurement infrastructure with each stage of the process">
+      </figure>
+    </p>
+<h2><strong>The Bottom Line for Modern Brands</strong></h2>
+<p>AI has transformed marketing mix modelling. For brands of all sizes, this shift delivers two huge advantages:</p>
+<ol>
+<li><strong>Cost-Efficient Measurement</strong>: The days of paying £1m annually for slow, black-box, retroactive MMM consultancies are over. That’s why we started <a href="https://linea-analytics.com/">Linea</a>!  </li>
+<li><strong>Bringing MMM to brands of all sizes</strong>: No longer is accurate marketing measurement reserved for large enterprises, it is now accessible to high-growth brands of all sizes.</li>
+</ol>
+<p>While AI provides unprecedented speed and data automation, it won’t solve all of your measurement problems. The primary barrier to a successful Marketing Mix Model has always been its ability to drive real-world change in media planning, budget allocation, creative execution, and overarching strategy. To drive this transformation still requires experienced measurement professionals driving action alongside brand leadership. </p>
+<p>But automating data engineering, enforcing rigorous human oversight on model builds, and deploying AI engines for rapid scenario planning, allows us to deliver faster, more transparent, and actionable marketing measurement that brands can truly trust.</p>
+
+
+        <!-- ARTICLE CONTENT END -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Article Container Close -->
+
+
+  <!-- Section Contacts Start -->
+  <section class="section cta d-flex align-items-center" id="contactUs">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-5 col-lg-6">
+          <div class="cta-item bg-white p-5 rounded text-center">
+            <span class="h6 text-color">Take control of your data</span>
+            <h2 class="mt-2 mb-4">Contact us</h2>
+            <p class="lead mb-4">Have any project on mind?<br>For immediate support:</p>
+            <a href="mailto:info@linea-analytics.com">
+              <i class="fas fa-envelope mr-2"></i>
+              <span>info@linea-analytics.com</span>
+            </a>
+            <br>
+            <a href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/david-walsh-linea-analytics/30min'});return false;">
+              <i class="fas fa-phone mr-2"></i>
+              Schedule a Call
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-70 position-relative">
+    <div class="container">
+      <div class="cta-block-2 bg-gray p-5 rounded border-1">
+        <div class="row justify-content-center align-items-center ">
+          <div class="col-lg-7">
+            <span class="text-color">Why wait</span>
+            <h2 class="mt-2 mb-4 mb-lg-0">Get the <strong>True Impact</strong> of your Marketing.</h2>
+          </div>
+          <div class="col-lg-4">
+            <a href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/david-walsh-linea-analytics/30min'});return false;" class="btn btn-main btn-round-full float-lg-right ">Schedule a call</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <footer id="footer-container" class="footer section"></footer>
+
+  <!--Scroll to top-->
+  <div id="scroll-to-top" class="scroll-to-top">
+    <span class="icon fa fa-angle-up"></span>
+  </div>
+
+
+  <!-- JS HELPERS -->
+  <!-- Main jQuery -->
+  <script src="/plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4.3.1 -->
+  <script src="/plugins/bootstrap/bootstrap.min.js"></script>
+  <!--  Magnific Popup-->
+  <script src="/plugins/magnific-popup/jquery.magnific-popup.min.js"></script>
+  <!-- Slick Slider -->
+  <script src="/plugins/slick/slick.min.js"></script>
+
+  <script src="/js/script.js"></script>
+  <script src="/js/views.js"></script>
+  <script src="/js/customDropdown.js"></script>
+  <script src="/js/blog-single.js"></script>
+  <script src="/js/translate.js"></script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5LHVS45SP4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'G-5LHVS45SP4');
+  </script>
+</body>
+
+</html>
