@@ -1891,3 +1891,107 @@ input[type="range"]:hover::-moz-range-thumb {
 input[type="range"]:focus-visible {
   outline: none;
 }
+
+/* Article byline (author photo + one-line bio), inserted by blog-single.js
+   right under the article thumbnail. */
+.article-byline {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px 0 22px;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 28px;
+}
+
+.article-byline img {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.article-byline-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.article-byline-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.article-byline-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #191b1c;
+}
+
+.article-byline-name .role {
+  font-weight: 400;
+  color: #8a9694;
+}
+
+.article-byline-name .role::before {
+  content: "\00b7";
+  margin: 0 6px;
+  color: #8a9694;
+}
+
+.article-byline-date {
+  font-size: 12.5px;
+  color: #8a9694;
+  white-space: nowrap;
+}
+
+.article-byline-bio {
+  margin: 5px 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #5c6b69;
+  max-width: 54ch;
+}
+
+.article-byline-bio a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-left: 4px;
+  border-radius: 4px;
+  background: rgba(41, 202, 171, 0.14);
+  color: rgb(31, 156, 133);
+  text-decoration: none;
+  font-size: 11px;
+  vertical-align: -3px;
+}
+
+.article-byline-bio a:hover {
+  background: rgba(41, 202, 171, 0.28);
+}
+
+/* Click-to-enlarge affordance for in-article images (see
+   initArticleImageLightbox in blog-single.js). */
+.article-lightbox-link {
+  display: block;
+  cursor: zoom-in;
+}
+
+.article-lightbox-link img {
+  transition: opacity 0.15s ease;
+}
+
+.article-lightbox-link:hover img,
+.article-lightbox-link:focus-visible img {
+  opacity: 0.85;
+}
+
+.article-lightbox-link:focus-visible {
+  outline: 2px solid rgb(41, 202, 171);
+  outline-offset: 2px;
+}

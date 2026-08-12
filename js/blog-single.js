@@ -182,6 +182,69 @@ function escapeHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
+/**
+ * Author bios, sourced from about.html "Our Team" section.
+ * Keyed by the exact "author" string used in articles-meta.json.
+ */
+const AUTHOR_BIOS = {
+  'David Walsh': {
+    role: 'Client Lead',
+    photo: '/images/team/dw.png',
+    bio: '15 years experience at MediaMonks, Brightblue & Mediacom. Delivered marketing effectiveness programmes to drive business growth.',
+    linkedin: 'https://www.linkedin.com/in/david-walsh-0820b1a8/'
+  },
+  'Claudio Paladini': {
+    role: 'Tech Lead',
+    photo: '/images/team/cp.png',
+    bio: '8 years experience building best in class measurement software at IPG Mediabrands, Brightblue & Decoded.',
+    linkedin: 'https://www.linkedin.com/in/paladinic/'
+  }
+};
+
+/**
+ * Builds the byline element inserted right under the article thumbnail.
+ * When the author is recognised (see AUTHOR_BIOS), this is a compact strip
+ * with photo, name, role, one-line bio and a LinkedIn link, with the date
+ * pushed to the top-right. Otherwise it falls back to the plain
+ * "By <author> • <date>" line.
+ */
+function buildArticleByline(meta) {
+  const authorName = meta && typeof meta.author === 'string' ? meta.author.trim() : '';
+  // Any author not (yet) in AUTHOR_BIOS - e.g. a new writer - falls back to
+  // the plain text line below, so a missing bio never breaks the layout.
+  const author = authorName ? AUTHOR_BIOS[authorName] : null;
+  const formattedDate = formatArticleDate(meta && meta.date);
+
+  const el = document.createElement('div');
+
+  if (!author) {
+    el.className = 'mt-2 text-muted small mb-3 text-right';
+    el.innerHTML = authorName
+      ? `
+        <span>By ${escapeHtml(authorName)}</span>
+        <span class="mx-2">•</span>
+        <span>${escapeHtml(formattedDate)}</span>
+      `
+      : `<span>${escapeHtml(formattedDate)}</span>`;
+    return el;
+  }
+
+  el.className = 'article-byline';
+  el.innerHTML = `
+    <img src="${author.photo}" alt="${escapeHtml(authorName)}" onerror="this.style.display='none'">
+    <div class="article-byline-body">
+      <div class="article-byline-head">
+        <span class="article-byline-name">${escapeHtml(authorName)}${author.role ? `<span class="role">${escapeHtml(author.role)}</span>` : ''}</span>
+        <span class="article-byline-date">${escapeHtml(formattedDate)}</span>
+      </div>
+      <p class="article-byline-bio">
+        ${escapeHtml(author.bio || '')}${author.linkedin ? ` <a href="${author.linkedin}" target="_blank" rel="noopener" aria-label="${escapeHtml(authorName)} on LinkedIn"><i class="fab fa-linkedin"></i></a>` : ''}
+      </p>
+    </div>
+  `;
+  return el;
+}
+
 // Load the JSON once the DOM is ready
 document.addEventListener('DOMContentLoaded', function () {
   // Adjust this path depending on where articles-meta.json lives
@@ -232,21 +295,11 @@ function insertArticleMeta() {
     const thumbWrapper = thumbImg.parentElement;
     if (!thumbWrapper) return;
 
-    // 4. Create the author + date element
-    const metaDiv = document.createElement('div');
-    // Using Bootstrap utility classes for simple styling
-    metaDiv.className = 'mt-2 text-muted small mb-3 text-right';
-
-    const formattedDate = formatArticleDate(meta.date);
-
-    metaDiv.innerHTML = `
-      <span>By ${escapeHtml(meta.author || '')}</span>
-      <span class="mx-2">•</span>
-      <span>${escapeHtml(formattedDate)}</span>
-    `;
+    // 4. Build the byline (author photo + bio, or plain text fallback)
+    const bylineEl = buildArticleByline(meta);
 
     // 5. Insert it immediately after the thumbnail container
-    thumbWrapper.insertAdjacentElement('afterend', metaDiv);
+    thumbWrapper.insertAdjacentElement('afterend', bylineEl);
 
   } catch (err) {
     console.error('Error inserting article meta:', err);
@@ -254,9 +307,49 @@ function insertArticleMeta() {
 }
 
 
+/**
+ * Wraps in-article content images (charts, screenshots, tables) in a
+ * Magnific Popup lightbox so they open full-size on click - the same
+ * plugin/pattern already used for the portfolio gallery (see script.js).
+ * Skips the hero thumbnail and the author byline photo. If the plugin
+ * isn't available for some reason, images are left as plain <img> tags
+ * rather than breaking the page.
+ */
+function initArticleImageLightbox() {
+  if (typeof $ === 'undefined' || !$.fn || !$.fn.magnificPopup) {
+    console.warn('Magnific Popup not loaded; skipping article image lightbox.');
+    return;
+  }
+
+  const container = document.querySelector('.container.mt-5');
+  if (!container) return;
+
+  const images = Array.from(container.querySelectorAll('img')).filter((img) =>
+    img.getAttribute('alt') !== 'thumbnail' && !img.closest('.article-byline')
+  );
+  if (!images.length) return;
+
+  images.forEach((img) => {
+    const link = document.createElement('a');
+    link.href = img.getAttribute('src');
+    link.className = 'article-lightbox-link';
+    link.title = img.getAttribute('alt') || '';
+    link.setAttribute('aria-label', 'Enlarge image');
+    img.parentNode.insertBefore(link, img);
+    link.appendChild(img);
+  });
+
+  $(container).find('.article-lightbox-link').magnificPopup({
+    type: 'image',
+    gallery: { enabled: true },
+    image: { verticalFit: true }
+  });
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   loadWidgets();
   insertLatest();
+  initArticleImageLightbox();
 });
 
 function applyTableStyling() {
