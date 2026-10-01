@@ -1,0 +1,390 @@
+<style>
+  #tbs-root .tbs-seg .btn {
+    font-size: 0.85rem;
+    padding: 6px 16px;
+  }
+  #tbs-root .tbs-seg .btn.active {
+    background: #21caab;
+    border-color: #21caab;
+    color: #fff;
+  }
+  #tbs-root .tbs-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 5px;
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    background: #e5e7eb;
+  }
+  #tbs-root .tbs-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2.5px solid #21caab;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.15);
+    cursor: pointer;
+  }
+  #tbs-root .tbs-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2.5px solid #21caab;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.15);
+    cursor: pointer;
+  }
+  #tbs-root .tbs-plot {
+    width: 100%;
+    height: 440px;
+  }
+  #tbs-root .tbs-peaks {
+    font-size: 0.9rem;
+    font-variant-numeric: tabular-nums;
+  }
+  #tbs-root .tbs-peaks li { margin-bottom: 2px; }
+  #tbs-root .tbs-result {
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    min-height: 3.2em;
+  }
+  @media (max-width: 576px) {
+    #tbs-root .tbs-plot { height: 340px; }
+  }
+</style>
+
+<div id="tbs-root" class="py-4">
+  <h4 class="text-center mb-3">Where Is the Best Plan?</h4>
+
+  <div class="card p-3 p-md-4 shadow">
+
+    <!-- Model choice -->
+    <div class="row g-3 align-items-center mb-2">
+      <div class="col-12 col-md-5">
+        <div class="btn-group tbs-seg w-100" role="group" aria-label="Model">
+          <button type="button" class="btn btn-outline-secondary active" id="tbs-add" aria-pressed="true">Additive</button>
+          <button type="button" class="btn btn-outline-secondary" id="tbs-syn" aria-pressed="false">With synergy</button>
+        </div>
+      </div>
+      <div class="col-12 col-md-7" id="tbs-strength-wrap" style="visibility:hidden;">
+        <label for="tbs-strength" class="form-label fw-semibold mb-1">
+          Synergy strength: <span id="tbs-strength-val" class="fw-normal">45</span>
+        </label>
+        <input type="range" id="tbs-strength" class="tbs-slider" min="0" max="100" step="5" value="45">
+      </div>
+    </div>
+
+    <!-- Surface -->
+    <div id="tbs-plot" class="tbs-plot" aria-label="3D surface of weekly profit by TV and search spend"></div>
+
+    <!-- Optimiser -->
+    <p class="small text-muted mb-2 mt-1">
+      Drag to rotate. Click anywhere on the surface, or use a button, to start the optimiser from that plan.
+    </p>
+    <div class="row g-2 mb-3">
+      <div class="col-12 col-md-6 mb-2 mb-md-0">
+        <button type="button" id="tbs-start-light" class="btn bg-green rounded-pill shadow-sm font-weight-bold w-100">
+          Optimise from a light-TV plan
+        </button>
+      </div>
+      <div class="col-12 col-md-6">
+        <button type="button" id="tbs-start-heavy" class="btn bg-green rounded-pill shadow-sm font-weight-bold w-100">
+          Optimise from a heavy-TV plan
+        </button>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-12 col-md-5">
+        <div class="fw-semibold mb-1" style="font-size:0.9rem;">Peaks on this surface</div>
+        <ul class="tbs-peaks ps-3 mb-0" id="tbs-peaks"></ul>
+      </div>
+      <div class="col-12 col-md-7">
+        <div class="tbs-result" id="tbs-result">The optimiser hasn't run yet.</div>
+      </div>
+    </div>
+
+    <p class="text-muted small mt-3 mb-0">
+      Illustrative model. Height is weekly profit: sales driven by TV and search, minus what you spend on them (£k).
+      In the synergy version, TV also makes search work harder, but only once TV spend is big enough to cut through.
+      At a synergy strength of 0 the two models are identical. The optimiser is a hill climber: from its starting plan
+      it keeps moving £0.5k at a time in whichever direction raises profit most, and stops when no move helps.
+    </p>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-gl3d-dist-min@2.35.2/plotly-gl3d.min.js"></script>
+
+<script>
+function initThreeBodySurfaceWidget() {
+  const root = document.getElementById('tbs-root');
+  if (!root || root.dataset.ready) return;
+  if (typeof Plotly === 'undefined') { setTimeout(initThreeBodySurfaceWidget, 100); return; }
+  root.dataset.ready = '1';
+
+  // ---- Model (£k per week) ----------------------------------------------
+  // profit = 30·s(TV) + 40·s(Search) + strength·h(TV)·s(Search) - TV - Search
+  // s: diminishing returns; h: S-shaped, TV only lifts search above ~£45k
+  const TV_MAX = 80, SEARCH_MAX = 40;
+  const expo = (x, l) => 1 - Math.exp(-x / l);
+  const hill = x => Math.pow(x, 5) / (Math.pow(x, 5) + Math.pow(45, 5));
+  const SYN_DEFAULT = 45;
+
+  let mode = 'add';
+  let strength = SYN_DEFAULT;
+  const gamma = () => (mode === 'add' ? 0 : strength);
+
+  function profit(tv, se, g) {
+    return 30 * expo(tv, 20) + 40 * expo(se, 8) + g * hill(tv) * expo(se, 8) - tv - se;
+  }
+
+  // ---- Surface grid -------------------------------------------------------
+  const xs = Array.from({ length: TV_MAX + 1 }, (_, i) => i);
+  const ys = Array.from({ length: SEARCH_MAX + 1 }, (_, j) => j);
+  const surfaceZ = g => ys.map(se => xs.map(tv => profit(tv, se, g)));
+
+  // ---- Peaks: local maxima on a £0.5k grid ---------------------------------
+  function findPeaks(g) {
+    const step = 0.5;
+    const nx = TV_MAX / step + 1, ny = SEARCH_MAX / step + 1;
+    const val = (i, j) => profit(i * step, j * step, g);
+    const found = [];
+    for (let i = 0; i < nx; i++) {
+      for (let j = 0; j < ny; j++) {
+        const v = val(i, j);
+        let isMax = true;
+        for (let di = -1; di <= 1 && isMax; di++) {
+          for (let dj = -1; dj <= 1; dj++) {
+            if (!di && !dj) continue;
+            const a = i + di, b = j + dj;
+            if (a >= 0 && a < nx && b >= 0 && b < ny && val(a, b) > v + 1e-9) { isMax = false; break; }
+          }
+        }
+        if (isMax) found.push({ tv: i * step, se: j * step, p: v });
+      }
+    }
+    found.sort((a, b) => b.p - a.p);
+    const peaks = [];
+    found.forEach(f => {
+      if (peaks.every(q => Math.abs(q.tv - f.tv) + Math.abs(q.se - f.se) > 3)) peaks.push(f);
+    });
+    return peaks;
+  }
+
+  // ---- Hill climber -------------------------------------------------------
+  function climb(tv, se, g) {
+    const step = 0.5;
+    const clampTv = v => Math.min(TV_MAX, Math.max(0, v));
+    const clampSe = v => Math.min(SEARCH_MAX, Math.max(0, v));
+    let x = Math.round(clampTv(tv) / step) * step;
+    let y = Math.round(clampSe(se) / step) * step;
+    const path = [[x, y]];
+    for (let k = 0; k < 2000; k++) {
+      let best = profit(x, y, g), bx = x, by = y;
+      for (let dx = -1; dx <= 1; dx++) {
+        for (let dy = -1; dy <= 1; dy++) {
+          if (!dx && !dy) continue;
+          const nx = clampTv(x + dx * step), ny = clampSe(y + dy * step);
+          const v = profit(nx, ny, g);
+          if (v > best + 1e-9) { best = v; bx = nx; by = ny; }
+        }
+      }
+      if (bx === x && by === y) break;
+      x = bx; y = by;
+      path.push([x, y]);
+    }
+    return path;
+  }
+
+  // ---- Plot -----------------------------------------------------------------
+  const plotEl = document.getElementById('tbs-plot');
+  const PATH_COLOR = '#f97316';
+  const fmt = v => `£${v.toFixed(1)}k`;
+  const lift = 0.6; // draw markers slightly above the surface
+
+  let peaks = [];
+  let anim = null;
+
+  // Colour and contours focus on the top of the surface, so separate peaks stand out
+  const COLOUR_BAND = 12, Z_BELOW = 45, Z_ABOVE = 3;
+
+  function traces(g) {
+    peaks = findPeaks(g);
+    const top = peaks[0].p;
+    layout.scene.zaxis.range = [top - Z_BELOW, top + Z_ABOVE];
+    return [
+      {
+        type: 'surface',
+        x: xs, y: ys, z: surfaceZ(g),
+        colorscale: [[0, '#eef2f7'], [0.6, '#a2ede2'], [1, '#0f8f78']],
+        cmin: top - COLOUR_BAND,
+        cmax: top,
+        showscale: false,
+        opacity: 0.97,
+        contours: {
+          z: {
+            show: true, usecolormap: true, project: { z: true }, width: 2,
+            start: top - COLOUR_BAND, end: top - 0.2, size: 1.5
+          }
+        },
+        lighting: { ambient: 0.75, diffuse: 0.6, specular: 0.05, roughness: 0.9 },
+        hovertemplate: 'TV £%{x}k<br>Search £%{y}k<br>Profit £%{z:.1f}k<extra></extra>'
+      },
+      {
+        type: 'scatter3d',
+        mode: 'markers+text',
+        x: peaks.map(p => p.tv),
+        y: peaks.map(p => p.se),
+        z: peaks.map(p => p.p + lift),
+        text: peaks.map((_, i) => `Peak ${i + 1}`),
+        textposition: 'top center',
+        textfont: { size: 12, color: '#111827' },
+        marker: { size: 6, color: '#111827', symbol: 'diamond' },
+        hovertemplate: 'TV £%{x}k<br>Search £%{y}k<extra>Peak</extra>'
+      },
+      {
+        type: 'scatter3d',
+        mode: 'lines+markers',
+        x: [], y: [], z: [],
+        line: { color: PATH_COLOR, width: 6 },
+        marker: { size: 2.5, color: PATH_COLOR },
+        hoverinfo: 'skip'
+      },
+      {
+        type: 'scatter3d',
+        mode: 'markers',
+        x: [], y: [], z: [],
+        marker: { size: 6, color: '#ffffff', line: { color: PATH_COLOR, width: 3 } },
+        hoverinfo: 'skip'
+      }
+    ];
+  }
+
+  const layout = {
+    uirevision: 'keep',
+    margin: { l: 0, r: 0, t: 0, b: 0 },
+    showlegend: false,
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    font: { size: 11, color: '#4b5563' },
+    scene: {
+      xaxis: { title: { text: 'TV spend (£k/week)' }, range: [0, TV_MAX], gridcolor: '#e5e7eb' },
+      yaxis: { title: { text: 'Search spend (£k/week)' }, range: [0, SEARCH_MAX], gridcolor: '#e5e7eb' },
+      zaxis: { title: { text: 'Profit (£k/week)' }, gridcolor: '#e5e7eb' },
+      aspectmode: 'manual',
+      aspectratio: { x: 1.5, y: 1, z: 0.7 },
+      camera: { eye: { x: 1.15, y: -1.45, z: 0.6 }, center: { x: 0, y: 0, z: -0.12 } },
+      dragmode: 'turntable'
+    }
+  };
+
+  const config = { displayModeBar: false, responsive: true, scrollZoom: false };
+
+  // On narrow screens, pull the camera back and use short axis titles so nothing is cut off
+  if (plotEl.clientWidth < 600) {
+    layout.scene.camera.eye = { x: 1.55, y: -1.95, z: 0.9 };
+    layout.scene.xaxis.title.text = 'TV';
+    layout.scene.yaxis.title.text = 'Search';
+    layout.scene.zaxis.title.text = 'Profit';
+  }
+
+  function renderPeaks() {
+    const best = peaks[0];
+    document.getElementById('tbs-peaks').innerHTML = peaks.map((p, i) => {
+      const gap = best.p - p.p;
+      const note = i === 0 ? 'best' : `${fmt(gap)} below best`;
+      return `<li><strong>Peak ${i + 1}:</strong> TV ${fmt(p.tv)}, Search ${fmt(p.se)} → profit ${fmt(p.p)} <span class="text-muted">(${note})</span></li>`;
+    }).join('');
+  }
+
+  function draw() {
+    if (anim) { clearInterval(anim); anim = null; }
+    Plotly.react(plotEl, traces(gamma()), layout, config);
+    renderPeaks();
+    document.getElementById('tbs-result').textContent = "The optimiser hasn't run yet.";
+  }
+
+  function runFrom(tv, se) {
+    if (anim) { clearInterval(anim); anim = null; }
+    const g = gamma();
+    const path = climb(tv, se, g);
+    const zOf = p => profit(p[0], p[1], g) + lift;
+    Plotly.restyle(plotEl, { x: [[path[0][0]]], y: [[path[0][1]]], z: [[zOf(path[0])]] }, [3]);
+    const result = document.getElementById('tbs-result');
+    result.textContent = `Climbing from TV ${fmt(path[0][0])}, Search ${fmt(path[0][1])}...`;
+
+    let k = 1;
+    const perTick = Math.max(1, Math.ceil(path.length / 60));
+    anim = setInterval(() => {
+      k = Math.min(path.length, k + perTick);
+      const seg = path.slice(0, k);
+      Plotly.restyle(plotEl, {
+        x: [seg.map(p => p[0])], y: [seg.map(p => p[1])], z: [seg.map(zOf)]
+      }, [2]);
+      if (k >= path.length) {
+        clearInterval(anim); anim = null;
+        const end = path[path.length - 1];
+        const endP = profit(end[0], end[1], g);
+        const best = peaks[0];
+        const gap = best.p - endP;
+        const where = `Started at TV ${fmt(path[0][0])}, Search ${fmt(path[0][1])}. ` +
+          `Stopped at <strong>TV ${fmt(end[0])}, Search ${fmt(end[1])}</strong>, profit ${fmt(endP)} a week. `;
+        if (gap < 0.05) {
+          result.innerHTML = where + (peaks.length > 1
+            ? 'This is the highest peak, but start somewhere else and the same optimiser can stop on a different one.'
+            : 'This is the only peak, so every starting plan ends here.');
+        } else {
+          result.innerHTML = where + `This is a lower peak, ${fmt(gap)} a week below the best plan. ` +
+            'No small move improves on it, so the optimiser stops and reports it as optimal.';
+        }
+      }
+    }, 35);
+  }
+
+  // ---- Controls -------------------------------------------------------------
+  const addBtn = document.getElementById('tbs-add');
+  const synBtn = document.getElementById('tbs-syn');
+  const strengthWrap = document.getElementById('tbs-strength-wrap');
+  const strengthEl = document.getElementById('tbs-strength');
+
+  function setMode(m) {
+    mode = m;
+    addBtn.classList.toggle('active', m === 'add');
+    synBtn.classList.toggle('active', m === 'syn');
+    addBtn.setAttribute('aria-pressed', m === 'add');
+    synBtn.setAttribute('aria-pressed', m === 'syn');
+    strengthWrap.style.visibility = m === 'syn' ? 'visible' : 'hidden';
+    draw();
+  }
+
+  addBtn.addEventListener('click', () => setMode('add'));
+  synBtn.addEventListener('click', () => setMode('syn'));
+
+  let pending = false;
+  strengthEl.addEventListener('input', () => {
+    strength = parseFloat(strengthEl.value);
+    document.getElementById('tbs-strength-val').textContent = strength;
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(() => { pending = false; draw(); });
+  });
+
+  document.getElementById('tbs-start-light').addEventListener('click', () => runFrom(5, 30));
+  document.getElementById('tbs-start-heavy').addEventListener('click', () => runFrom(70, 35));
+
+  draw();
+  plotEl.on('plotly_click', ev => {
+    const pt = ev && ev.points && ev.points[0];
+    if (!pt || pt.curveNumber !== 0) return;
+    // Redrawing inside Plotly's own click handling recurses, so start just after it
+    setTimeout(() => runFrom(pt.x, pt.y), 0);
+  });
+}
+
+requestAnimationFrame(initThreeBodySurfaceWidget);
+</script>

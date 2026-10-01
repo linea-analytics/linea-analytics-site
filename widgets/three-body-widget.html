@@ -1,0 +1,298 @@
+<style>
+  #three-body-widget-root .tb-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 5px;
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+  }
+  #three-body-widget-root .tb-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2.5px solid #21caab;
+    box-shadow: 0 1px 6px rgba(33,202,171,0.35);
+    cursor: pointer;
+  }
+  #three-body-widget-root .tb-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2.5px solid #21caab;
+    box-shadow: 0 1px 6px rgba(33,202,171,0.35);
+    cursor: pointer;
+  }
+  #three-body-widget-root .tb-slider::-moz-range-track {
+    height: 5px;
+    border-radius: 3px;
+    background: #e5e7eb;
+  }
+  #three-body-widget-root .tb-stat {
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 10px 12px;
+    height: 100%;
+  }
+  #three-body-widget-root .tb-stat-label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-bottom: 2px;
+  }
+  #three-body-widget-root .tb-stat-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+    font-variant-numeric: tabular-nums;
+  }
+  #three-body-widget-root .tb-chart-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+  }
+  #three-body-widget-root .tb-chart-box {
+    position: relative;
+    height: 260px;
+  }
+</style>
+
+<div id="three-body-widget-root" class="py-4">
+  <h4 class="text-center mb-3">Three Channels in Complete Synergy</h4>
+
+  <div class="card p-3 p-md-4 shadow">
+
+    <!-- Slider -->
+    <label for="tb-slider" class="form-label fw-semibold mb-1">
+      Explore models that explain the past equally well
+    </label>
+    <input type="range" id="tb-slider" class="tb-slider" min="0" max="100" step="1" value="0">
+    <p class="text-muted small mt-2 mb-3">
+      Each position is a different model in which TV, Social and Search only drive sales together.
+    </p>
+
+    <!-- Stats -->
+    <div class="row g-2 mb-3">
+      <div class="col-6 col-md-3">
+        <div class="tb-stat">
+          <div class="tb-stat-label">Model fit (R²)</div>
+          <div class="tb-stat-value" id="tb-r2">0.94</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="tb-stat">
+          <div class="tb-stat-label">Recommended TV</div>
+          <div class="tb-stat-value" id="tb-rec-tv">-</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="tb-stat">
+          <div class="tb-stat-label">Recommended Social</div>
+          <div class="tb-stat-value" id="tb-rec-social">-</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="tb-stat">
+          <div class="tb-stat-label">Recommended Search</div>
+          <div class="tb-stat-value" id="tb-rec-search">-</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="mt-0 mb-3">
+
+    <!-- Charts -->
+    <div class="row">
+      <div class="col-12 col-md-7 mb-4 mb-md-0">
+        <div class="tb-chart-title">Weekly sales: actual vs model (£k)</div>
+        <div class="tb-chart-box"><canvas id="tb-fit-chart"></canvas></div>
+      </div>
+      <div class="col-12 col-md-5">
+        <div class="tb-chart-title">Weekly budget (£k): current in grey, recommended in colour</div>
+        <div class="tb-chart-box"><canvas id="tb-split-chart"></canvas></div>
+      </div>
+    </div>
+
+    <p class="text-muted small mt-4 mb-0">
+      Simulated data, 52 weeks. Every model assumes media sales = TV × Social × Search, each raised to a different
+      weight, so no channel works without the other two. All of them fit history with an R² between 0.92 and 0.94,
+      yet the "optimal" split of the same budget changes completely.
+    </p>
+
+  </div>
+</div>
+
+
+<script>
+function initThreeBodyWidget() {
+  const root = document.getElementById('three-body-widget-root');
+  if (!root || root.dataset.ready) return;
+  root.dataset.ready = '1';
+
+  // Simulated weekly spend (£k) and sales (£k)
+  const tv     = [16.76, 21.79, 25.64, 25.22, 26.16, 28.58, 28.47, 24.44, 18.67, 15.61, 14.7, 13.58, 14.18, 12.01, 13.58, 16.18, 11.13, 16.64, 16.15, 20.19, 21.81, 26.39, 26.7, 27.74, 24.16, 21.79, 11.62, 10.97, 13.5, 12.89, 11.06, 11.59, 12.4, 12.03, 16.38, 15.71, 20.23, 25.65, 23.87, 28.24, 27.63, 23.47, 20.34, 17.79, 16.11, 11.06, 13.52, 13.24, 12.63, 18.43, 14.32, 12.79];
+  const social = [11.63, 13.68, 14.43, 17.63, 17.98, 15.64, 15.37, 18.16, 12.41, 8.9, 9.44, 9.89, 9.08, 7.39, 9.49, 9.17, 7.07, 8.67, 11.02, 14.47, 15.7, 19.55, 16.72, 19.21, 18.15, 11.81, 8.83, 9.14, 8.85, 10.15, 6.95, 9.46, 7.66, 7.87, 10.98, 12.75, 15.07, 18.89, 19.43, 17.63, 19.02, 19.19, 13.21, 12.99, 10.89, 7.2, 10.86, 9.32, 8.48, 9.85, 9.84, 6.91];
+  const search = [9.12, 12.09, 12.9, 13.22, 16.36, 13.59, 14.47, 14.46, 10.44, 7.49, 7.82, 7.96, 7.16, 6.88, 6.81, 7.43, 6.42, 7.35, 8.7, 11.89, 13.2, 14.89, 13.82, 13.77, 12.39, 12.02, 6.98, 7.73, 7.45, 7.41, 5.87, 7.04, 6.03, 6.86, 8.4, 8.82, 13.68, 15.22, 15.24, 16.18, 14.67, 13.8, 10.66, 10.05, 9.95, 5.56, 9.06, 7.92, 6.33, 9.72, 8.89, 5.51];
+  const sales  = [529.7, 538.3, 554.3, 563.9, 556.4, 550.0, 565.1, 560.4, 531.4, 514.2, 508.5, 503.0, 509.3, 495.3, 499.0, 518.6, 496.9, 517.8, 515.7, 538.0, 543.4, 561.1, 562.5, 561.9, 558.1, 543.1, 515.3, 495.1, 514.3, 509.1, 495.4, 495.5, 497.9, 506.6, 520.9, 524.0, 544.2, 571.6, 561.8, 556.2, 563.5, 546.6, 518.6, 527.9, 531.8, 495.5, 508.7, 504.5, 510.3, 527.4, 516.0, 498.4];
+
+  const N = sales.length;
+  const ELASTICITY = 0.6;   // total of the three weights, same for every model
+  const RADIUS = 0.30;      // how far the weights move around an even split
+
+  const COLORS = { tv: '#21caab', social: '#8b5cf6', search: '#3b82f6', actual: '#9ca3af' };
+
+  const mean = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+  const avg = { tv: mean(tv), social: mean(social), search: mean(search) };
+  const weeklyBudget = avg.tv + avg.social + avg.search;
+
+  // Slider position -> channel weights (shares of ELASTICITY, summing to 1)
+  function weightsAt(pos) {
+    const ang = 2 * Math.PI * pos / 100;
+    const k = RADIUS * Math.sqrt(2 / 3);
+    return [
+      1 / 3 + k * Math.cos(ang),
+      1 / 3 + k * Math.cos(ang - 2 * Math.PI / 3),
+      1 / 3 + k * Math.cos(ang + 2 * Math.PI / 3),
+    ];
+  }
+
+  // Fit sales = intercept + slope * TV^a * Social^b * Search^c by least squares
+  function fitModel(w) {
+    const [a, b, c] = w.map(x => x * ELASTICITY);
+    const f = tv.map((_, i) => Math.pow(tv[i], a) * Math.pow(social[i], b) * Math.pow(search[i], c));
+    const fBar = mean(f), yBar = mean(sales);
+    let sxy = 0, sxx = 0;
+    for (let i = 0; i < N; i++) {
+      sxy += (f[i] - fBar) * (sales[i] - yBar);
+      sxx += (f[i] - fBar) ** 2;
+    }
+    const slope = sxy / sxx;
+    const intercept = yBar - slope * fBar;
+    const pred = f.map(v => intercept + slope * v);
+    let ssRes = 0, ssTot = 0;
+    for (let i = 0; i < N; i++) {
+      ssRes += (sales[i] - pred[i]) ** 2;
+      ssTot += (sales[i] - yBar) ** 2;
+    }
+    return { pred, r2: 1 - ssRes / ssTot };
+  }
+
+  // With TV^a * Social^b * Search^c, the best split of a fixed budget is a : b : c
+  function recommendedSplit(w) {
+    return w.map(x => x * weeklyBudget);
+  }
+
+  const fmtK = v => `£${v.toFixed(1)}k`;
+
+  const slider = document.getElementById('tb-slider');
+  const w0 = weightsAt(parseInt(slider.value, 10));
+  const fit0 = fitModel(w0);
+
+  // Chart 1: actual vs fitted sales
+  const fitChart = new Chart(document.getElementById('tb-fit-chart').getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: sales.map((_, i) => `W${i + 1}`),
+      datasets: [
+        {
+          label: 'Actual sales',
+          data: sales,
+          borderColor: COLORS.actual,
+          backgroundColor: COLORS.actual,
+          borderWidth: 0,
+          pointRadius: 3,
+          showLine: false
+        },
+        {
+          label: 'Model',
+          data: fit0.pred,
+          borderColor: COLORS.tv,
+          borderWidth: 2,
+          pointRadius: 0,
+          tension: 0.25,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 250 },
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { maxTicksLimit: 9 } },
+        y: { min: 480, max: 580, grid: { color: '#f1f5f9' } }
+      }
+    }
+  });
+
+  // Chart 2: current vs recommended weekly budget per channel
+  const labels = ['TV', 'Social', 'Search'];
+  const channelColors = [COLORS.tv, COLORS.social, COLORS.search];
+  const splitChart = new Chart(document.getElementById('tb-split-chart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Current',
+          data: [avg.tv, avg.social, avg.search],
+          backgroundColor: '#e5e7eb',
+          borderRadius: 4
+        },
+        {
+          label: 'Recommended',
+          data: recommendedSplit(w0),
+          backgroundColor: channelColors,
+          borderRadius: 4
+        }
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 250 },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${fmtK(ctx.raw)} per week` } }
+      },
+      scales: {
+        x: { min: 0, max: 30, grid: { color: '#f1f5f9' } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+
+  function setSliderFill(val) {
+    slider.style.background = `linear-gradient(to right, #21caab ${val}%, #e5e7eb ${val}%)`;
+  }
+
+  function update() {
+    const pos = parseInt(slider.value, 10);
+    const w = weightsAt(pos);
+    const { pred, r2 } = fitModel(w);
+    const split = recommendedSplit(w);
+
+    fitChart.data.datasets[1].data = pred;
+    splitChart.data.datasets[1].data = split;
+    fitChart.update();
+    splitChart.update();
+
+    document.getElementById('tb-r2').textContent = r2.toFixed(2);
+    document.getElementById('tb-rec-tv').textContent = fmtK(split[0]);
+    document.getElementById('tb-rec-social').textContent = fmtK(split[1]);
+    document.getElementById('tb-rec-search').textContent = fmtK(split[2]);
+    setSliderFill(pos);
+  }
+
+  slider.addEventListener('input', update);
+  update();
+}
+
+requestAnimationFrame(initThreeBodyWidget);
+</script>
