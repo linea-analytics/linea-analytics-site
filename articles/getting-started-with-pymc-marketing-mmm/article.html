@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+
+<head>
+
+  <!-- ** Basic Page Needs ** -->
+  <meta charset="utf-8">
+  <title>Linea Analytics - Getting Started with PyMC-Marketing for Media Mix Modelling</title>
+
+  <!-- ** Mobile Specific Metas ** -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="A beginers guide to PyMC-Marketing">
+  <link rel="canonical" href="https://linea-analytics.com/articles/getting-started-with-pymc-marketing-mmm/article.html">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="author" content="linea-analytics">
+  <meta name="generator" content="linea-analytics">
+
+  <!-- theme meta -->
+  <meta name="theme-name" content="linea-analytics" />
+
+  <!-- bootstrap.min css -->
+  <link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css">
+  <!-- Icon Font Css -->
+  <link rel="stylesheet" href="/plugins/themify/css/themify-icons.css">
+  <link rel="stylesheet" href="/plugins/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="/plugins/magnific-popup/magnific-popup.css">
+  <!-- Owl Carousel CSS -->
+  <link rel="stylesheet" href="/plugins/slick/slick.css">
+  <link rel="stylesheet" href="/plugins/slick/slick-theme.css">
+
+  <!-- Markdown to html -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/custom-dropdown.css">
+
+  <!--Favicon-->
+  <link rel="icon" href="/images/logos/icon.png" type="image/x-icon">
+
+  <!-- CSV parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.5.2/papaparse.min.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- calendly -->
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
+</head>
+
+<body>
+
+
+  <!-- Header Start -->
+  <header id="header-container" class="navigation"></header>
+  <!-- Header Close -->
+
+
+  <!-- Article Container Start -->
+  <div class="container mt-5 ">
+    <div class="row justify-content-center">
+      <div class="col-lg-12 col-md-12 mb-5">
+        <div style="
+          width: 100%;
+          max-width: 100%;
+          height: 300px;
+          overflow: hidden;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 20px;
+        ">
+          <img src="./thumbnail.jpg" alt="thumbnail" class="shadow rounded" style="
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              object-position: center center;
+            ">
+        </div>
+        <!-- ARTICLE CONTENT START -->
+        <h1>Getting Started with PyMC-Marketing for Media Mix Modelling</h1>
+<h2>What this article covers</h2>
+<p>PyMC-Marketing is an open-source Python library for Bayesian Media Mix Modelling (MMM). Built on top of <a href="https://www.pymc.io">PyMC</a>, it provides ready-built components for the core parts of an MMM: the <strong>adstock</strong> (carryover) and <strong>saturation</strong> (diminishing returns) transformations, <strong>decomposition</strong>, <strong>optimisation</strong>, and more.</p>
+<p><strong>Who is this article for?</strong>
+This article is aimed at anyone who wants to better understand what this software can do. Data scientists and marketing analysts comfortable with Python and basic regression modelling will be able to follow along in Jupyter, but the charts and outputs can be interpreted by any marketing professional.</p>
+<p><strong>Who is PyMC-Marketing for?</strong>
+PyMC-Marketing is not a no-code tool: operating it requires people who can write Python, understand Bayesian inference, and interpret model diagnostics. While it is free and easy to run code like the one below, building a model that actually generates value for your brand is not easy, and requires:</p>
+<ul>
+<li><strong>Data:</strong> Collecting data from various sources to isolate the <strong>incremental impact</strong> of marketing activity. Not a trivial task when you consider all the factors other than marketing that might be affecting your KPIs.</li>
+<li><strong>Technical skills:</strong> On top of general data science skills (e.g. using Python to manipulate data and run machine learning models), MMM requires experience in time-series, econometrics, and marketing science.</li>
+<li><strong>Marketing experience:</strong> To understand the <em>causal</em> relationships between marketing activity (e.g. media, price, promotions) and your KPIs, marketing experience is required, preferably in the relevant industry.</li>
+</ul>
+<p><strong>What the code covers:</strong></p>
+<ol>
+<li>Installation and environment setup</li>
+<li>Loading and exploring marketing data</li>
+<li>Fitting a Bayesian MMM with multiple channels and control variables</li>
+<li>Interpreting outputs: ROAS, contributions, response curves</li>
+<li>Budget optimisation</li>
+</ol>
+<p>A pros/cons comparison and a full alternatives overview are included at the end.</p>
+<hr>
+<h2>Step 1: Installation and Imports</h2>
+<pre><code class="language-bash">pip install pymc-marketing matplotlib seaborn numpyro jax
+</code></pre>
+<p>This walkthrough was run with pymc-marketing 0.19.4.</p>
+<blockquote>
+<p><strong>Performance note:</strong> We use <code>nuts_sampler=&quot;numpyro&quot;</code>, which uses JAX under the hood and is much faster than the default sampler. The full fit (4 chains x 1,000 draws) takes about a minute on a laptop CPU.</p>
+</blockquote>
+<p>We use the <code>MMM</code> class from <code>pymc_marketing.mmm.multidimensional</code>. This is the current model class: the older <code>pymc_marketing.mmm.MMM</code> is deprecated and will be removed in version 0.20, so make sure any tutorial you follow uses the new import.</p>
+<pre><code class="language-python">import warnings
+warnings.filterwarnings(&quot;ignore&quot;)
+
+import numpy as np
+import pandas as pd
+import xarray as xr
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import seaborn as sns
+import arviz as az
+
+from pymc_marketing.mmm import GeometricAdstock, LogisticSaturation
+from pymc_marketing.mmm.multidimensional import MMM, MultiDimensionalBudgetOptimizerWrapper
+
+plt.rcParams[&quot;figure.dpi&quot;] = 120
+sns.set_theme(style=&quot;whitegrid&quot;, palette=&quot;muted&quot;)
+</code></pre>
+<hr>
+<h2>Step 2: Loading the Data</h2>
+<p>We use the same dataset as our <a href="https://linea-analytics.com/articles/meridian-demo/article.html">Meridian article</a>, which allows a direct comparison between the two frameworks on identical data.</p>
+<p>The dataset is publicly available at <a href="https://github.com/linea-analytics/public-data/blob/main/formatted_data_simple.csv">github.com/linea-analytics/public-data/blob/main/formatted_data_simple.csv</a>.</p>
+<p>It covers <strong>156 weeks</strong> (Jan 2022 to Dec 2024) with 6 media channels and 5 control variables:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Columns</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>KPI</strong></td>
+<td><code>sales</code></td>
+</tr>
+<tr>
+<td><strong>Media</strong></td>
+<td><code>tv_spend</code>, <code>radio_spend</code>, <code>display_spend</code>, <code>vod_spend</code>, <code>non_brand_ppc_spend</code>, <code>brand_ppc_spend</code></td>
+</tr>
+<tr>
+<td><strong>Controls</strong></td>
+<td><code>economy</code>, <code>seasonality</code>, <code>price</code>, <code>event_dummy_1</code>, <code>event_dummy_2</code></td>
+</tr>
+</tbody></table>
+<pre><code class="language-python">df = pd.read_csv(&quot;formatted_data_simple.csv&quot;)
+df[&quot;date&quot;] = pd.to_datetime(df[&quot;date&quot;], dayfirst=True)
+df = df.sort_values(&quot;date&quot;).reset_index(drop=True)
+
+channel_cols  = [&quot;tv_spend&quot;, &quot;radio_spend&quot;, &quot;display_spend&quot;, &quot;vod_spend&quot;,
+                 &quot;non_brand_ppc_spend&quot;, &quot;brand_ppc_spend&quot;]
+control_cols  = [&quot;economy&quot;, &quot;seasonality&quot;, &quot;price&quot;, &quot;event_dummy_1&quot;, &quot;event_dummy_2&quot;]
+n_weeks = len(df)
+
+print(f&quot;Shape:      {df.shape}&quot;)
+print(f&quot;Date range: {df[&#39;date&#39;].min().date()} to {df[&#39;date&#39;].max().date()}&quot;)
+print(f&quot;Weeks:      {n_weeks}&quot;)
+df.head()
+</code></pre>
+<pre><code>Shape:      (156, 13)
+Date range: 2022-01-01 to 2024-12-21
+Weeks:      156
+</code></pre>
+<p>A quick check on how often each channel is dark (zero spend) is worth doing before modelling:</p>
+<pre><code class="language-python"># Quick data check: zero-spend weeks per channel
+zero_pct = (df[channel_cols] == 0).mean() * 100
+spend_summary = df[channel_cols].describe().loc[[&quot;mean&quot;, &quot;min&quot;, &quot;max&quot;]].T
+spend_summary[&quot;zero_weeks_%&quot;] = zero_pct.values.round(1)
+spend_summary.round(0)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Mean (£/week)</th>
+<th>Min</th>
+<th>Max</th>
+<th>Zero weeks %</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>tv_spend</code></td>
+<td>8,782</td>
+<td>0</td>
+<td>50,000</td>
+<td>58.0</td>
+</tr>
+<tr>
+<td><code>radio_spend</code></td>
+<td>5,256</td>
+<td>0</td>
+<td>50,000</td>
+<td>74.0</td>
+</tr>
+<tr>
+<td><code>display_spend</code></td>
+<td>43,136</td>
+<td>0</td>
+<td>175,635</td>
+<td>3.0</td>
+</tr>
+<tr>
+<td><code>vod_spend</code></td>
+<td>30,449</td>
+<td>0</td>
+<td>250,000</td>
+<td>70.0</td>
+</tr>
+<tr>
+<td><code>non_brand_ppc_spend</code></td>
+<td>36,394</td>
+<td>2,451</td>
+<td>240,499</td>
+<td>0.0</td>
+</tr>
+<tr>
+<td><code>brand_ppc_spend</code></td>
+<td>34,996</td>
+<td>1,103</td>
+<td>108,534</td>
+<td>0.0</td>
+</tr>
+</tbody></table>
+<p>TV, radio and VOD are &quot;flighted&quot; channels, dark for most weeks, while display and PPC run almost continuously.</p>
+<pre><code class="language-python">df[[&quot;sales&quot;] + channel_cols].describe().round(0)
+</code></pre>
+<p>Weekly sales average around £1.43m, ranging from £0.95m to £1.92m.</p>
+<hr>
+<h2>Step 3: Exploratory Analysis</h2>
+<p>Two charts tell most of the story before we fit anything.</p>
+<h3>Weekly Sales</h3>
+<pre><code class="language-python"># Chart 1: Weekly Sales
+fig, ax = plt.subplots(figsize=(12, 4))
+
+ax.plot(df[&quot;date&quot;], df[&quot;sales&quot;] / 1_000, color=&quot;#2563EB&quot;, linewidth=1.5)
+ax.fill_between(df[&quot;date&quot;], df[&quot;sales&quot;] / 1_000, alpha=0.10, color=&quot;#2563EB&quot;)
+ax.set_title(&quot;Weekly Sales (£000s)&quot;, fontsize=14, fontweight=&quot;bold&quot;, pad=12)
+ax.set_ylabel(&quot;Sales (£000s)&quot;)
+ax.xaxis.set_major_formatter(mdates.DateFormatter(&quot;%b %Y&quot;))
+ax.xaxis.set_major_locator(mdates.MonthLocator(interval=6))
+plt.xticks(rotation=45)
+sns.despine()
+plt.tight_layout()
+plt.show()
+</code></pre>
+<p>
+      <figure class="p-5">
+        <img width="100%" class="rounded" src="./image1.png" alt="">
+      </figure>
+    </p>
+<h3>Media Spend by Channel</h3>
+<pre><code class="language-python"># Chart 2: Media spend by channel (3x2 grid)
+channel_labels = [&quot;TV&quot;, &quot;Radio&quot;, &quot;Display&quot;, &quot;VOD&quot;, &quot;Non-Brand PPC&quot;, &quot;Brand PPC&quot;]
+channel_colors = [&quot;#2563EB&quot;, &quot;#DC2626&quot;, &quot;#16A34A&quot;, &quot;#9333EA&quot;, &quot;#EA580C&quot;, &quot;#0891B2&quot;]
+
+fig, axes = plt.subplots(3, 2, figsize=(14, 10), sharex=True)
+axes = axes.flatten()
+
+for ax, col, label, color in zip(axes, channel_cols, channel_labels, channel_colors):
+    ax.bar(df[&quot;date&quot;], df[col] / 1_000, color=color, alpha=0.75, width=5)
+    ax.set_title(label, fontsize=11, fontweight=&quot;bold&quot;)
+    ax.set_ylabel(&quot;Spend (£000s)&quot;, fontsize=9)
+    ax.xaxis.set_major_formatter(mdates.DateFormatter(&quot;%b %Y&quot;))
+    ax.xaxis.set_major_locator(mdates.MonthLocator(interval=6))
+    plt.setp(ax.get_xticklabels(), rotation=45, ha=&quot;right&quot;, fontsize=8)
+    sns.despine(ax=ax)
+
+fig.suptitle(&quot;Weekly Media Spend by Channel&quot;, fontsize=14, fontweight=&quot;bold&quot;)
+plt.tight_layout()
+plt.show()
+</code></pre>
+<p>
+      <figure class="p-5">
+        <img width="100%" class="rounded" src="./image2.png" alt="">
+      </figure>
+    </p>
+<h3>Correlations</h3>
+<pre><code class="language-python"># Correlation heatmap: media spend vs sales
+corr_df = df[[&quot;sales&quot;] + channel_cols].corr()
+
+fig, ax = plt.subplots(figsize=(9, 7))
+sns.heatmap(
+    corr_df,
+    annot=True, fmt=&quot;.2f&quot;, cmap=&quot;Blues&quot;,
+    vmin=-1, vmax=1, linewidths=0.5, ax=ax
+)
+ax.set_title(&quot;Pearson Correlation: Sales vs Media Channels&quot;, fontsize=12, fontweight=&quot;bold&quot;)
+plt.tight_layout()
+plt.show()
+</code></pre>
+<p>
+      <figure class="p-5">
+        <img width="100%" class="rounded" src="./image3.png" alt="">
+      </figure>
+    </p>
+<hr>
+<h2>Step 4: Building the Model</h2>
+<p>The model includes:</p>
+<ul>
+<li><strong>6 media channels</strong>, each with its own adstock decay and saturation curve</li>
+<li><strong>5 control variables</strong>, added as linear predictors (no adstock/saturation):<ul>
+<li><code>economy</code>: macroeconomic index</li>
+<li><code>seasonality</code>: pre-computed seasonal pattern</li>
+<li><code>price</code>: price index (0.5 / 1.0 / 2.5)</li>
+<li><code>event_dummy_1</code>, <code>event_dummy_2</code>: promotional event flags</li>
+</ul>
+</li>
+</ul>
+<p>Internally the model scales sales and spend to a 0-1 range. <code>add_original_scale_contribution_variable</code> adds copies of the key outputs back in £, which the plotting and summary functions then use.</p>
+<pre><code class="language-python">X = df[[&quot;date&quot;] + channel_cols + control_cols].copy()
+y = df[&quot;sales&quot;].copy()
+
+mmm = MMM(
+    date_column=&quot;date&quot;,
+    target_column=&quot;sales&quot;,
+    channel_columns=channel_cols,
+    control_columns=control_cols,
+    adstock=GeometricAdstock(l_max=8),
+    saturation=LogisticSaturation(),
+)
+
+mmm.build_model(X, y)
+mmm.add_original_scale_contribution_variable(
+    var=[&quot;channel_contribution&quot;, &quot;control_contribution&quot;, &quot;intercept_contribution&quot;, &quot;y&quot;]
+)
+
+print(&quot;Free random variables:&quot;)
+for rv in mmm.model.free_RVs:
+    print(&quot; &quot;, rv.name)
+</code></pre>
+<pre><code>Free random variables:
+  intercept_contribution
+  adstock_alpha
+  saturation_lam
+  saturation_beta
+  gamma_control
+  y_sigma
+</code></pre>
+<p>These are the key model parameters:</p>
+<ul>
+<li><code>intercept_contribution</code>: baseline sales</li>
+<li><code>adstock_alpha</code>: decay rate per channel (0 = no carryover, 1 = infinite)</li>
+<li><code>saturation_lam</code> / <code>saturation_beta</code>: saturation curve shape and scale per channel</li>
+<li><code>gamma_control</code>: coefficients on the control variables</li>
+<li><code>y_sigma</code>: observation noise</li>
+</ul>
+<p><strong>Key design choices:</strong></p>
+<ul>
+<li><code>GeometricAdstock(l_max=8)</code>: each week&#39;s ad effect can carry forward up to 8 weeks, with a learned decay rate per channel</li>
+<li><code>LogisticSaturation()</code>: each channel has its own saturation curve, capturing diminishing returns</li>
+</ul>
+<hr>
+<h2>Step 5: Fitting the Model</h2>
+<p>NUTS (No-U-Turn Sampler) is used to draw from the posterior via the numpyro backend.</p>
+<ul>
+<li><strong>4 chains</strong>: run in parallel, used to diagnose convergence</li>
+<li><strong>1,000 tune</strong>: warm-up draws to adapt the sampler, discarded after</li>
+<li><strong>1,000 draws</strong>: posterior samples retained for inference</li>
+<li><strong>target_accept=0.90</strong>: acceptance rate; raise for complex posteriors</li>
+</ul>
+<pre><code class="language-python">idata = mmm.fit(
+    X=X,
+    y=y,
+    draws=1_000,
+    tune=1_000,
+    chains=4,
+    target_accept=0.90,
+    nuts_sampler=&quot;numpyro&quot;,
+    random_seed=42,
+)
+</code></pre>
+<blockquote>
+<p><strong>Tip:</strong> PyMC-Marketing uses NUTS sampling from PyMC, which is the gold standard for Bayesian inference. If you&#39;ve built models in Stan before, you&#39;ll feel at home.</p>
+</blockquote>
+<hr>
+<h2>Step 6: Convergence Diagnostics</h2>
+<p><strong>Never skip this step.</strong> Bayesian MCMC outputs are meaningless if the chains have not converged.</p>
+<h3>R-hat (Gelman-Rubin statistic)</h3>
+<p>Values close to 1.0 (&lt; 1.01) indicate the chains have mixed well.</p>
+<pre><code class="language-python"># R-hat summary: values should be &lt; 1.01 for good convergence
+summary = az.summary(
+    idata,
+    var_names=[&quot;adstock_alpha&quot;, &quot;saturation_lam&quot;, &quot;saturation_beta&quot;, &quot;y_sigma&quot;],
+)
+print(f&quot;Divergences: {int(idata.sample_stats[&#39;diverging&#39;].sum())} of 4,000 draws&quot;)
+summary[[&quot;mean&quot;, &quot;sd&quot;, &quot;r_hat&quot;, &quot;ess_bulk&quot;]].round(3)
+</code></pre>
+<pre><code>Divergences: 1 of 4,000 draws
+
+                                       mean     sd  r_hat  ess_bulk
+adstock_alpha[tv_spend]               0.550  0.166    1.0    2765.0
+adstock_alpha[radio_spend]            0.205  0.163    1.0    3876.0
+adstock_alpha[display_spend]          0.133  0.101    1.0    3440.0
+adstock_alpha[vod_spend]              0.444  0.174    1.0    2934.0
+adstock_alpha[non_brand_ppc_spend]    0.077  0.071    1.0    3527.0
+adstock_alpha[brand_ppc_spend]        0.395  0.247    1.0    3268.0
+saturation_lam[tv_spend]              3.427  2.127    1.0    1961.0
+saturation_lam[radio_spend]           2.243  1.500    1.0    2832.0
+saturation_lam[display_spend]         1.764  1.027    1.0    2392.0
+saturation_lam[vod_spend]             2.966  2.029    1.0    2194.0
+saturation_lam[non_brand_ppc_spend]   2.744  1.306    1.0    1727.0
+saturation_lam[brand_ppc_spend]       2.911  2.017    1.0    2957.0
+saturation_beta[tv_spend]             0.131  0.148    1.0    1712.0
+saturation_beta[radio_spend]          0.073  0.084    1.0    1916.0
+saturation_beta[display_spend]        0.260  0.245    1.0    2273.0
+saturation_beta[vod_spend]            0.165  0.182    1.0    1887.0
+saturation_beta[non_brand_ppc_spend]  0.246  0.177    1.0    1613.0
+saturation_beta[brand_ppc_spend]      0.100  0.147    1.0    2055.0
+y_sigma                               0.049  0.003    1.0    4324.0
+</code></pre>
+<p>Every R-hat is 1.0, effective sample sizes are well above 1,000, and there is a single divergent transition out of 4,000 draws, so the chains have mixed well. TV and VOD show the strongest carryover (alpha around 0.55 and 0.44), while non-brand PPC has almost none (0.08), which is what you would expect from a search channel.</p>
+<h3>Trace Plots</h3>
+<pre><code class="language-python"># Trace plots: chains should look like &quot;fuzzy caterpillars&quot; (no drifts, no divergences)
+az.plot_trace(
+    idata,
+    var_names=[&quot;adstock_alpha&quot;, &quot;saturation_lam&quot;, &quot;saturation_beta&quot;],
+    compact=True,
+)
+plt.tight_layout()
+plt.show()
+</code></pre>
+<p>
+      <figure class="p-5">
+        <img width="100%" class="rounded" src="./image4.png" alt="">
+      </figure>
+    </p>
+<h3>Posterior Predictive Check</h3>
+<p>Does the model reproduce the observed sales? We sample from the posterior predictive distribution and overlay the actuals.</p>
+<pre><code class="language-python"># Posterior predictive check: does the model reproduce observed sales?
+mmm.sample_posterior_predictive(X, extend_idata=True, combined=True)
+
+fig, axes = mmm.plot.posterior_predictive(var=[&quot;y_original_scale&quot;])
+ax = np.ravel(axes)[0]
+ax.plot(df[&quot;date&quot;], df[&quot;sales&quot;], color=&quot;black&quot;, linewidth=1, label=&quot;Observed&quot;)
+ax.legend()
+plt.show()
+</code></pre>
+<p>
+      <figure class="p-5">
+        <img width="100%" class="rounded" src="./image5.png" alt="">
+      </figure>
+    </p>
+<p>The model tracks the trend, the seasonal swings and the spring 2022 spike closely, with most observed weeks inside the credible band.</p>
+<hr>
+<h2>Step 7: Channel Contributions and ROAS</h2>
+<h3>Sales Decomposition</h3>
+<p>Once the model has converged, we can decompose total sales into baseline, control, and channel contributions:</p>
+<pre><code class="language-python"># Waterfall decomposition: baseline, controls and each channel&#39;s contribution over the full period
+mmm.plot.waterfall_components_decomposition()
+plt.show()
+</code></pre>
+<p>
+      <figure class="p-5">
+        <img width="100%" class="rounded" src="./image6.png" alt="">
+      </figure>
+    </p>
+<p>Over the three years, the baseline (35.5%) and seasonality (34.5%) drive most sales, followed by the economy (11.7%). Paid media together account for about 19%, led by display and non-brand PPC (4.7% each). Price has a negative effect (-2.8%).</p>
+<h3>Channel Contributions Over Time</h3>
+<pre><code class="language-python"># Time-series contributions: how each channel contributed week by week
+mmm.plot.contributions_over_time(var=[&quot;channel_contribution_original_scale&quot;])
+plt.show()
+</code></pre>
+<p>
+      <figure class="p-5">
+        <img width="100%" class="rounded" src="./image7.png" alt="">
+      </figure>
+    </p>
+<h3>ROAS by Channel</h3>
+<p>Return on ad spend (ROAS): for every £1 spent on a channel, how much incremental sales does it drive? <code>mmm.summary.roas()</code> computes it over the full period, with a 94% credible interval.</p>
+<pre><code class="language-python">roas = mmm.summary.roas(frequency=&quot;all_time&quot;).set_index(&quot;channel&quot;)
+roas.columns = [&quot;Mean&quot;, &quot;Median&quot;, &quot;94% HDI lower&quot;, &quot;94% HDI upper&quot;]
+roas.round(2)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Mean</th>
+<th>Median</th>
+<th>94% HDI lower</th>
+<th>94% HDI upper</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>TV</td>
+<td>4.48</td>
+<td>4.49</td>
+<td>2.42</td>
+<td>6.61</td>
+</tr>
+<tr>
+<td>Radio</td>
+<td>1.80</td>
+<td>1.71</td>
+<td>0.00</td>
+<td>3.55</td>
+</tr>
+<tr>
+<td>Display</td>
+<td>1.56</td>
+<td>1.54</td>
+<td>0.89</td>
+<td>2.21</td>
+</tr>
+<tr>
+<td>VOD</td>
+<td>1.00</td>
+<td>0.99</td>
+<td>0.41</td>
+<td>1.58</td>
+</tr>
+<tr>
+<td>Non-Brand PPC</td>
+<td>1.84</td>
+<td>1.82</td>
+<td>1.26</td>
+<td>2.50</td>
+</tr>
+<tr>
+<td>Brand PPC</td>
+<td>1.46</td>
+<td>1.24</td>
+<td>0.00</td>
+<td>3.23</td>
+</tr>
+</tbody></table>
+<p>TV delivers by far the highest ROAS (4.48) on a relatively small budget, and its interval sits well above break-even. VOD only just breaks even. Radio and brand PPC have wide intervals that reach zero, so the data can&#39;t rule out that they add very little.</p>
+<pre><code class="language-python">channel_labels_short = [&quot;TV&quot;, &quot;Radio&quot;, &quot;Display&quot;, &quot;VOD&quot;, &quot;NB PPC&quot;, &quot;Brand PPC&quot;]
+channel_colors_6     = [&quot;#2563EB&quot;, &quot;#DC2626&quot;, &quot;#16A34A&quot;, &quot;#9333EA&quot;, &quot;#EA580C&quot;, &quot;#0891B2&quot;]
+
+fig, ax = plt.subplots(figsize=(10, 4))
+bars = ax.bar(channel_labels_short, roas[&quot;Mean&quot;], color=channel_colors_6, alpha=0.85, width=0.6)
+ax.errorbar(
+    channel_labels_short, roas[&quot;Mean&quot;],
+    yerr=[roas[&quot;Mean&quot;] - roas[&quot;94% HDI lower&quot;], roas[&quot;94% HDI upper&quot;] - roas[&quot;Mean&quot;]],
+    fmt=&quot;none&quot;, ecolor=&quot;black&quot;, elinewidth=1, capsize=4,
+)
+ax.axhline(1.0, color=&quot;black&quot;, linestyle=&quot;--&quot;, linewidth=0.8, label=&quot;Break-even (ROAS = 1)&quot;)
+ax.bar_label(bars, fmt=&quot;%.2f&quot;, padding=4, fontsize=10, label_type=&quot;center&quot;, color=&quot;white&quot;)
+ax.set_ylabel(&quot;ROAS (£ sales per £ spend)&quot;)
+ax.set_title(&quot;Return on Ad Spend by Channel (mean and 94% HDI)&quot;, fontsize=13, fontweight=&quot;bold&quot;)
+ax.legend(frameon=False)
+sns.despine()
+plt.tight_layout()
+plt.show()
+</code></pre>
+<p>
+      <figure class="p-5">
+        <img width="100%" class="rounded" src="./image8.png" alt="">
+      </figure>
+    </p>
+<h3>Response Curves</h3>
+<p>Response curves show the <em>marginal return</em> at different spend levels, which is crucial for understanding where each channel sits on its saturation curve. Dots are the observed weeks.</p>
+<pre><code class="language-python">curve = mmm.sample_saturation_curve(original_scale=False)
+mmm.plot.saturation_curves(curve=curve, original_scale=True)
+plt.show()
+</code></pre>
+<p>
+      <figure class="p-5">
+        <img width="100%" class="rounded" src="./image9.png" alt="">
+      </figure>
+    </p>
+<p>Steep portions of the curve = high marginal return. Flat portions = diminishing returns territory.</p>
+<hr>
+<h2>Step 8: Budget Optimisation</h2>
+<p>Knowing ROAS by channel is useful; knowing the <em>optimal allocation</em> of a fixed budget is actionable. The budget optimiser finds the weekly spend per channel that maximises expected media contribution, for a fixed total budget.</p>
+<ul>
+<li><strong>Planning window:</strong> the 52 weeks after the data ends</li>
+<li><strong>Budget:</strong> the historical average weekly spend across all channels, so the question is &quot;same money, better split?&quot;</li>
+<li><strong>Bounds:</strong> each channel stays within +/-50% of its historical weekly average</li>
+</ul>
+<p><code>MultiDimensionalBudgetOptimizerWrapper</code> sets up the planning window. Note that <code>budget</code> is the spend <strong>per week</strong>, not the total over the window.</p>
+<pre><code class="language-python">weekly_spend = df[channel_cols].mean()   # historical £/week per channel
+
+start_date = df[&quot;date&quot;].max() + pd.Timedelta(weeks=1)
+end_date   = df[&quot;date&quot;].max() + pd.Timedelta(weeks=52)
+optimizer = MultiDimensionalBudgetOptimizerWrapper(
+    model=mmm,
+    start_date=start_date.strftime(&quot;%Y-%m-%d&quot;),
+    end_date=end_date.strftime(&quot;%Y-%m-%d&quot;),
+)
+
+budget_bounds = xr.DataArray(
+    np.column_stack([0.5 * weekly_spend, 1.5 * weekly_spend]),
+    dims=[&quot;channel&quot;, &quot;bound&quot;],
+    coords={&quot;channel&quot;: channel_cols, &quot;bound&quot;: [&quot;lower&quot;, &quot;upper&quot;]},
+)
+
+optimal_budgets, res = optimizer.optimize_budget(
+    budget=weekly_spend.sum(),
+    budget_bounds=budget_bounds,
+)
+print(f&quot;Optimisation success: {res.success}  |  {res.message}\n&quot;)
+
+allocation = pd.DataFrame({
+    &quot;Current (£/week)&quot;: weekly_spend,
+    &quot;Optimal (£/week)&quot;: optimal_budgets.to_series(),
+})
+allocation[&quot;Change&quot;] = (allocation[&quot;Optimal (£/week)&quot;] / allocation[&quot;Current (£/week)&quot;] - 1).map(&quot;{:+.0%}&quot;.format)
+allocation.round(0)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Current (£/week)</th>
+<th>Optimal (£/week)</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>TV</td>
+<td>8,782</td>
+<td>13,173</td>
+<td>+50%</td>
+</tr>
+<tr>
+<td>Radio</td>
+<td>5,256</td>
+<td>7,885</td>
+<td>+50%</td>
+</tr>
+<tr>
+<td>Display</td>
+<td>43,136</td>
+<td>49,910</td>
+<td>+16%</td>
+</tr>
+<tr>
+<td>VOD</td>
+<td>30,449</td>
+<td>15,224</td>
+<td>-50%</td>
+</tr>
+<tr>
+<td>Non-Brand PPC</td>
+<td>36,394</td>
+<td>54,591</td>
+<td>+50%</td>
+</tr>
+<tr>
+<td>Brand PPC</td>
+<td>34,996</td>
+<td>18,230</td>
+<td>-48%</td>
+</tr>
+</tbody></table>
+<p>The optimiser moves money out of VOD and brand PPC, the two channels with the weakest returns, and into TV, radio and non-brand PPC, pushing three of them to their +50% cap.</p>
+<p>To see what the reallocation is worth, we simulate the planning window under both allocations and compare the expected media contribution:</p>
+<pre><code class="language-python">current_budgets = xr.DataArray(weekly_spend.values, dims=[&quot;channel&quot;], coords={&quot;channel&quot;: channel_cols})
+
+response_current = optimizer.sample_response_distribution(allocation_strategy=current_budgets)
+response_optimal = optimizer.sample_response_distribution(allocation_strategy=optimal_budgets)
+
+contrib_current = float(response_current[&quot;total_media_contribution_original_scale&quot;].mean())
+contrib_optimal = float(response_optimal[&quot;total_media_contribution_original_scale&quot;].mean())
+
+print(f&quot;Media contribution over 52 weeks, current split: £{contrib_current:,.0f}&quot;)
+print(f&quot;Media contribution over 52 weeks, optimal split: £{contrib_optimal:,.0f}&quot;)
+print(f&quot;Uplift from reallocation, same total spend:      {contrib_optimal / contrib_current - 1:+.1%}&quot;)
+</code></pre>
+<pre><code>Media contribution over 52 weeks, current split: £15,305,967
+Media contribution over 52 weeks, optimal split: £16,901,569
+Uplift from reallocation, same total spend:      +10.4%
+</code></pre>
+<p>Same money, about £1.6m more media-driven sales over a year. That&#39;s the kind of output that makes an MMM actionable, although with the bounds this tight, the result mostly says &quot;move towards the caps&quot;, and a real plan would test wider bounds and sense-check them against what the channels can actually absorb.</p>
+<pre><code class="language-python"># Optimal weekly spend per channel vs the expected weekly contribution it drives
+mmm.plot.budget_allocation(
+    samples=response_optimal,
+    scale_factor=float(mmm.idata.constant_data[&quot;target_scale&quot;]),
+)
+plt.show()
+</code></pre>
+<p>
+      <figure class="p-5">
+        <img width="100%" class="rounded" src="./image10.png" alt="">
+      </figure>
+    </p>
+<hr>
+<h2>Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>What we did</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Data</strong></td>
+<td>Loaded 156 weeks of sales and media spend (Jan 2022 to Dec 2024)</td>
+</tr>
+<tr>
+<td><strong>EDA</strong></td>
+<td>Visualised sales, all 6 media channels, and correlations</td>
+</tr>
+<tr>
+<td><strong>Model</strong></td>
+<td>6 channels with geometric adstock + logistic saturation, 5 control variables</td>
+</tr>
+<tr>
+<td><strong>Fit</strong></td>
+<td>NUTS via numpyro (4 chains x 1,000 draws)</td>
+</tr>
+<tr>
+<td><strong>Diagnostics</strong></td>
+<td>R-hat, trace plots, posterior predictive check</td>
+</tr>
+<tr>
+<td><strong>Outputs</strong></td>
+<td>Sales decomposition, ROAS by channel, response curves</td>
+</tr>
+<tr>
+<td><strong>Optimisation</strong></td>
+<td>Optimal weekly budget split via <code>MultiDimensionalBudgetOptimizerWrapper</code>, compared against the current split</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Pros, Cons and Alternatives</h2>
+<h3>PyMC-Marketing</h3>
+<p><strong>Pros</strong></p>
+<ul>
+<li>Built-in adstock, saturation, and budget optimisation components mean you can start modelling quickly without writing everything from scratch.</li>
+<li>Open source with an active community and transparent methodology.</li>
+</ul>
+<p><strong>Cons</strong></p>
+<ul>
+<li>Less flexible than a fully custom-built solution: the library abstractions can limit you when you need non-standard model structures.</li>
+<li>Measuring channel synergies (interaction effects between media) is not natively supported.</li>
+<li>The budget optimiser works out of the box for standard allocation problems, but more complex scenarios (phased roll-outs, channel-level constraints beyond simple bounds) require extending the built-in <code>BudgetOptimizer</code> or building custom logic on top of it.</li>
+</ul>
+<h3>Alternatives</h3>
+<table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Best suited when</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Similar open-source libraries</strong> (Meridian, Robyn)</td>
+<td>Broadly similar pros and cons to PyMC-Marketing. Meridian integrates tightly with Google media; Robyn uses a different estimation engine. Choice often comes down to team familiarity.</td>
+</tr>
+<tr>
+<td><strong>Custom-built PyMC or Stan</strong></td>
+<td>Your team has deep MMM expertise and needs full control over model structure, priors, and custom scenarios. Not suitable for generalist data scientists without strong statistical backgrounds.</td>
+</tr>
+<tr>
+<td><strong>Modelling UIs</strong></td>
+<td>Getting started quickly with simple, repeatable models. Limited flexibility and you do not own the methodology. Not suitable if you need custom scenarios or full transparency.</td>
+</tr>
+<tr>
+<td><strong>Automated modelling platforms</strong></td>
+<td>Budgets under £500k and digital-only spend, where a fast, low-cost estimate is acceptable. Models tend to be less sophisticated.</td>
+</tr>
+<tr>
+<td><strong>Agency-led measurement</strong></td>
+<td>Independent measurement is a priority, particularly for large or multi-market campaigns.</td>
+</tr>
+<tr>
+<td><strong>Linea</strong></td>
+<td>We offer three options: (1) open-source in-house implementation where your team runs the models; (2) custom-built in-house implementation tailored to your business; (3) project-based measurement where we run the analysis end-to-end.</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>For questions or to share your results, find us on the <a href="https://github.com/pymc-labs/pymc-marketing">PyMC-Marketing GitHub</a>.</em></p>
+
+
+        <!-- ARTICLE CONTENT END -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Article Container Close -->
+
+
+  <!-- Section Contacts Start -->
+  <section class="section cta d-flex align-items-center" id="contactUs">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-5 col-lg-6">
+          <div class="cta-item bg-white p-5 rounded text-center">
+            <span class="h6 text-color">Take control of your data</span>
+            <h2 class="mt-2 mb-4">Contact us</h2>
+            <p class="lead mb-4">Have any project on mind?<br>For immediate support:</p>
+            <a href="mailto:info@linea-analytics.com">
+              <i class="fas fa-envelope mr-2"></i>
+              <span>info@linea-analytics.com</span>
+            </a>
+            <br>
+            <a href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/david-walsh-linea-analytics/30min'});return false;">
+              <i class="fas fa-phone mr-2"></i>
+              Schedule a Call
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-70 position-relative">
+    <div class="container">
+      <div class="cta-block-2 bg-gray p-5 rounded border-1">
+        <div class="row justify-content-center align-items-center ">
+          <div class="col-lg-7">
+            <span class="text-color">Why wait</span>
+            <h2 class="mt-2 mb-4 mb-lg-0">Get the <strong>True Impact</strong> of your Marketing.</h2>
+          </div>
+          <div class="col-lg-4">
+            <a href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/david-walsh-linea-analytics/30min'});return false;" class="btn btn-main btn-round-full float-lg-right ">Schedule a call</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <footer id="footer-container" class="footer section"></footer>
+
+  <!--Scroll to top-->
+  <div id="scroll-to-top" class="scroll-to-top">
+    <span class="icon fa fa-angle-up"></span>
+  </div>
+
+
+  <!-- JS HELPERS -->
+  <!-- Main jQuery -->
+  <script src="/plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4.3.1 -->
+  <script src="/plugins/bootstrap/bootstrap.min.js"></script>
+  <!--  Magnific Popup-->
+  <script src="/plugins/magnific-popup/jquery.magnific-popup.min.js"></script>
+  <!-- Slick Slider -->
+  <script src="/plugins/slick/slick.min.js"></script>
+
+  <script src="/js/script.js"></script>
+  <script src="/js/views.js"></script>
+  <script src="/js/customDropdown.js"></script>
+  <script src="/js/blog-single.js"></script>
+  <script src="/js/translate.js"></script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5LHVS45SP4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'G-5LHVS45SP4');
+  </script>
+</body>
+
+</html>
