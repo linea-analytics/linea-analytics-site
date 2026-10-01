@@ -558,5 +558,13 @@
     "author": "David Walsh",
     "date": "2026-08-18",
     "category": "Article"
+  },
+  {
+    "title": "Getting Started with PyMC-Marketing for Media Mix Modelling",
+    "teaser": "A beginers guide to PyMC-Marketing",
+    "folder": "getting-started-with-pymc-marketing-mmm",
+    "author": "Claudio Paladini",
+    "date": "2026-10-01",
+    "category": "Article"
   }
 ]
