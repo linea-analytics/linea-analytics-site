@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<!-- ** Basic Page Needs ** -->
+	<meta charset="utf-8">
+	<title>Linea Analytics - Linea Flow AI Pipeline Builder</title>
+
+	<!-- Open Graph -->
+	<meta property="og:type" content="website">
+	<meta property="og:site_name" content="Linea Analytics">
+	<meta property="og:title" content="Linea Flow - Linea Analytics">
+	<meta property="og:description" content="From raw data to a live, shareable dashboard in one prompt. Every step is a notebook you can open, edit and version.">
+	<meta property="og:url" content="https://linea-analytics.com/linea-flow">
+	<meta property="og:image" content="https://linea-analytics.com/images/linea-flow/flow-dashboard.webp">
+	<meta property="og:image:alt" content="A Linea Flow dashboard next to the assistant chat that built it">
+	<meta property="og:locale" content="en_GB">
+
+	<!-- ** Mobile Specific Metas ** -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="Linea Flow builds data pipelines and dashboards with AI. Describe what you want; the assistant connects your data, writes and runs a pipeline of notebooks, and builds a dashboard you can share.">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+	<meta name="author" content="linea-analytics">
+	<meta name="generator" content="linea-analytics">
+
+	<!-- theme meta -->
+	<meta name="theme-name" content="linea-analytics" />
+
+	<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="12622efc-c240-40ef-98cc-000d74c93104" data-blockingmode="auto" type="text/javascript"></script>
+
+	<!-- bootstrap.min css -->
+	<link rel="stylesheet" href="/plugins/bootstrap/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+	<!-- Icon Font Css -->
+	<link rel="stylesheet" href="plugins/themify/css/themify-icons.css">
+	<link rel="stylesheet" href="plugins/fontawesome/css/all.min.css">
+	<link rel="stylesheet" href="plugins/magnific-popup/magnific-popup.css">
+	<!-- Owl Carousel CSS -->
+	<link rel="stylesheet" href="plugins/slick/slick.css">
+	<link rel="stylesheet" href="plugins/slick/slick-theme.css">
+
+	<!-- Main Stylesheet -->
+
+	<link rel="stylesheet" href="css/style.css">
+
+	<!--Favicon-->
+	<link rel="icon" href="images/logos/icon.png" type="image/x-icon">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@700&display=swap">
+
+	<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+	<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
+	<!-- Linea Flow page styles -->
+	<style>
+		.lf-badge {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			padding: 6px 16px;
+			border-radius: 50px;
+			background: rgba(255, 255, 255, 0.85);
+			color: #111c28;
+			font-family: "Poppins", sans-serif;
+			font-size: 14px;
+			font-weight: 600;
+		}
+
+		.lf-badge .dot {
+			width: 8px;
+			height: 8px;
+			border-radius: 50%;
+			background: #ff0061;
+		}
+
+		/* Product wordmark, set in the app's brand font */
+		.lf-wordmark {
+			font-family: "Montserrat Alternates", "Poppins", sans-serif;
+			font-weight: 700;
+			font-size: 4.5rem;
+			line-height: 1.1;
+			color: #111c28;
+			white-space: nowrap;
+		}
+
+		@media (max-width: 575px) {
+			.lf-wordmark {
+				font-size: 3.2rem;
+			}
+		}
+
+		/* Hero screenshot sits on a green-to-white split so it bridges the hero and the page */
+		.lf-showcase {
+			background: linear-gradient(to bottom, rgb(41, 202, 171) 0, rgb(41, 202, 171) 40%, #fff 40%, #fff 100%);
+		}
+
+		.lf-frame {
+			background: #fff;
+			border-radius: 12px;
+			box-shadow: 0 18px 50px rgba(17, 28, 40, 0.18);
+			padding: 6px;
+		}
+
+		.lf-frame img {
+			display: block;
+			width: 100%;
+			height: auto;
+			border-radius: 8px;
+		}
+
+		.lf-caption {
+			font-size: 15px;
+			color: #5c6b69;
+		}
+
+		/* Example prompt, styled after the assistant's composer */
+		.lf-prompt {
+			max-width: 720px;
+			margin: 0 auto;
+			background: #fff;
+			border: 2px solid rgb(41, 202, 171);
+			border-radius: 14px;
+			padding: 20px 24px;
+			text-align: left;
+			box-shadow: 0 6px 24px rgba(17, 28, 40, 0.08);
+		}
+
+		.lf-prompt .file {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			padding: 3px 12px;
+			border-radius: 50px;
+			background: rgba(41, 202, 171, 0.14);
+			color: rgb(31, 156, 133);
+			font-size: 14px;
+			font-weight: 600;
+		}
+
+		.lf-prompt .text {
+			font-size: 19px;
+			line-height: 1.55;
+			color: #191b1c;
+			margin: 12px 0 0;
+		}
+
+		.lf-prompt .send {
+			width: 40px;
+			height: 40px;
+			border-radius: 10px;
+			background: #111c28;
+			color: #fff;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+		}
+
+		.lf-step-num {
+			width: 48px;
+			height: 48px;
+			border-radius: 50%;
+			background: rgb(41, 202, 171);
+			color: #111c28;
+			font-family: "Poppins", sans-serif;
+			font-weight: 700;
+			font-size: 20px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.lf-portrait {
+			max-width: 380px;
+			margin: 0 auto;
+		}
+
+		.lf-chip {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			padding: 10px 18px;
+			margin: 0 6px 12px 0;
+			border-radius: 50px;
+			background: #fff;
+			color: #191b1c;
+			font-weight: 600;
+			box-shadow: 0 1px 4px rgba(17, 28, 40, 0.1);
+		}
+
+		.lf-chip i {
+			color: rgb(31, 156, 133);
+		}
+
+		.lf-check li {
+			list-style: none;
+			position: relative;
+			padding-left: 30px;
+			margin-bottom: 10px;
+		}
+
+		.lf-check li::before {
+			content: "\F26A";
+			font-family: "bootstrap-icons";
+			position: absolute;
+			left: 0;
+			top: 1px;
+			color: rgb(41, 202, 171);
+		}
+
+		.lf-quote {
+			border-left: 4px solid rgb(41, 202, 171);
+			background: #fff;
+			border-radius: 0 10px 10px 0;
+			padding: 14px 20px;
+			margin-bottom: 14px;
+			font-size: 18px;
+			color: #191b1c;
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<!-- Header Start -->
+	<header id="header-container" class="navigation"></header>
+	<!-- Header Close -->
+
+	<!-- START HERO -->
+	<section class="service border-top p-lg-5 bg-green" id="linea-flow">
+
+		<div class="container">
+			<div class="row align-items-center">
+
+				<div class="col-lg-12 col-md-12">
+					<div class="text-center mt-5">
+						<span class="lf-badge"><span class="dot"></span>Now in early access</span>
+					</div>
+
+					<div class="section-title mx-lg-3 mt-4 mb-5 row">
+						<h1 class="text-center col-lg-9 mx-auto">
+							<span class="font-weight-normal">From raw data to a live, shareable dashboard in one prompt with</span>
+							<br>
+							<span class="lf-wordmark d-inline-block mt-2">linea flow</span>
+						</h1>
+					</div>
+
+					<div>
+						<p class="h3 mb-5 px-3 text-center font-weight-normal col-lg-10 mx-auto">
+							Describe what you want. An AI assistant connects your data, builds a pipeline of small
+							notebooks, runs it, checks the results and puts a dashboard on top. Every step stays open
+							to inspect, edit and version.
+						</p>
+					</div>
+
+					<div class="row justify-content-between mt-4 px-1 mx-auto">
+						<div class="col-12 col-lg-4 mb-3">
+							<a href="#how-it-works"
+								class="btn d-block bg-white btn-main btn-lg btn-block btn-round-full"
+								aria-label="How it works">
+								How it works
+							</a>
+						</div>
+
+						<div class="col-12 col-lg-4 mb-3">
+							<a href="https://linea-flow-docs.web.app" target="_blank" rel="noopener"
+								class="btn btn-main d-block bg-white btn-lg btn-block btn-round-full"
+								aria-label="Read the documentation">
+								Read the docs
+							</a>
+						</div>
+
+						<div class="col-12 col-lg-4 mb-3">
+							<a href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/david-walsh-linea-analytics/30min'});return false;"
+								class="btn btn-main d-block bg-dark btn-lg btn-block btn-round-full text-white"
+								aria-label="Book a demo">
+								book a demo
+							</a>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+	</section>
+	<!-- END HERO -->
+
+	<!-- Hero screenshot -->
+	<section class="lf-showcase pb-5">
+		<div class="container">
+			<div class="col-lg-11 mx-auto px-0">
+				<div class="lf-frame">
+					<img src="images/linea-flow/flow-dashboard.webp" width="1800" height="1125"
+						alt="A weekly sales dashboard in Linea Flow, next to the assistant chat that built it">
+				</div>
+				<p class="lf-caption text-center mt-3 mb-0">
+					One prompt: the assistant built the pipeline, ran it and opened this dashboard.
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="py-5 bg-light" id="what-is-linea-flow">
+		<div class="container text-center p-3">
+			<div class="text-center mb-3 col-lg-8 col-sm-8 mx-auto">
+				<h2 class="text-white mx-auto font-weight-bold bg-green rounded-pill text-capitalize p-3 h2 "
+					style="width: 90%;">What is Linea Flow?</h2>
+			</div>
+
+			<div class="section-title">
+				<p class="mb-5 lead ">An AI analyst that shows its work</p>
+			</div>
+
+			<div class="row g-4 mb-5">
+
+				<div class="col-12 col-md-3 mb-3">
+					<div class="card h-100 shadow-sm border-0 reveal">
+						<div class="card-body p-4">
+							<div class="d-inline-flex align-items-center bg-green justify-content-center rounded-circle fs-3 mb-3"
+								style="width:64px;height:64px;">
+								<i class="bi bi-chat-dots-fill text-white mt-1"></i>
+							</div>
+							<h5 class="fw-bold">Ask in plain English</h5>
+							<p class="mb-0">Describe the analysis <br>or dashboard you need</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-12 col-md-3 mb-3">
+					<div class="card h-100 shadow-sm border-0 reveal">
+						<div class="card-body p-4">
+							<div class="d-inline-flex align-items-center bg-green justify-content-center rounded-circle fs-3 mb-3"
+								style="width:64px;height:64px;">
+								<i class="bi bi-journal-code text-white mt-1"></i>
+							</div>
+							<h5 class="fw-bold">Built from notebooks</h5>
+							<p class="mb-0">Every step is a notebook <br>you can open and edit</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-12 col-md-3 mb-3">
+					<div class="card h-100 shadow-sm border-0 reveal">
+						<div class="card-body p-4">
+							<div class="d-inline-flex align-items-center bg-green justify-content-center rounded-circle fs-3 mb-3"
+								style="width:64px;height:64px;">
+								<i class="bi bi-arrow-repeat text-white mt-1"></i>
+							</div>
+							<h5 class="fw-bold">Always current</h5>
+							<p class="mb-0">Pipelines run on a schedule <br>in your time zone</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-12 col-md-3 mb-3">
+					<div class="card h-100 shadow-sm border-0 reveal">
+						<div class="card-body p-4">
+							<div class="d-inline-flex align-items-center bg-green justify-content-center rounded-circle fs-3 mb-3"
+								style="width:64px;height:64px;">
+								<i class="bi bi-share-fill text-white mt-1"></i>
+							</div>
+							<h5 class="fw-bold">Share by link</h5>
+							<p class="mb-0">Send a dashboard to anyone, <br>no account needed</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</section>
+
+	<!-- section HOW IT WORKS START -->
+	<section class="container text-center reveal" id="how-it-works">
+		<div class="text-center mt-5 mb-3 pt-5 col-lg-8 col-sm-8 mx-auto">
+			<h2 class="text-white mx-auto font-weight-bold bg-green rounded-pill text-capitalize p-3 h2 "
+				style="width: 90%;">How it works</h2>
+		</div>
+
+		<div class="section-title mb-5">
+			<p class="mb-5 lead ">From a CSV file to a shared dashboard in one prompt</p>
+
+			<div class="lf-prompt">
+				<span class="file"><i class="bi bi-paperclip"></i>orders.csv</span>
+				<div class="d-flex align-items-end">
+					<p class="text mr-3">
+						Build a weekly sales dashboard from the orders file: revenue and orders by region and
+						channel, the weekly trend, and filters for period, region and channel. Refresh it every
+						Monday morning.
+					</p>
+					<span class="send" aria-hidden="true"><i class="bi bi-send-fill"></i></span>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="container mb-5 pb-3">
+		<div class="row text-center">
+			<div class="col-12 col-md-6 col-lg-3 mb-4 reveal">
+				<span class="lf-step-num mb-3">1</span>
+				<h5>Bring your data</h5>
+				<p class="mb-0">Drop a CSV, Excel or Parquet file into the chat, or connect a database, API or
+					Google source.</p>
+			</div>
+			<div class="col-12 col-md-6 col-lg-3 mb-4 reveal">
+				<span class="lf-step-num mb-3">2</span>
+				<h5>Describe the outcome</h5>
+				<p class="mb-0">Say what you want to see and how often it should refresh. Type @ to point at
+					existing pipelines or tables.</p>
+			</div>
+			<div class="col-12 col-md-6 col-lg-3 mb-4 reveal">
+				<span class="lf-step-num mb-3">3</span>
+				<h5>Watch it build</h5>
+				<p class="mb-0">The assistant inspects the data, writes each step, runs the pipeline, checks the
+					outputs and builds the dashboard.</p>
+			</div>
+			<div class="col-12 col-md-6 col-lg-3 mb-4 reveal">
+				<span class="lf-step-num mb-3">4</span>
+				<h5>Use it, or look inside</h5>
+				<p class="mb-0">Filter, edit and share the dashboard. Open any step's code, runs and versions,
+					change it and rerun.</p>
+			</div>
+		</div>
+	</section>
+	<!-- section HOW IT WORKS END -->
+
+	<!-- section FEATURES header START -->
+	<section class="container text-center reveal" id="features">
+		<div class="text-center mt-5 mb-3 pt-3 col-lg-8 col-sm-8 mx-auto">
+			<h2 class="text-white mx-auto font-weight-bold bg-green rounded-pill text-capitalize p-3 h2 "
+				style="width: 90%;">Why use Linea Flow?</h2>
+		</div>
+
+		<div class="section-title">
+			<p class="mb-5 lead ">Fast like a chatbot, transparent like a notebook</p>
+		</div>
+	</section>
+	<!-- section header END -->
+
+	<!-- Section square right Start-->
+	<section class="container-fluid mt-5 mb-md-5 pt-0 pb-md-5 reveal">
+		<div class="row flex-wrap-reverse" style="min-height: 450px;">
+			<div class="col-md-6 d-flex justify-content-center align-items-center bg-white p-lg-5">
+				<div class="bg-green w-80 p-lg-5 p-3 p-md-3 m-0 rounded shadow-inset">
+					<div class="bg-white rounded shadow m-1 p-1 lf-portrait">
+						<img src="images/linea-flow/flow-assistant.webp" class="rounded w-100 h-auto" width="766" height="1050" loading="lazy"
+							alt="The assistant's action cards while it builds a sales pipeline">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 d-flex justify-content-center align-items-center bg-light">
+				<div class="about-item p-md-5 p-3">
+					<h2 class="mt-3 mb-3 position-relative">An assistant that does the work, and shows it</h2>
+					<p class="mb-4 h5 font-weight-normal position-relative">
+						The assistant plans, writes, runs and repairs your pipeline while you watch. Every action
+						appears as a card you can click into, so you can follow along, stop it, or take over.
+					</p>
+					<ul class="h5 font-weight-normal lf-check pl-0">
+						<li>Reads the error and retries when a step fails</li>
+						<li>Uses your metric definitions from shared workspace notes</li>
+						<li>Ends with a summary built from what actually ran</li>
+						<li>Works with Anthropic Claude or Google Gemini</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Section square right End -->
+
+	<!-- Section square left Start -->
+	<section class="container-fluid mt-5 mb-md-5 pt-5 pb-md-5 reveal">
+		<div class="row" style="min-height: 450px;">
+			<div class="col-md-6 d-flex justify-content-center align-items-center bg-light">
+				<div class="about-item p-md-5 p-3">
+					<h2 class="mt-3 mb-4 position-relative">No black boxes</h2>
+					<p class="h5 mb-4 font-weight-normal">
+						Every step is a small Python notebook with declared inputs and outputs. Open any step as a
+						live marimo notebook with the real upstream data loaded, change it, and save it as a new
+						version.
+					</p>
+					<ul class="h5 font-weight-normal lf-check pl-0">
+						<li>Python and DuckDB SQL, with polars, pandas, statsmodels and scikit-learn</li>
+						<li>Every change is a version you can compare and restore</li>
+						<li>Every run records exactly which versions it used</li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-6 d-flex justify-content-center align-items-center bg-white p-lg-5">
+				<div class="bg-green w-80 p-lg-5 p-3 p-md-3 m-0 rounded shadow-inset">
+					<div class="bg-white rounded shadow m-1 p-1">
+						<img src="images/linea-flow/flow-notebook.webp" class="rounded w-100 h-auto" width="1600" height="1225" loading="lazy"
+							alt="A pipeline step open as a live marimo notebook with its data loaded">
+					</div>
+					<div class="bg-white rounded shadow m-1 mt-3 p-1">
+						<img src="images/linea-flow/flow-versions.webp" class="rounded w-100 h-auto" width="1600" height="786" loading="lazy"
+							alt="A version diff of a pipeline step, with a restore button">
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Section square left End -->
+
+	<!-- Section square right Start -->
+	<section class="container-fluid mt-5 mb-md-5 pt-0 pb-md-5 reveal">
+		<div class="row flex-wrap-reverse" style="min-height: 450px;">
+			<div class="col-md-6 d-flex justify-content-center align-items-center bg-white p-lg-5">
+				<div class="bg-green w-80 p-lg-5 p-3 p-md-3 m-0 rounded shadow-inset">
+					<div class="bg-white rounded shadow m-1 p-1">
+						<img src="images/linea-flow/flow-pipeline.webp" class="rounded w-100 h-auto" width="1400" height="881" loading="lazy"
+							alt="A pipeline graph of four steps, scheduled every Monday at 07:00">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 d-flex justify-content-center align-items-center bg-light">
+				<div class="about-item p-md-5 p-3">
+					<h2 class="mt-3 mb-3 position-relative">Pipelines that keep themselves current</h2>
+					<p class="mb-4 h5 font-weight-normal position-relative">
+						The pipeline graph draws itself from what each step reads and writes. You never draw arrows.
+						Set a schedule once and your numbers stay up to date.
+					</p>
+					<ul class="h5 font-weight-normal lf-check pl-0">
+						<li>Hourly, daily, weekly, monthly or custom schedules, in your time zone</li>
+						<li>Independent steps run in parallel; unchanged steps come from cache</li>
+						<li>A failure turns only that step red, with its logs one click away</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Section square right End -->
+
+	<!-- Section square left Start -->
+	<section class="container-fluid mt-5 mb-md-5 pt-5 pb-md-5 reveal">
+		<div class="row" style="min-height: 450px;">
+			<div class="col-md-6 d-flex justify-content-center align-items-center bg-light">
+				<div class="about-item p-md-5 p-3">
+					<h2 class="mt-3 mb-4 position-relative">Dashboards anyone can open</h2>
+					<p class="h5 mb-4 font-weight-normal">
+						Turn outputs into dashboards with KPI tiles, charts, tables and filters, built by the assistant
+						or in the visual builder. They refresh every time the pipeline runs.
+					</p>
+					<ul class="h5 font-weight-normal lf-check pl-0">
+						<li>Share a revocable link that shows one dashboard and only the data it uses</li>
+						<li>Viewers need no account</li>
+						<li>Need something bespoke? Write a custom HTML page on live pipeline data</li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-6 d-flex justify-content-center align-items-center bg-white p-lg-5">
+				<div class="bg-green w-80 p-lg-5 p-3 p-md-3 m-0 rounded shadow-inset">
+					<div class="bg-white rounded shadow m-1 p-1">
+						<img src="images/linea-flow/flow-shared.webp" class="rounded w-100 h-auto" width="1600" height="1032" loading="lazy"
+							alt="A shared weekly sales dashboard as a visitor sees it">
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Section square left End -->
+
+	<!-- Section CONNECT + SECURITY Start -->
+	<section class="py-5 bg-light mt-5" id="connections">
+		<div class="container py-lg-4">
+			<div class="row">
+				<div class="col-lg-6 mb-5 mb-lg-0 pr-lg-5 reveal">
+					<h2 class="mb-3">Connect to where your data lives</h2>
+					<p class="h5 font-weight-normal mb-4">
+						When the assistant needs a source you haven't connected yet, it shows the connection form right
+						in the chat. Credentials go to the server, never to the assistant.
+					</p>
+					<div>
+						<span class="lf-chip"><i class="bi bi-file-earmark-spreadsheet"></i>CSV, Excel &amp; Parquet</span>
+						<span class="lf-chip"><i class="bi bi-database"></i>PostgreSQL</span>
+						<span class="lf-chip"><i class="bi bi-hdd-stack"></i>BigQuery</span>
+						<span class="lf-chip"><i class="bi bi-table"></i>Google Sheets</span>
+						<span class="lf-chip"><i class="bi bi-bar-chart-line"></i>Google Analytics 4</span>
+						<span class="lf-chip"><i class="bi bi-megaphone"></i>Google Ads</span>
+						<span class="lf-chip"><i class="bi bi-cloud-arrow-down"></i>REST APIs</span>
+					</div>
+				</div>
+
+				<div class="col-lg-6 reveal">
+					<h2 class="mb-3">Your data stays yours</h2>
+					<ul class="h5 font-weight-normal lf-check pl-0 mt-4">
+						<li>Runs on your own machine: no database server, no Docker and no cloud account needed</li>
+						<li>Only what you send to your chosen AI provider leaves your machine, and credentials never do</li>
+						<li>AI-written code runs in an isolated process per step, with an optional locked-down Docker executor</li>
+						<li>BigQuery queries carry a cost cap, and admins can cap AI token use</li>
+						<li>Export projects to Git as plain notebooks, with no data or secrets</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Section CONNECT + SECURITY End -->
+
+	<!-- Section MARKETING TEAMS Start -->
+	<section class="container py-5 my-4">
+		<div class="row align-items-center">
+			<div class="col-lg-5 mb-4 mb-lg-0 reveal">
+				<span class="h6 text-color">Built by Linea Analytics</span>
+				<h2 class="mt-2 mb-4">Made for analysts who answer the same questions every week</h2>
+				<p class="h5 font-weight-normal">
+					Linea Flow comes from a team that spends its days on marketing data. Ask for the reporting you
+					need, keep it current automatically, and change it in a sentence when the question changes.
+				</p>
+			</div>
+			<div class="col-lg-6 ml-auto reveal">
+				<p class="lead mb-3">Try asking:</p>
+				<div class="lf-quote">"Build a weekly sales dashboard by region and channel, refreshed every Monday."</div>
+				<div class="lf-quote">"Put our media spend next to revenue by week."</div>
+				<div class="lf-quote">"The revenue in this pipeline should be net of refunds."</div>
+			</div>
+		</div>
+	</section>
+	<!-- Section MARKETING TEAMS End -->
+
+	<!-- Section FAQ -->
+	<section class="container py-5 my-3 reveal">
+		<h2 class="mb-4">Frequently Asked Questions</h2>
+
+		<details class="mb-3 border rounded">
+			<summary class="p-3 fw-bold">
+				Do I need to know how to code?
+			</summary>
+			<div class="px-3 pb-3">
+				<p class="mb-0">
+					No. You can build, change and share pipelines by asking the assistant. Every step is still plain
+					Python and SQL, so analysts who do code can open, edit and version any of it.
+				</p>
+			</div>
+		</details>
+
+		<details class="mb-3 border rounded">
+			<summary class="p-3 fw-bold">
+				Where does my data go?
+			</summary>
+			<div class="px-3 pb-3">
+				<p class="mb-0">
+					Linea Flow stores everything locally. The only thing that leaves your machine is what you send
+					to the AI provider you choose, and your credentials never do. They are stored encrypted and never
+					enter the assistant's context.
+				</p>
+			</div>
+		</details>
+
+		<details class="mb-3 border rounded">
+			<summary class="p-3 fw-bold">
+				Which AI models does it use?
+			</summary>
+			<div class="px-3 pb-3">
+				<p class="mb-0">
+					Anthropic Claude or Google Gemini, with your own API key. You pick the model per chat, and
+					admins can set token limits per user, per model and per period.
+				</p>
+			</div>
+		</details>
+
+		<details class="mb-3 border rounded">
+			<summary class="p-3 fw-bold">
+				Can I trust what the assistant built?
+			</summary>
+			<div class="px-3 pb-3">
+				<p class="mb-0">
+					Nothing it makes is hidden. Every step is a notebook with a declared contract, every run keeps its
+					outputs, and every change is a new version you can compare and restore. The summary at the end of
+					each chat is built from what actually happened, not from the model's own account.
+				</p>
+			</div>
+		</details>
+
+		<details class="mb-3 border rounded">
+			<summary class="p-3 fw-bold">
+				Is Linea Flow available now?
+			</summary>
+			<div class="px-3 pb-3">
+				<p class="mb-0">
+					Linea Flow is in early access. The local, single-user edition is complete and tested; a hosted,
+					multi-user edition is in progress. <a href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/david-walsh-linea-analytics/30min'});return false;">Book a call</a>
+					to get started.
+				</p>
+			</div>
+		</details>
+
+		<details class="mb-3 border rounded">
+			<summary class="p-3 fw-bold">
+				How does it relate to Linea's marketing mix modelling?
+			</summary>
+			<div class="px-3 pb-3">
+				<p class="mb-0">
+					Linea Flow is a general analytics tool: it builds the pipelines and dashboards around your data.
+					Marketing mix modelling is a separate Linea service, available as our
+					<a href="/measurement-platform-mmm">Platform</a> or <a href="/full-service-mmm">Full Service</a>.
+				</p>
+			</div>
+		</details>
+	</section>
+	<!-- Section FAQ end -->
+
+
+	<!-- Section Start -->
+	<section class="section cta d-flex align-items-center" id="contactUs">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-xl-5 col-lg-6">
+					<div class="cta-item bg-white p-5 rounded text-center">
+						<span class="h6 text-color tc27">Take control of your data</span>
+						<h2 class="mt-2 mb-4 tc28">Contact us</h2>
+						<p class="lead mb-4"><span class="tc29">Have any project on mind?</span><br><span
+								class="tc30">For immediate support:</span></p>
+						<a href="mailto:info@linea-analytics.com">
+							<i class="fas fa-envelope mr-2"></i>
+							<span>info@linea-analytics.com</span>
+						</a>
+						<br>
+						<a href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/david-walsh-linea-analytics/30min'});return false;" class="tc31">
+							<i class="fas fa-phone mr-2"></i>
+							Schedule a Call
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="mt-70 position-relative">
+		<div class="container">
+			<div class="cta-block-2 bg-gray p-5 rounded border-1">
+				<div class="row justify-content-center align-items-center ">
+					<div class="col-lg-7">
+						<span class="text-color tc32">Why wait</span>
+						<h2 class="mt-2 mb-4 mb-lg-0"><span class="">Your next dashboard is</span> <strong><span class="">
+									one prompt</span> </strong><span class="">away.</span></h2>
+					</div>
+					<div class="col-lg-4">
+						<a href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/david-walsh-linea-analytics/30min'});return false;"
+							class="btn btn-main btn-round-full float-lg-right tc31">Book a demo</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<footer id="footer-container" class="footer section"></footer>
+
+	<!--Scroll to top-->
+	<div id="scroll-to-top" class="scroll-to-top shadow">
+		<i class="bi bi-chevron-up"></i>
+
+	</div>
+
+
+	<!--
+Essential Scripts
+=====================================-->
+	<!-- Main jQuery -->
+	<script src="plugins/jquery/jquery.min.js"></script>
+	<!-- Bootstrap 4.3.1 -->
+	<script src="plugins/bootstrap/bootstrap.min.js"></script>
+	<!--  Magnific Popup-->
+	<script src="plugins/magnific-popup/jquery.magnific-popup.min.js"></script>
+	<!-- Slick Slider -->
+	<script src="plugins/slick/slick.min.js"></script>
+	<!-- Counterup -->
+	<script src="plugins/counterup/jquery.waypoints.min.js"></script>
+	<script src="plugins/counterup/jquery.counterup.min.js"></script>
+
+	<script src="js/script.js"></script>
+	<script src="js/views.js"></script>
+
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-5LHVS45SP4"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'G-5LHVS45SP4');
+	</script>
+
+<script>
+  function isCalendlyEvent(e) {
+    return e.origin === "https://calendly.com" && e.data && e.data.event && e.data.event.indexOf("calendly.") === 0;
+  }
+
+  window.addEventListener("message", function(e) {
+    if (!isCalendlyEvent(e)) return;
+
+    if (e.data.event === "calendly.event_scheduled") {
+
+      gtag("event", "generate_lead", {
+        lead_source: "calendly",
+        calendly_event: e.data.payload && e.data.payload.event && e.data.payload.event.uri
+      });
+
+
+    }
+  });
+</script>
+</body>
+
+</html>
